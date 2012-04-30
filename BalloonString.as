@@ -51,7 +51,7 @@ package
 			stBit.draw(st); 
 			texture = Texture.fromBitmapData(stBit); 
 			img = new Image(texture); 
-			addChild(img); 
+			//addChild(img); 
 			
 		}
 		public static function get rsxpos():Number

@@ -1,8 +1,9 @@
 package
 {	
+	import flash.display.Bitmap;
+	
 	import starling.display.Sprite;
 	import starling.textures.Texture; 
-	import flash.display.Bitmap; 
 	
 	public class SingletonSpriteSheet extends Sprite
 	{
@@ -18,7 +19,7 @@ package
 		
 		private var _myTexture:Texture; 
 		private var _myXML:XML; 
-		
+
 		public function SingletonSpriteSheet()
 		{
 			if(!isOkToCreate) throw new Error(this + " is a singleton. Access using getInstance()"); 
@@ -26,9 +27,8 @@ package
 			
 				var allBits:Bitmap = new spriteSheet(); 
 				_myTexture = Texture.fromBitmap(allBits, true); 
-				
-
 				_myXML = XML(new allData()); 
+			
 				
 				
 			}
@@ -57,7 +57,6 @@ package
 		{
 			return _myXML;
 		}
-
 
 
 

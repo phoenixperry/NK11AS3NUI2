@@ -4,6 +4,7 @@ package
 	import flash.display.Bitmap;
 	
 	import starling.core.Starling;
+	import starling.display.BlendMode;
 	import starling.display.Image;
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
@@ -60,10 +61,11 @@ package
 				container.addChild(_img2); 
 			}
 			 addChild(container); 
+			 addEventListener(Event.ENTER_FRAME, update); 
 
 		}
 		
-		public function update():void {
+		public function update(e:Event):void {
 			
 			if(!_vert) {
 			container.x = container.x -_s; 
@@ -89,6 +91,16 @@ package
 				
 			}
 		}	
+		public function multiplyIt():void { 
+		_img1.blendMode = BlendMode.MULTIPLY; 
+		_img2.blendMode = BlendMode.MULTIPLY;
+		}
+		public function screenIt():void { 
+			_img1.blendMode = BlendMode.SCREEN; 
+			_img2.blendMode = BlendMode.SCREEN;
+		}
+		
+
 		public function remove ():void
 		{
 			para1Texture.dispose(); 

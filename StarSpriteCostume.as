@@ -18,7 +18,7 @@ package
 		private var _textureName:String; 
 		private var _myFrameRate:int; 
 		private var myMovie:MovieClip; 
-		
+		private var _single_mc:MovieClip; 
 		private var sprites:SingletonSpriteSheet; 
 
 		public function StarSpriteCostume(textureName:String, myFrameRate:int)
@@ -26,7 +26,7 @@ package
 			//starling 
 			sprites = SingletonSpriteSheet.getInstance();
 			_myXML = sprites.myXML; 
-			myTexture = sprites.myTexture; 
+			myTexture = sprites.myTexture ; 
 			_textureName = textureName; 
 
 		}
@@ -47,6 +47,20 @@ package
 			
 			
 		}
+		
+//	public function singleOutfit(_myTexture:Texture, _xmlData:XML, _name:String):MovieClip{ 
+		//fix this function. it's busted. Why? 
+//			var _myAtlas:TextureAtlas = new TextureAtlas(_myTexture,_xmlData); 
+//			trace(_myAtlas);
+//			trace("i ran screaming"); 
+//			//first create the costume 
+//			var _frames:Vector.<Texture> = myAtlas.getTextures(_name); 
+//			_single_mc= new MovieClip(_frames,1);  
+//			
+//			return _single_mc; 
+		
+		//}
+		
 
 	}
 }

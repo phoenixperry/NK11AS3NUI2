@@ -74,7 +74,7 @@ package
 			
 
 		private function update(e:Event):void { 
-		para.update(); 
+
 			for each(var actor:Actor in items) {
 				actor.updateNow(); 
 			}

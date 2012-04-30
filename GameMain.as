@@ -9,6 +9,7 @@ package
 	import Box2D.Dynamics.b2FixtureDef;
 	import Box2D.Dynamics.b2World;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -33,6 +34,9 @@ package
 	{
 		private var level1:LevelOne; 
 		private var level2:LevelTwo; 
+		private var level3:LevelThree; 
+		
+		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
 		private var useKinect:Boolean = true ; 
 		private var _mouseX:Number = 0;
@@ -46,32 +50,27 @@ package
 		
 		private var gameTimer:GameTimer; 
 		
+		
 		public function GameMain() 
 		{
 			makeSprites = SingletonSpriteSheet.getInstance(); 
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
-			level1 = new LevelOne(); 
-			addChild(level1); 
+			
+			//level1 = new LevelOne(); 
+			//addChild(level1);
+			
 		}
 		private function onAdded(e:Event):void
 		{
 			setupPhysicsWorld();
 			gameTimer = new GameTimer(); 
 			
-			
 			this.addChild(new Stats());
 			removeEventListener(Event.ADDED_TO_STAGE, onAdded); 
-	
-			if(useKinect) {
-				k = new KinectOn(); 
-				addChild(k); 	
-			}
-			else{
-				
-				stage.addEventListener(TouchEvent.TOUCH, onTouch);
+
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteLevel);
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, levelCreator);
-				}
+				
 		}		
 	//	trying to fix the time step. This is going to have to happen. Oh zee pain. 
 //		private var _currentTime:Number = gameTimer.getVirtualTime()/1000; 
@@ -152,9 +151,20 @@ package
 		}		
 		
 		private function levelCreator(e:KeyboardEvent):void {
+			
 			if(e.keyCode == Keyboard.LEFT) {
-				level2 = new LevelTwo(); 
-				addChild(level2); 
+				gameOverStart = new GameOverStart(); 
+				addChild(gameOverStart); 
+				//level2 = new LevelTwo(); 
+				//addChild(level2); 
+			}
+			if(useKinect) {
+				k = new KinectOn(); 
+				addChild(k); 	
+			}
+			else{
+				
+				stage.addEventListener(TouchEvent.TOUCH, onTouch);
 			}
 		}
 		private function deleteLevel(e:KeyboardEvent):void { 

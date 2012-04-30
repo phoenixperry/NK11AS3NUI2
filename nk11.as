@@ -23,9 +23,9 @@ package
 		
 		private function onContextCreated(e:Event):void
 		{
-			//var debugSprite:Sprite=new Sprite();
-			//addChild(debugSprite);
-			//(st.stage.getChildAt(0) as GameMain).setDebugDraw(debugSprite)
+			var debugSprite:Sprite=new Sprite();
+			addChild(debugSprite);
+			(st.stage.getChildAt(0) as GameMain).setDebugDraw(debugSprite)
 		}
 	}
 }

@@ -36,7 +36,6 @@ package
 		[Embed(source="./assets/level1/sprites/particle/particle.pex", mimeType="application/octet-stream")]
 		public var ParticleXML:Class; 
 		
-		
 		public var particles:ParticleDesignerPS; 
 		
 		public static const CACHE_ID:String = "BALLOON"; 
@@ -46,8 +45,6 @@ package
 		public var _BallBody:b2Body; 
 		protected var dict:Dictionary;
 
-		
-		
 		protected var _mouseXWorldPhys:Number;
 		protected var _mouseYWorldPhys:Number;
 		protected var _mouseXWorld:Number=0;
@@ -62,8 +59,6 @@ package
 		//experiment with singles 
 		private var b2Movie:MovieClip; 
 		private var sprites:StarSpriteCostume; 
-		
-
 		
 		public function BalloonActor()
 		{
