@@ -10,6 +10,7 @@ package
 	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
+	import org.osflash.signals.Signal; 
 	
 	public class GameOverStart extends Sprite
 	{
