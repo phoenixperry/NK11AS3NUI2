@@ -8,7 +8,7 @@ package
 	import flash.events.Event;
 	
 	import starling.core.Starling; 
-	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#ffffff")]
+	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#000000")]
 	public class nk11 extends Sprite
 		
 	{
@@ -17,15 +17,15 @@ package
 		{
 			st = new Starling(GameMain, stage); 
 			st.start(); 
-			stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
+		//stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
 			trace("fuck it"); 
 		}
 		
 		private function onContextCreated(e:Event):void
 		{
-			var debugSprite:Sprite=new Sprite();
-			addChild(debugSprite);
-			(st.stage.getChildAt(0) as GameMain).setDebugDraw(debugSprite)
+//			var debugSprite:Sprite=new Sprite();
+//			addChild(debugSprite);
+//			(st.stage.getChildAt(0) as GameMain).setDebugDraw(debugSprite)
 		}
 	}
 }

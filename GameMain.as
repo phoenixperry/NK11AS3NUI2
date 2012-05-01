@@ -9,6 +9,8 @@ package
 	import Box2D.Dynamics.b2FixtureDef;
 	import Box2D.Dynamics.b2World;
 	
+	import com.greensock.TweenLite;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -27,8 +29,7 @@ package
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
-	import starling.utils.Stats;
-
+	import starling.utils.Stats; 
 	
 	public class GameMain extends Sprite
 	{
@@ -55,9 +56,7 @@ package
 		{
 			makeSprites = SingletonSpriteSheet.getInstance(); 
 			addEventListener(Event.ADDED_TO_STAGE, onAdded);
-			
-			//level1 = new LevelOne(); 
-			//addChild(level1);
+		
 			
 		}
 		private function onAdded(e:Event):void
@@ -65,7 +64,7 @@ package
 			setupPhysicsWorld();
 			gameTimer = new GameTimer(); 
 			
-			this.addChild(new Stats());
+		
 			removeEventListener(Event.ADDED_TO_STAGE, onAdded); 
 
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteLevel);
@@ -154,9 +153,16 @@ package
 			
 			if(e.keyCode == Keyboard.LEFT) {
 				gameOverStart = new GameOverStart(); 
+				gameOverStart.alpha = 0; 
 				addChild(gameOverStart); 
+				TweenLite.to(gameOverStart, 3, {x:0, y:0, alpha:1});
+				
 				//level2 = new LevelTwo(); 
 				//addChild(level2); 
+			}
+			if(e.keyCode == Keyboard.O){ 
+				level1 = new LevelOne(); 
+				addChild(level1);
 			}
 			if(useKinect) {
 				k = new KinectOn(); 
@@ -166,10 +172,12 @@ package
 				
 				stage.addEventListener(TouchEvent.TOUCH, onTouch);
 			}
+			//this.addChild(new Stats());
 		}
 		private function deleteLevel(e:KeyboardEvent):void { 
 			if(e.keyCode == Keyboard.RIGHT){
 			level1.removeLevel(); 
+			trace("level one removed"); 
 			}
 			trace(e);
 		}
