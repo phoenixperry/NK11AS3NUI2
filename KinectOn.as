@@ -43,6 +43,7 @@ package
 		public var gbArray:Array; 
 		public var startScreenKinect:Signal;
 		private var makeGlowBodies:Boolean; 
+		
 		public function KinectOn()
 		{
 			_skeletonSprite = new Sprite();

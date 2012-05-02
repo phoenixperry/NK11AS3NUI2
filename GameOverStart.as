@@ -4,6 +4,8 @@ package
 	import com.greensock.easing.*;
 	
 	import flash.display.Bitmap;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import org.osflash.signals.Signal;
 	
@@ -18,7 +20,7 @@ package
 	import starling.textures.TextureAtlas;
 
 	
-	public class GameOverStart extends Sprite
+	public class GameOverStart extends LevelGen
 	{
 		private var stars:MovieClip; 
 		private var start:MovieClip;
@@ -39,8 +41,13 @@ package
 		private var btnTrigger:Signal; 
 		private static var _rhxpos:Number; 
 		private static var _rhypos:Number; 
-		
- 
+		private var deleteLevelTimer:Timer;
+		//intro letters to delete later
+		private var introBits:Bitmap; 
+		private var introTexture:Texture; 
+		private var introImage:Image;
+		[Embed(source="./assets/gameOver/sprites/letters.png")]
+		private var intro:Class;
 		
 		[Embed(source="./assets/gameOver/sprites/startClouds.png")]
 		private var startClouds:Class; 
@@ -71,8 +78,8 @@ package
 			_startXML = XML(new startData()); 
 			btnTrigger = new Signal(); 
 			btnTrigger.add(btnClicked); 
-	
-	
+			deleteLevelTimer = new Timer(2000,1);
+			deleteLevelTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timeToDie); 
 		}
 		
 		private function startAdded(e:Event):void
@@ -103,38 +110,42 @@ package
 			var frames1:Vector.<Texture> = textureAtlas.getTextures("die");
 			dieBtn_mc = new MovieClip(frames1,1); 
 			addChild(dieBtn_mc); 
-			TweenLite.to(dieBtn_mc, 2, {x:832, y:480, alpha:1, ease:Cubic.easeOut});
-			dieBtn_mc.y = 480; 
+			TweenLite.to(dieBtn_mc, 2, {x:832, y:0, alpha:1, ease:Cubic.easeOut});
+			dieBtn_mc.y = 100; 
 			dieBtn_mc.x = 1024; 
 			
+			introBits = new intro(); 
+			introTexture = Texture.fromBitmap(introBits); 
+			introImage = new Image(introTexture); 
+			addChild(introImage);
+			introImage.alpha = 0; 
+			TweenLite.to(introImage, 3, {alpha:1});
+			introImage.x = 386; 
+			introImage.y = 286; 
+
 			addEventListener(Event.ENTER_FRAME, btnTest); 
 		}
 		public function btnTest(e:Event) :void {
-			if(rhxpos > 832 && rhxpos < 1024 && rhypos > 480 && rhypos < 568) { 
+			if(rhxpos > 832 && rhxpos < 1024 && rhypos > 0 && rhypos < 90) { 
 				btnTrigger.dispatch("btn clicked"); 
 				
 			}
 		}
 		public function btnClicked(msg:String):void {
 			trace(msg);
-			//TweenLite.to(dieBtn_mc, 1, {x:832, y:480,  alpha:0.5});
+			
+			TweenLite.to(dieBtn_mc, 1, {x:832, y:480,  alpha:0.5});
 			var q:starling.display.Quad = new starling.display.Quad(192, 7, 0x62b6bd, true); 
 			addChild(q); 
 			q.x = 1024; 
 			q.y = 568; 
 			TweenLite.to(q, 2, {x:832, y:568, alpha:1, ease:Cubic.easeOut});
 			dieBtn_mc.color = 0x62b6bd;
-//			for (var i:int = 0; i < 5; i++) 
-//			{
-//				var e:EarthAir = new EarthAir(); 
-//				addChild(e); 
-//				e.x = 200; 
-//				e.y= 0; 
-//						
-//			}
-			
-		
-			
+				deleteLevelTimer.start(); 
+				TweenLite.to(cloudsPara, 1.5, {alpha:0});
+				TweenLite.to(starsPara, 1.5, {alpha:0});
+				TweenLite.to(start_mc, 1.5, {alpha:0})
+				TweenLite.to(introImage, 1.5, {alpha:0})
 		}
 
 		public static function get rhxpos():Number
@@ -157,7 +168,26 @@ package
 			_rhypos = value;
 		}
 	
+		public function timeToDie(e:TimerEvent):void {
+			removeEventListener(TimerEvent.TIMER_COMPLETE, timeToDie); 
+			removeLevel(); 
+			
+		}
+			
 		
+		override public function removeLevel():void {
+			//remove textures, children, listeners the shazm! 
+			cloudsPara.remove();  	
+			starsPara.remove(); 
+			//now let's get those starling babies out of here! 
+			//objects first! 
+			this.removeChildren(); 
+			this.dispose();
+			trace(numChildren); 
+			//listeners outta here
+			this.removeEventListeners(); 
+			GameMain.loadLevelOne=true; 
+		}
 		
 	}
 }

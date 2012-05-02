@@ -64,8 +64,8 @@ package
 		public function hitByActor(actor:Actor):void
 		{
 			// OVERRIDE IN EXTENDED ACTOR CLASS.
+			trace ("this fucker ran"); 
 		}
-		
 		
 		public function destroy():void { 
 			cleanUpBeforeRemoving(); 

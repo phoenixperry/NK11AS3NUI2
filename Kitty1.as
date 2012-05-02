@@ -23,6 +23,7 @@ package
 	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;  
+	
 
 	public class Kitty1 extends Actor
 	{
@@ -31,7 +32,7 @@ package
 		protected var dict:Dictionary;
 		protected var kMovie:MovieClip; 
 	
-		
+
 		public var _Kitty1Body:b2Body; 
 		
 		
@@ -174,6 +175,8 @@ package
 				
 			kMovie2.x = _Kitty1Body.GetPosition().x * GameMain.RATIO; 
 			kMovie2.y = _Kitty1Body.GetPosition().y * GameMain.RATIO; 
+		//	ant_gravity = new b2Vec2(0.0,-20.0*_Kitty1Body.GetMass()); 
+		//	_Kitty1Body.ApplyForce(ant_gravity, _Kitty1Body.GetWorldCenter()); 
 
 		}		
 		

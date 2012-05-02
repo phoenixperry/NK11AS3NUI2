@@ -14,6 +14,7 @@ package
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+//	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.globalization.CurrencyFormatter;
 	import flash.printing.PrintJob;
@@ -29,7 +30,7 @@ package
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
-	import starling.utils.Stats; 
+	import starling.utils.Stats;
 	
 	public class GameMain extends Sprite
 	{
@@ -47,6 +48,10 @@ package
 		private static var _world:b2World; 
 		public static const GAME_WIDTH:Number = 1024; 
 		public static const GAME_HEIGHT:Number = 768;  
+		public static var loadLevelOne:Boolean= false; 
+		public static var loadLevelTwo:Boolean = false; 
+		public var gameOverLevel1:GameOverLevel1; 
+		
 		private var makeSprites:SingletonSpriteSheet; 
 		
 		private var gameTimer:GameTimer; 
@@ -69,7 +74,9 @@ package
 
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteLevel);
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, levelCreator);
-				
+			
+			addEventListener(Event.ENTER_FRAME, gameLoop); 
+			
 		}		
 	//	trying to fix the time step. This is going to have to happen. Oh zee pain. 
 //		private var _currentTime:Number = gameTimer.getVirtualTime()/1000; 
@@ -150,7 +157,10 @@ package
 		}		
 		
 		private function levelCreator(e:KeyboardEvent):void {
-			
+			if(loadLevelOne){
+				gameOverLevel1 = new GameOverLevel1(); 
+				addChild(gameOverLevel1); 
+			}
 			if(e.keyCode == Keyboard.LEFT) {
 				gameOverStart = new GameOverStart(); 
 				gameOverStart.alpha = 0; 
@@ -238,7 +248,15 @@ package
 			_world.SetDebugDraw(debugDraw);
 			
 		}
-
+		
+		public function gameLoop(e:starling.events.Event):void{
+			if(loadLevelOne){
+				gameOverLevel1 = new GameOverLevel1(); 
+				addChild(gameOverLevel1); 
+				loadLevelOne = false; 
+			}
+		}
+								 
 
 		
 		

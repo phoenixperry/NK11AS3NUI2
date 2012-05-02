@@ -9,16 +9,13 @@ package
 	
 	public class NKContactListener extends b2ContactListener
 	{
-		var glowHit:Signal; 
-		var earthHit:Signal; 
+		
 		//handles collsions in the b2World 
 		public function NKContactListener() 
 		{
 			super(); 
 			trace(this+" initalized");
-			glowHit = new Signal(); 
-			earthHit = new Signal(); 
-			
+		
 		}
 		/** contact started notify actors involved **/ 
 		override public function BeginContact(contact:b2Contact):void 
@@ -29,31 +26,32 @@ package
 			var actorAFixtureUserData:* = contact.GetFixtureA().GetUserData();
 			var actorBFixtureUserData:* = contact.GetFixtureB().GetUserData();
 			
+			
 			//ballActor and PegActor contacted 
 			if (actorA is Kitty1 && actorB is BalloonActor) {
 		
 				trace("kittyhitballoon");
 				actorA.hitByActor(actorB);	
 			}
-			else if (actorB is Kitty1 && actorA is BalloonActor) {
+			 if (actorB is Kitty1 && actorA is BalloonActor) {
 				//contact.GetFixtureB().GetBody().GetUserData().contact = true;
 			 
 				actorB.hitByActor(actorA);
 				trace("balloonHitKitty");
-				earthHit.dispatch("glowBall hit some earth"); 
+
 			} 		
-		
-			if (actorA is EarthAir && actorB is GlowBody) {
+//		
+			 if (actorA is EarthAir && actorB is GlowBody) {
 				
 				trace("earth hit joint");
-				actorA.hitByActor(actorB);
-				glowHit.dispatch("glow joint hit by earth", .02, 1); 
-			}
-			else if (actorB is EarthAir && actorA is GlowBody) {
-				//contact.GetFixtureB().GetBody().GetUserData().contact = true;
-				
 				actorB.hitByActor(actorA);
+				
+			}
+			 if (actorB is EarthAir && actorA is GlowBody) {
+		
+				actorA.hitByActor(actorB); //check this you might of switched A/B
 				trace("joint hit earth");
+				
 			} 
 		}
 	

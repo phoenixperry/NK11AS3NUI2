@@ -22,7 +22,7 @@ package
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
-	import starling.textures.TextureAtlas;  
+	import starling.textures.TextureAtlas;
 	
 	public class EarthAir extends Actor
 	{
@@ -30,7 +30,7 @@ package
 		public static const CACHE_ID:String = "EarthAndAir"; 
 		protected var dict:Dictionary;
 		protected var earth_mc:MovieClip; 
-		
+		private var ant_gravity:b2Vec2;
 		
 		public var _earthAirBody:b2Body; 
 		
@@ -49,7 +49,7 @@ package
 			addEventListener(Event.ADDED_TO_STAGE, EarthAirAdded); 
 			
 			
-			sprites = new StarSpriteCostume("EarthAndAir", 2);
+			sprites = new StarSpriteCostume("EarthAndAirSm", 2);
 			
 			earth_mc = sprites.getDressed(); 
 			
@@ -61,8 +61,7 @@ package
 			
 			
 			dict = new Dictionary();
-			//add kitty specific info 
-			dict["earthAir"] = [
+			dict["EarthAndAirSm"] = [
 				
 				[
 					// density, friction, restitution
@@ -74,17 +73,14 @@ package
 					// vertexes of decomposed polygons
 					[
 						
-						[   new b2Vec2(19/GameMain.RATIO, 67/GameMain.RATIO)  ,  new b2Vec2(22/GameMain.RATIO, 42/GameMain.RATIO)  ,  new b2Vec2(44/GameMain.RATIO, -4/GameMain.RATIO)  ,  new b2Vec2(68.5/GameMain.RATIO, 45/GameMain.RATIO)  ,  new b2Vec2(70.5/GameMain.RATIO, 62/GameMain.RATIO)  ,  new b2Vec2(46/GameMain.RATIO, 107.5/GameMain.RATIO)  ] ,
-						[   new b2Vec2(87/GameMain.RATIO, 81/GameMain.RATIO)  ,  new b2Vec2(70.5/GameMain.RATIO, 62/GameMain.RATIO)  ,  new b2Vec2(68.5/GameMain.RATIO, 45/GameMain.RATIO)  ,  new b2Vec2(87/GameMain.RATIO, 23/GameMain.RATIO)  ] ,
-						[   new b2Vec2(22/GameMain.RATIO, 42/GameMain.RATIO)  ,  new b2Vec2(19/GameMain.RATIO, 67/GameMain.RATIO)  ,  new b2Vec2(2/GameMain.RATIO, 82/GameMain.RATIO)  ,  new b2Vec2(2/GameMain.RATIO, 32.5/GameMain.RATIO)  ]
+						[   new b2Vec2(1/GameMain.RATIO, 26/GameMain.RATIO)  ,  new b2Vec2(24/GameMain.RATIO, -2/GameMain.RATIO)  ,  new b2Vec2(44/GameMain.RATIO, 27/GameMain.RATIO)  ,  new b2Vec2(22/GameMain.RATIO, 56/GameMain.RATIO)  ]
 					]
 					
 				]
 				
 			];
 			
-			
-			_earthAirBody= createBody("earthAir", GameMain.world, b2Body.b2_dynamicBody,earth_mc); 
+			_earthAirBody= createBody("EarthAndAirSm", GameMain.world, b2Body.b2_dynamicBody,earth_mc); 
 			_earthAirBody.SetFixedRotation(true); 
 			
 			super(_earthAirBody, earth_mc); 
@@ -93,10 +89,18 @@ package
 		private function EarthAirAdded(e:Event):void
 		{
 			addChild(earth_mc); 
-			trace("kitt2 added"); 
+			//trace("earth added"); 
+			addEventListener(Event.ENTER_FRAME, boundsCheck); 
 			
 		}
 		
+		protected function boundsCheck(e:Event):void
+		{
+			// TODO Auto-generated method stub
+			if(this.x >stage.stageHeight+200 || this.y > stage.stageWidth+200 ||this.x < -200 || this.y< -200){
+				remove(); 
+			}
+		}		
 		
 		public function createBody(name:String,  world:b2World, bodyType:uint, userData:*):b2Body
 		{
@@ -112,6 +116,7 @@ package
 			var bodyDef:b2BodyDef = new b2BodyDef();
 			bodyDef.type = bodyType;
 			bodyDef.userData = userData;
+			bodyDef.userData.name="earthAir"; 
 			//fixes sticking but lord oh lord at what cost 
 			bodyDef.bullet = false; 
 			
@@ -163,12 +168,15 @@ package
 		}
 		override protected function childSpecificUpdating():void
 		{ 
-			addEventListener(Event.ENTER_FRAME, updateKitty); 	
+			addEventListener(Event.ENTER_FRAME, updateEarth); 	
 		}
 		
-		private function updateKitty(e:Event):void
+		private function updateEarth(e:Event):void
 		{
 			
+			
+			ant_gravity = new b2Vec2(60,0.3*_earthAirBody.GetMass()); 
+			_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
 			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
 			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 
 			
@@ -181,6 +189,7 @@ package
 				_beenHit = true; 
 				setState(); 
 				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
+				trace("hit state works you are dumb"); 
 			}
 		}
 		private function setState():void { 

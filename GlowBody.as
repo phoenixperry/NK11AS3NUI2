@@ -20,6 +20,8 @@ package
 	import flash.ui.GameInput;
 	import flash.utils.Dictionary;
 	
+	import org.osflash.signals.Signal;
+	
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -56,11 +58,12 @@ package
 		private  var _ypos:Number; 
 		
 		private var _beenHit:Boolean;
+		public var glowHit:Signal; 		
 		
 		//experiment with singles 
 		private var b2Movie:MovieClip; 
 		private var sprites:StarSpriteCostume; 
-		
+
 		
 		public function GlowBody()
 		{
@@ -72,6 +75,8 @@ package
 			particles = new ParticleDesignerPS(XML(new ParticleXML()),
 			Texture.fromBitmap(new ParticleTexture()));
 			dict = new Dictionary();
+			glowHit = new  Signal();
+			glowHit.add(setState);
 			
 			
 			dict["glow"] = [
@@ -84,7 +89,7 @@ package
 					'CIRCLE',
 					
 					// center, radius
-					new b2Vec2(16.000/GameMain.RATIO,15.000/GameMain.RATIO),
+					new b2Vec2(16.000/GameMain.RATIO,14.000/GameMain.RATIO),
 					18.000/GameMain.RATIO
 					
 				]
@@ -109,7 +114,7 @@ package
 			bodyDef.userData = userData;
 			
 			// create the body
-			body = world.CreateBody(bodyDef);
+			body = GameMain.world.CreateBody(bodyDef);
 			
 			// prepare fixtures
 			for(f=0; f<fixtures.length; f++)
@@ -175,8 +180,8 @@ package
 		public function ballAdded(e:Event):void { 
 			//	
 			particles.start(); 
-			particles.emitterX = b2Movie.x +93; 
-			particles.emitterY = b2Movie.y + 140; 
+			particles.emitterX = b2Movie.x; 
+			particles.emitterY = b2Movie.y; 
 			_particleMouseX = 	particles.emitterX; 
 			py = 	particles.emitterY;
 			
@@ -187,7 +192,8 @@ package
 			addChild(particles); 
 	
 			removeEventListener(Event.ADDED_TO_STAGE, ballAdded); 
-				
+			//addChild(b2Movie); 
+			//b2Movie.alpha=0; 
 			
 		}
 		override protected function childSpecificUpdating():void
@@ -217,9 +223,9 @@ package
 			b2Movie.x = _BallBody.GetPosition().x * GameMain.RATIO; 
 			b2Movie.y = _BallBody.GetPosition().y * GameMain.RATIO;  
 			b2Movie.rotation = _BallBody.GetAngle() * (180/Math.PI);
-			particles.emitterX = (_BallBody.GetPosition().x * GameMain.RATIO); 
+			particles.emitterX = (_BallBody.GetPosition().x * GameMain.RATIO)+13; 
 			
-			particles.emitterY = (_BallBody.GetPosition().y* GameMain.RATIO); 
+			particles.emitterY = (_BallBody.GetPosition().y* GameMain.RATIO)+15; 
 			
 			//trace(_xpos, _ypos); 
 			
@@ -228,18 +234,26 @@ package
 		
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
+			this.alpha = 0
+		
+			trace ("this fucker ran"); 
 			if (! _beenHit)
 			{	
 				_beenHit = true; 
-				setBalloonState(); 
 				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
+				
+			}
+			if(particles.alpha ==0) {
+				this.remove(); 
+				this.destroy(); 
+				GameMain.world.DestroyBody(_BallBody);
+		
 			}
 		}
 		
-		private function setBalloonState():void
+		private function setState(msg:String):void
 		{
-			//do animation here 
-			trace("balloon hit kitty");
+			trace(msg);
 			
 		}
 		
@@ -247,9 +261,13 @@ package
 		{
 			
 			this.removeChildren(); 
-			b2Movie.dispose(); 
+			//b2Movie.dispose(); 
+			particles.dispose(); 
 			trace(this.numChildren); 
 		}
+
+
+
 	//l2
 	}	
 }
