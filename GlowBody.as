@@ -1,377 +1,255 @@
-package
+package 
 {
+	/**
+	 * @author phoenix
+	 */
+	import Box2D.Collision.*;
+	import Box2D.Collision.Shapes.*;
+	import Box2D.Collision.Shapes.b2CircleShape;
+	import Box2D.Common.Math.*;
+	import Box2D.Common.Math.b2Vec2;
+	import Box2D.Dynamics.*;
+	import Box2D.Dynamics.b2Body;
+	import Box2D.Dynamics.b2BodyDef;
+	import Box2D.Dynamics.b2FixtureDef;
+	
 	import flash.display.Bitmap;
+	import flash.display.Graphics;
+	import flash.display.Sprite;
+	import flash.geom.Point;
+	import flash.ui.GameInput;
+	import flash.utils.Dictionary;
 	
 	import starling.core.Starling;
+	import starling.display.Image;
+	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.extensions.*;
 	import starling.extensions.ParticleDesignerPS;
-	import starling.textures.Texture; 
-
+	import starling.textures.Texture;
+	import starling.textures.TextureAtlas;
 	
-	public class GlowBody extends Sprite
+	public class GlowBody extends Actor
 	{
-		private var particleXML:XML; 
-		private var particleTexture:Texture; 
-		private var particleBits:Bitmap; 
-
-
-		private var mps:ParticleDesignerPS;
-		private var mps2:ParticleDesignerPS;
-		private var mps3:ParticleDesignerPS;
-		private var mps4:ParticleDesignerPS;
-		private var mps5:ParticleDesignerPS;
-		private var mps6:ParticleDesignerPS;
-		private var mps7:ParticleDesignerPS;
-		private var mps8:ParticleDesignerPS;
-		private var mps9:ParticleDesignerPS;
-		private var mps10:ParticleDesignerPS;
-		private var mps11:ParticleDesignerPS;
-		private var mps12:ParticleDesignerPS;
-		private var mps13:ParticleDesignerPS;
-		private var mps14:ParticleDesignerPS;
-		private var mps15:ParticleDesignerPS;
+		[Embed(source="./assets/gameOver/sprites/glowBall.png")]
+		public var ParticleTexture:Class;
 		
-
+		[Embed(source="./assets/gameOver/sprites/particle.xml", mimeType="application/octet-stream")]
+		public var ParticleXML:Class; 
 		
-		private static var _xpos:Number=0; 
-		private static var _ypos:Number=0; 
+		public var particles:ParticleDesignerPS; 
+		public static const CACHE_ID:String = "GLOWBALL"; 
+		private var _particleMouseX:Number; 
+		public var py:Number; 
 		
-		private static var _xpos2:Number=0; 
-		private static var _ypos2:Number=0; 
+		public var _BallBody:b2Body; 
+		protected var dict:Dictionary;
 		
-		private static  var _xpos3:Number=0; 
-		private static var _ypos3:Number=0; 
+		protected var _mouseXWorldPhys:Number;
+		protected var _mouseYWorldPhys:Number;
+		protected var _mouseXWorld:Number=0;
+		protected var _mouseYWorld:Number=0;
+		protected var _mousePVec:b2Vec2 = new b2Vec2();
 		
-		private static var _xpos4:Number=0; 
-		private static var _ypos4:Number=0; 
+		private  var _xpos:Number; 
+		private  var _ypos:Number; 
 		
-		private static var _xpos5:Number; 
-		private static var _ypos5:Number; 
+		private var _beenHit:Boolean;
 		
-		private static var _xpos6:Number; 
-		private static var _ypos6:Number; 
-		private static var _xpos7:Number; 
-		private static var _ypos7:Number; 
+		//experiment with singles 
+		private var b2Movie:MovieClip; 
+		private var sprites:StarSpriteCostume; 
 		
-		private static var _xpos8:Number; 
-		private static var _ypos8:Number; 
-		
-		private static var _xpos9:Number; 
-		private static var _ypos9:Number; 
-		
-		private static var _xpos10:Number; 
-		private static var _ypos10:Number; 
-		
-		private static var _xpos11:Number; 
-		private static  var _ypos11:Number; 
-		
-		private static var _xpos12:Number; 
-		private static var _ypos12:Number; 
-		
-		private static var _xpos13:Number; 
-		private static var _ypos13:Number; 
-		
-		private static var _xpos14:Number; 
-		private static var _ypos14:Number; 
-		
-		private static var _xpos15:Number; 
-		private static var _ypos15:Number; 
-		
-		[Embed(source="./assets/gameOver/sprites/texture.png")] 
-		private var _particle:Class;  
-		
-		[Embed(source="./assets/gameOver/sprites/particle.xml",  mimeType="application/octet-stream")]
-		private var particleData:Class;
 		
 		public function GlowBody()
 		{
-		addEventListener(Event.ADDED_TO_STAGE, onAdded); 
-		particleXML = XML(new particleData()); 
-		particleBits = new _particle(); 
+			addEventListener(Event.ADDED_TO_STAGE, ballAdded); 
+			_particleMouseX = 0; 
+			
+			sprites = new StarSpriteCostume("glowBall", 5); 
+			b2Movie = sprites.getDressed(); 
+			particles = new ParticleDesignerPS(XML(new ParticleXML()),
+			Texture.fromBitmap(new ParticleTexture()));
+			dict = new Dictionary();
+			
+			
+			dict["glow"] = [
+				
+				[
+					// density, friction, restitution
+					2, 0, 0,
+					// categoryBits, maskBits, groupIndex, isSensor
+					1, 65535, 0, false,
+					'CIRCLE',
+					
+					// center, radius
+					new b2Vec2(16.000/GameMain.RATIO,15.000/GameMain.RATIO),
+					18.000/GameMain.RATIO
+					
+				]
+				
+			];
+			_BallBody = createBody("glow", GameMain.world, b2Body.b2_dynamicBody,particles); 
+			_BallBody.SetFixedRotation(true); 
+			super(_BallBody, particles); 
+			
 		
 		}
+		public function createBody(name:String, world:b2World, bodyType:uint, userData:*):b2Body
+		{
+			var fixtures:Array = dict[name];
+			
+			var body:b2Body;
+			var f:Number;
+			
+			// prepare body def
+			var bodyDef:b2BodyDef = new b2BodyDef();
+			bodyDef.type = bodyType;
+			bodyDef.userData = userData;
+			
+			// create the body
+			body = world.CreateBody(bodyDef);
+			
+			// prepare fixtures
+			for(f=0; f<fixtures.length; f++)
+			{
+				var fixture:Array = fixtures[f];
+				
+				var fixtureDef:b2FixtureDef = new b2FixtureDef();
+				
+				fixtureDef.density=fixture[0];
+				fixtureDef.friction=fixture[1];
+				fixtureDef.restitution=fixture[2];
+				
+				fixtureDef.filter.categoryBits = fixture[3];
+				fixtureDef.filter.maskBits = fixture[4];
+				fixtureDef.filter.groupIndex = fixture[5];
+				fixtureDef.isSensor = fixture[6];
+				
+				if(fixture[7] == "POLYGON")
+				{                    
+					var p:Number;
+					var polygons:Array = fixture[8];
+					for(p=0; p<polygons.length; p++)
+					{
+						var polygonShape:b2PolygonShape = new b2PolygonShape();
+						polygonShape.SetAsArray(polygons[p], polygons[p].length);
+						fixtureDef.shape=polygonShape;
+						
+						body.CreateFixture(fixtureDef);
+					}
+				}
+				else if(fixture[7] == "CIRCLE")
+				{
+					var circleShape:b2CircleShape = new b2CircleShape(fixture[9]);                    
+					circleShape.SetLocalPosition(fixture[8]);
+					fixtureDef.shape=circleShape;
+					body.CreateFixture(fixtureDef);                    
+				}                
+			}
+			
+			return body;
+		}
+		public  function set ypos(value:Number):void
+		{
+			_ypos = value;
+			//trace(_ypos, "I'm _ypos from the class"); 
+		}
 		
-		private function onAdded(e:Event):void { 
-			removeEventListener(Event.ADDED_TO_STAGE, onAdded); 
-			particleTexture = Texture.fromBitmap(particleBits); 
-			
-			mps = new ParticleDesignerPS(particleXML, particleTexture); 
-			mps2 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps3 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps4 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps5 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps6 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps7 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps8 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps9 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps10 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps11 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps12 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps13 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps14 = new ParticleDesignerPS(particleXML, particleTexture);
-			mps15 = new ParticleDesignerPS(particleXML, particleTexture);
-
-			
-			
-	
-			mps.start();
-			mps2.start();
-			mps3.start();
-			mps4.start();
-			//mps5.start();
-			mps6.start();
-			mps7.start();
-			mps8.start();
-			mps9.start();
-			mps10.start();
-			mps11.start();
-			mps12.start();
-			mps13.start();
-			mps14.start();
-			mps15.start();
-			
-			addChild(mps); 
-			addChild(mps2);
-			addChild(mps3);
-			addChild(mps4);
-		//addChild(mps5);
-			addChild(mps6);
-			addChild(mps7);
-			addChild(mps8);
-			addChild(mps9);
-			addChild(mps10);
-			addChild(mps11);
-			addChild(mps12);
-			addChild(mps13);
-			addChild(mps14);
-			addChild(mps15);
-
-			Starling.juggler.add(mps); 
-			Starling.juggler.add(mps2);
-			Starling.juggler.add(mps3);
-			Starling.juggler.add(mps4);
-			Starling.juggler.add(mps5);
-			Starling.juggler.add(mps6);
-			Starling.juggler.add(mps7);
-			Starling.juggler.add(mps8);
-			Starling.juggler.add(mps9);
-			Starling.juggler.add(mps10);
-			Starling.juggler.add(mps11);
-			Starling.juggler.add(mps12);
-			Starling.juggler.add(mps13);
-			Starling.juggler.add(mps14);
-			Starling.juggler.add(mps15);
+		
+		public  function set xpos(value:Number):void
+		{
+			_xpos = value;
+			//trace(_xpos, "I'm _xpos from the class");
 		}
-	
-		public function update():void {
-//			
-			mps.emitterX= xpos; 
-			mps.emitterY = ypos;
-			
-			mps2.emitterX= xpos2; 
-			mps2.emitterY = ypos2;
-			
-			mps3.emitterX= xpos3; 
-			mps3.emitterY = ypos3;
-			mps4.emitterX= xpos4; 
-			mps4.emitterY = ypos4;
-			mps5.emitterX= xpos5; 
-			mps5.emitterY = ypos5;
-			mps6.emitterX= xpos6; 
-			mps6.emitterY = ypos6;
-			mps7.emitterX= xpos7; 
-			mps7.emitterY = ypos7;
-			mps8.emitterX= xpos8; 
-			mps8.emitterY = ypos8;
-			
-			mps9.emitterX= xpos9; 
-			mps9.emitterY = ypos9;
-			
-			mps10.emitterX= xpos10; 
-			mps10.emitterY = ypos10;
-			mps11.emitterX= xpos11; 
-			mps11.emitterY = ypos11;
-			mps12.emitterX= xpos12; 
-			mps12.emitterY = ypos12;
-			mps13.emitterX= xpos13; 
-			mps13.emitterY = ypos13;
-			
-			mps14.emitterX= xpos14; 
-			mps14.emitterY = ypos14;
-			
-			mps15.emitterX= xpos15; 
-			mps15.emitterY = ypos15;
-		}
-		public static function get xpos():Number
+		
+		public  function get xpos():Number
 		{
 			return _xpos;
 		}
-
-		public static function set xpos(value:Number):void
+		public  function get ypos():Number
 		{
-			_xpos = value;
+			return _ypos;
 		}
-
+		public function ballAdded(e:Event):void { 
+			//	
+			particles.start(); 
+			particles.emitterX = b2Movie.x +93; 
+			particles.emitterY = b2Movie.y + 140; 
+			_particleMouseX = 	particles.emitterX; 
+			py = 	particles.emitterY;
+			
+			//now add it to juggler
+			Starling.juggler.add(particles); 
+			
+			
+			addChild(particles); 
 	
-		public static function get xpos2():Number
-		{
-			return _xpos2;
+			removeEventListener(Event.ADDED_TO_STAGE, ballAdded); 
+				
+			
 		}
-
-		public static function set xpos2(value:Number):void
-		{
-			_xpos2 = value;
+		override protected function childSpecificUpdating():void
+		{ 
+			addEventListener(Event.ENTER_FRAME, updateMouse); 	
 		}
-
-	
-		public static function get xpos3():Number
-		{
-			return _xpos3;
-		}
-
-		public static function set xpos3(value:Number):void
-		{
-			_xpos3 = value;
-		}
-
 		
-		public static function get xpos4():Number
+		private function updateMouse(e:Event):void
 		{
-			return _xpos4;
-		}
-
-		public static function set xpos4(value:Number):void
-		{
-			_xpos4 = value;
-		}
-
+			//updateNow(); 
+			_mouseXWorldPhys = (_xpos-b2Movie.width/2) / GameMain.RATIO;
+			_mouseYWorldPhys = (_ypos- b2Movie.height/4) / GameMain.RATIO;
+			//	trace(_mouseXWorldPhys, _mouseYWorldPhys, xpos, ypos); 
+			if(_xpos > 0 && _xpos <stage.stageWidth) { 
+				var ballTarget:b2Vec2= new b2Vec2(_mouseXWorldPhys, _mouseYWorldPhys); 
+				var ballCurrent:b2Vec2 = new b2Vec2(_BallBody.GetPosition().x, _BallBody.GetPosition().y);
+				//trace(_BallBody.GetPosition().x, _BallBody.GetPosition().y); 
+				var diff:b2Vec2 = new b2Vec2((ballTarget.x-ballCurrent.x), (ballTarget.y-ballCurrent.y)); 
+				//diff.Normalize(); 
+				diff.Multiply(14);
+				_BallBody.SetLinearVelocity(diff); 
+				_BallBody.SetAngularVelocity(0); 
+				_BallBody.IsFixedRotation(); 
+				
+			} 
+			// set the rotation of the sprite
+			b2Movie.x = _BallBody.GetPosition().x * GameMain.RATIO; 
+			b2Movie.y = _BallBody.GetPosition().y * GameMain.RATIO;  
+			b2Movie.rotation = _BallBody.GetAngle() * (180/Math.PI);
+			particles.emitterX = (_BallBody.GetPosition().x * GameMain.RATIO); 
+			
+			particles.emitterY = (_BallBody.GetPosition().y* GameMain.RATIO); 
+			
+			//trace(_xpos, _ypos); 
+			
+			
+		}		
 		
-		public static function get xpos5():Number
-		{
-			return _xpos5;
+		public override function hitByActor(actor:Actor):void {
+			//not in hit state
+			if (! _beenHit)
+			{	
+				_beenHit = true; 
+				setBalloonState(); 
+				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
+			}
 		}
-
-		public static function set xpos5(value:Number):void
-		{
-			_xpos5 = value;
-		}
-
-	
-
-		public static function get xpos6():Number
-		{
-			return _xpos6;
-		}
-
-		public static function set xpos6(value:Number):void
-		{
-			_xpos6 = value;
-		}
-
-
-		public static function get xpos7():Number
-		{
-			return _xpos7;
-		}
-
-		public static function set xpos7(value:Number):void
-		{
-			_xpos7 = value;
-		}
-
-	
-		public static function get xpos8():Number
-		{
-			return _xpos8;
-		}
-
-		public static function set xpos8(value:Number):void
-		{
-			_xpos8 = value;
-		}
-
 		
-		public static function get xpos9():Number
+		private function setBalloonState():void
 		{
-			return _xpos9;
+			//do animation here 
+			trace("balloon hit kitty");
+			
 		}
-
-		public static function set xpos9(value:Number):void
-		{
-			_xpos9 = value;
-		}
-
-	
-		public static function get xpos10():Number
-		{
-			return _xpos10;
-		}
-
-		public static function set xpos10(value:Number):void
-		{
-			_xpos10 = value;
-		}
-
-	
-
-		public static function get xpos11():Number
-		{
-			return _xpos11;
-		}
-
-		public static function set xpos11(value:Number):void
-		{
-			_xpos11 = value;
-		}
-
 		
-		public static function get xpos12():Number
+		public function remove ():void
 		{
-			return _xpos12;
+			
+			this.removeChildren(); 
+			b2Movie.dispose(); 
+			trace(this.numChildren); 
 		}
-
-		public static function set xpos12(value:Number):void
-		{
-			_xpos12 = value;
-		}
-
-		
-
-		public static function get xpos13():Number
-		{
-			return _xpos13;
-		}
-
-		public static function set xpos13(value:Number):void
-		{
-			_xpos13 = value;
-		}
-
-		public static function get ypos14():Number
-		{
-			return _ypos14;
-		}
-
-		public static function set ypos14(value:Number):void
-		{
-			_ypos14 = value;
-		}
-
-		public static function get xpos15():Number
-		{
-			return _xpos15;
-		}
-
-		public static function set xpos15(value:Number):void
-		{
-			_xpos15 = value;
-		}
-
-	
-
-	
-
-//l2		
-	}
+	//l2
+	}	
 }

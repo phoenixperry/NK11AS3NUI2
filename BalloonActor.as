@@ -112,7 +112,7 @@ package
 			_BallBody = createBody("mouse", GameMain.world, b2Body.b2_dynamicBody,b2Movie); 
 			_BallBody.SetFixedRotation(true); 
 			super(_BallBody, b2Movie); 
-			trace(_xpos, _ypos); 
+			//trace(_xpos, _ypos); 
 		}
 		
 		

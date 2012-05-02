@@ -34,6 +34,7 @@ package
 				trace("I should only run once per class setup"); 
 			}
 		}
+	
 		public function updateNow(): void 
 		{
 			updateMyLook(); 

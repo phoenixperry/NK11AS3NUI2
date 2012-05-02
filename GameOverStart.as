@@ -37,8 +37,8 @@ package
 		private var rainbowPara:Parallex; 
 		private var cloudsPara:Parallex; 
 		private var btnTrigger:Signal; 
-		public static var rhxpos:Number; 
-		public static var rhypos:Number; 
+		private static var _rhxpos:Number; 
+		private static var _rhypos:Number; 
 		
  
 		
@@ -124,8 +124,37 @@ package
 			q.y = 568; 
 			TweenLite.to(q, 2, {x:832, y:568, alpha:1, ease:Cubic.easeOut});
 			dieBtn_mc.color = 0x62b6bd;
+//			for (var i:int = 0; i < 5; i++) 
+//			{
+//				var e:EarthAir = new EarthAir(); 
+//				addChild(e); 
+//				e.x = 200; 
+//				e.y= 0; 
+//						
+//			}
 			
+		
 			
+		}
+
+		public static function get rhxpos():Number
+		{
+			return _rhxpos;
+		}
+
+		public static function set rhxpos(value:Number):void
+		{
+			_rhxpos = value;
+		}
+
+		public static function get rhypos():Number
+		{
+			return _rhypos;
+		}
+
+		public static function set rhypos(value:Number):void
+		{
+			_rhypos = value;
 		}
 	
 		

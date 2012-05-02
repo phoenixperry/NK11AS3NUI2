@@ -36,7 +36,7 @@ package
 		private var ball:BalloonActor; 
 		private var d:Diamonds; 
 		private var bs:BalloonString; 
-	
+
 
 		public function LevelOne()
 		{
@@ -46,7 +46,7 @@ package
 			
 			
 		}
-		  	protected function loadl(e:Event):void { 
+		protected function loadl(e:Event):void { 
 			removeEventListener(Event.ADDED_TO_STAGE, loadLevel); 
 			
 		//	parallax
@@ -60,7 +60,7 @@ package
 			addChild(ball);
 			bs = new BalloonString(); 
 			addChild(bs); 
-			
+	
 			kitty = new Kitty1(); 
 			addChild(kitty); 
 			
