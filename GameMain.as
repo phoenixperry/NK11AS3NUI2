@@ -39,7 +39,7 @@ package
 		
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
-		public static const useKinect:Boolean = true ; 
+		private static const _useKinect:Boolean = false ; 
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 			
@@ -225,8 +225,8 @@ package
 			//trace(pos.x, pos.y); 
 			BalloonActor.xpos = pos.x; 
 			BalloonActor.ypos = pos.y;
-		//	GlowBody.xpos = pos.x
-		//	GlowBody.ypos = pos.y; 
+			GlowBody.xpos = pos.x
+			GlowBody.ypos = pos.y; 
 			
 			
 
@@ -258,6 +258,11 @@ package
 				addChild(gameOverLevel1); 
 				loadLevelOne = false; 
 			}
+		}
+
+		public static function get useKinect():Boolean
+		{
+			return _useKinect;
 		}
 								 
 

@@ -53,9 +53,12 @@ package
 		protected var _mouseXWorld:Number=0;
 		protected var _mouseYWorld:Number=0;
 		protected var _mousePVec:b2Vec2 = new b2Vec2();
+	
+		//we are the global class based vars for if the kinect is not being used and multi-touch is on
 		private static var _xpos:Number; 
 		private static var _ypos:Number; 
 		
+		//we are the member vars for setting up the individual positions of glow balls 
 		public var xposMem:Number; 
 		public var yposMem:Number; 
 		private var _beenHit:Boolean;
@@ -184,6 +187,7 @@ package
 		
 		private function updateMouse(e:Event):void
 		{
+			if(GameMain.useKinect){
 			//updateNow(); 
 			_mouseXWorldPhys = (xposMem-b2Movie.width/2) / GameMain.RATIO;
 			_mouseYWorldPhys = (yposMem- b2Movie.height/4) / GameMain.RATIO;
@@ -198,8 +202,26 @@ package
 				_BallBody.SetLinearVelocity(diff); 
 				_BallBody.SetAngularVelocity(0); 
 				_BallBody.IsFixedRotation(); 
+				}	
+			}
+				//these update based on if I am using kinect or touch. 
+				_mouseXWorldPhys = (xpos-b2Movie.width/2) / GameMain.RATIO;
+				_mouseYWorldPhys = (ypos- b2Movie.height/4) / GameMain.RATIO;
+				//	trace(_mouseXWorldPhys, _mouseYWorldPhys, xpos, ypos); 
+				if(xpos > 0 && xpos <stage.stageWidth) { 
+					var ballTarget:b2Vec2= new b2Vec2(_mouseXWorldPhys, _mouseYWorldPhys); 
+					var ballCurrent:b2Vec2 = new b2Vec2(_BallBody.GetPosition().x, _BallBody.GetPosition().y);
+					//trace(_BallBody.GetPosition().x, _BallBody.GetPosition().y); 
+					var diff:b2Vec2 = new b2Vec2((ballTarget.x-ballCurrent.x), (ballTarget.y-ballCurrent.y)); 
+					//diff.Normalize(); 
+					diff.Multiply(14);
+					_BallBody.SetLinearVelocity(diff); 
+					_BallBody.SetAngularVelocity(0); 
+					_BallBody.IsFixedRotation(); 
 				
-			} 
+			
+			
+		}
 			// set the rotation of the sprite
 			b2Movie.x = _BallBody.GetPosition().x * GameMain.RATIO; 
 			b2Movie.y = _BallBody.GetPosition().y * GameMain.RATIO;  

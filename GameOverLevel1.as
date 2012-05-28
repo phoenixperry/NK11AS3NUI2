@@ -4,6 +4,7 @@ package
 	import Box2D.Common.Math.b2Vec2;
 	
 	import com.greensock.TweenLite;
+	import com.phoenixperry.Node;
 	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
@@ -27,6 +28,11 @@ package
 		private var goombaImmune:Timer; 
 		private var introTimer:Timer; 
 		private var gb:GlowBody; 
+		
+		private var n1:Node = new Node(12); 
+		private var n2:Node = new Node(99); 
+		private var n3:Node = new Node(37); 
+		
 		public function GameOverLevel1() 
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
@@ -45,7 +51,11 @@ package
 			introTimer.start(); 
 			
 		}
-		
+		protected function dataType() :void { 
+			n2.insert_prev(n1); 
+			n2.insert_next(n3); 
+			trace(n1.get_next_node().get_node_data() .get_node_data()); 
+		}
 		protected function startUp(event:TimerEvent):void
 		{	
 			TweenLite.to(introImage, 1, {alpha:0});
@@ -60,8 +70,6 @@ package
 			trace("earth goomba up"); 
 			var ea:EarthAir = new EarthAir();  
 			addChild(ea);
-			
-
 		}
 		
 		override public function removeLevel():void {
