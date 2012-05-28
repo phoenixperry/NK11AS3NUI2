@@ -14,7 +14,6 @@ package
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
-//	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.globalization.CurrencyFormatter;
 	import flash.printing.PrintJob;
@@ -40,7 +39,7 @@ package
 		
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
-		private var useKinect:Boolean = true ; 
+		public static const useKinect:Boolean = true ; 
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 			
@@ -186,7 +185,7 @@ package
 		}
 		private function deleteLevel(e:KeyboardEvent):void { 
 			if(e.keyCode == Keyboard.RIGHT){
-			level1.removeLevel(); 
+			gameOverLevel1.removeLevel(); 
 			trace("level one removed"); 
 			}
 			trace(e);
@@ -212,7 +211,7 @@ package
 		static public function set world(value:b2World):void 
 		{
 			_world = value;
-			
+		
 		}
 		
 		private function onTouch (e:TouchEvent):void
@@ -226,6 +225,10 @@ package
 			//trace(pos.x, pos.y); 
 			BalloonActor.xpos = pos.x; 
 			BalloonActor.ypos = pos.y;
+			GlowBody.xpos = pos.x
+			GlowBody.ypos = pos.y; 
+			
+			
 
 	
 			

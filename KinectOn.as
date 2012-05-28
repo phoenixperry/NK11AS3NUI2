@@ -28,18 +28,18 @@ package
 	{
 		//kinect vars
 		private var _skeletonSprite:Sprite;
-	
+		
 		private var kinect:Kinect; 
 		//custom kinect vars
-		private var xpos:Number; 
-		private var ypos:Number;
+		private  var xpos:Number; 
+		private  var ypos:Number;
 		public var isPlayer:Boolean; 
 		private var particleXML:XML; 
 		private var particleTexture:Texture; 
 		private var particleBits:Bitmap; 
 		private var particleImage:Image; 
 		public var user:User;
-	
+		
 		public var gbArray:Array; 
 		public var startScreenKinect:Signal;
 		private var makeGlowBodies:Boolean; 
@@ -53,11 +53,11 @@ package
 			gbArray = [];
 		}
 		private function onAdded(e:Event):void {
-
+			
 			if(Kinect.isSupported()) 
 			{
 				kinect = Kinect.getDevice(); 
-			 	
+				
 				
 				var settings:KinectSettings = new KinectSettings();
 				settings.skeletonEnabled = true;
@@ -76,11 +76,11 @@ package
 				}	
 				
 			}
-						
+			
 			startScreenKinect = new Signal(); 
 			
 		}
-
+		
 		protected function onEnterFrame(event:Event):void
 		{
 			drawSkeletons();
@@ -91,11 +91,11 @@ package
 			//_skeletonSprite.removeChildren();
 			
 			var scaler:Vector3D = new Vector3D(stage.stageWidth, stage.stageHeight, 300);
-
-	
+			
+			
 			var headJoint:SkeletonJoint; 
 			var torso:SkeletonJoint; 
-		//right side of skeleton 
+			//right side of skeleton 
 			//hand
 			var rh:SkeletonJoint; 
 			var rhxpos:Number; 
@@ -110,7 +110,7 @@ package
 			var rk:SkeletonJoint; 
 			//foot   
 			var rf:SkeletonJoint; 
-		 	//left side of body
+			//left side of body
 			//shoulder
 			var ls:SkeletonJoint; 
 			//hand 
@@ -123,11 +123,11 @@ package
 			var lk:SkeletonJoint; 
 			//foot
 			var lf:SkeletonJoint; 
-		
+			
 			
 			for each(var user:User in kinect.usersWithSkeleton)
 			{
-			
+				
 				//get the head joint and set the x,y for the balloon later
 				headJoint = user.getJointByName("head"); 
 				torso = user.getJointByName("torso"); 
@@ -146,18 +146,18 @@ package
 				lh = user.getJointByName("left_hand"); 
 				
 				
-			//	trace(headJoint.depthRelativePosition.x*stage.stageWidth); 
-			
-			
-					
+				//	trace(headJoint.depthRelativePosition.x*stage.stageWidth); 
+				
+				
+				
 				xpos = Number(headJoint.depthRelativePosition.x*stage.stageWidth);
 				ypos = Number(headJoint.depthRelativePosition.y*stage.stageHeight); 
 				
-			//head 
+				//head 
 				gbArray[12].xpos  = Number(headJoint.depthRelativePosition.x*stage.stageWidth);
 				gbArray[12].ypos = Number(headJoint.depthRelativePosition.y*stage.stageHeight); 
-
-//				//right side 
+				
+				//				//right side 
 				gbArray[0].xpos = Number(rs.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[0].ypos = Number(rs.depthRelativePosition.y*stage.stageHeight); 
 				
@@ -166,18 +166,18 @@ package
 				rhxpos =Number(rh.depthRelativePosition.x*stage.stageWidth);
 				rhypos = Number(rh.depthRelativePosition.y*stage.stageHeight);
 				gbArray[2].xpos = Number(re.depthRelativePosition.x*stage.stageWidth); 
-	   			gbArray[2].ypos = Number(re.depthRelativePosition.y*stage.stageHeight); 
+				gbArray[2].ypos = Number(re.depthRelativePosition.y*stage.stageHeight); 
 				
 				gbArray[3].xpos = Number(rhip.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[3].ypos = Number(rhip.depthRelativePosition.y*stage.stageHeight);
-			
+				
 				gbArray[4].xpos = Number(rk.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[4].ypos = Number(rk.depthRelativePosition.y*stage.stageHeight); 
 				
 				gbArray[5].xpos = Number(rf.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[5].ypos = Number(rf.depthRelativePosition.y*stage.stageHeight); 
-	
-			
+				
+				
 				//left side 
 				gbArray[6].xpos = Number(ls.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[6].ypos = Number(ls.depthRelativePosition.y*stage.stageHeight); 
@@ -190,20 +190,20 @@ package
 				
 				gbArray[9].xpos = Number(lhip.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[9].ypos = Number(lhip.depthRelativePosition.y*stage.stageHeight);
-			
+				
 				gbArray[10].xpos = Number(lk.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[10].ypos = Number(lk.depthRelativePosition.y*stage.stageHeight); 
 				
 				gbArray[11].xpos = Number(lf.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[11].ypos= Number(lf.depthRelativePosition.y*stage.stageHeight); 
-//	
-//				//torso use GlowBody.xpos5 
-////				torsoxpos = Number(torso.depthRelativePosition.x*stage.stageWidth); 
-////				torsoypos = Number(torso.depthRelativePosition.y*stage.stageHeight); 
-//				
-//				BalloonActor.xpos = xpos; 
-//				BalloonActor.ypos = ypos; 
-//			
+				//	
+				//				//torso use GlowBody.xpos5 
+				////				torsoxpos = Number(torso.depthRelativePosition.x*stage.stageWidth); 
+				////				torsoypos = Number(torso.depthRelativePosition.y*stage.stageHeight); 
+				//				
+				//				BalloonActor.xpos = xpos; 
+				//				BalloonActor.ypos = ypos; 
+				//			
 				
 				//sending out for hand detection
 				GameOverStart.rhxpos = gbArray[1].xpos; 
@@ -212,16 +212,16 @@ package
 				
 			}
 		}
-			public function renderSkeleton():void { 
+		public function renderSkeleton():void { 
 			
 			var numJoints:uint = user.skeletonJoints.length;
 			//create labels
-				for(var i:int = 0; i < numJoints; i++)
-				{	
-					var joint:SkeletonJoint = user.skeletonJoints[i];
-
-				}
+			for(var i:int = 0; i < numJoints; i++)
+			{	
+				var joint:SkeletonJoint = user.skeletonJoints[i];
+				
 			}
-	
 		}
+		
 	}
+}

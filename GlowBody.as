@@ -53,9 +53,8 @@ package
 		protected var _mouseXWorld:Number=0;
 		protected var _mouseYWorld:Number=0;
 		protected var _mousePVec:b2Vec2 = new b2Vec2();
-		
-		private  var _xpos:Number; 
-		private  var _ypos:Number; 
+		private static var _xpos:Number; 
+		private static var _ypos:Number; 
 		
 		private var _beenHit:Boolean;
 		public var glowHit:Signal; 		
@@ -156,27 +155,7 @@ package
 			
 			return body;
 		}
-		public  function set ypos(value:Number):void
-		{
-			_ypos = value;
-			//trace(_ypos, "I'm _ypos from the class"); 
-		}
-		
-		
-		public  function set xpos(value:Number):void
-		{
-			_xpos = value;
-			//trace(_xpos, "I'm _xpos from the class");
-		}
-		
-		public  function get xpos():Number
-		{
-			return _xpos;
-		}
-		public  function get ypos():Number
-		{
-			return _ypos;
-		}
+
 		public function ballAdded(e:Event):void { 
 			//	
 			particles.start(); 
@@ -234,21 +213,22 @@ package
 		
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
-			this.alpha = 0
+			particles.alpha = 0
 		
-			trace ("this fucker ran"); 
-			if (! _beenHit)
-			{	
-				_beenHit = true; 
-				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
-				
-			}
-			if(particles.alpha ==0) {
+			trace ("this  ran"); 
+//			if (! _beenHit)
+//			{	
+//				_beenHit = true; 
+//				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
+//				
+//			}
+			
 				this.remove(); 
 				this.destroy(); 
 				GameMain.world.DestroyBody(_BallBody);
-		
-			}
+				trace("joint hit"); 
+				trace(this.numChildren);
+			
 		}
 		
 		private function setState(msg:String):void
@@ -261,11 +241,32 @@ package
 		{
 			
 			this.removeChildren(); 
-			//b2Movie.dispose(); 
+			b2Movie.dispose(); 
 			particles.dispose(); 
 			trace(this.numChildren); 
 		}
 
+		public static function get xpos():Number
+		{
+			return _xpos;
+		}
+		public static function get ypos():Number
+		{
+			return _ypos;
+		}
+
+		public static function set ypos(value:Number):void
+		{
+			_ypos = value;
+			trace(_ypos, "I'm _ypos from the class"); 
+		}
+		
+		
+		public static function set xpos(value:Number):void
+		{
+			_xpos = value;
+			trace(_xpos, "I'm _xpos from the class");
+		}
 
 
 	//l2

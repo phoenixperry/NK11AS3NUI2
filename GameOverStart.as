@@ -46,6 +46,7 @@ package
 		private var introBits:Bitmap; 
 		private var introTexture:Texture; 
 		private var introImage:Image;
+		private var gb:GlowBody; 
 		[Embed(source="./assets/gameOver/sprites/letters.png")]
 		private var intro:Class;
 		
@@ -84,7 +85,7 @@ package
 		
 		private function startAdded(e:Event):void
 		{
-		
+			
 			trace(_startXML); 
 			trace(_startTexture); 
 			var textureAtlas:TextureAtlas = new TextureAtlas(_startTexture, _startXML); 
@@ -122,15 +123,24 @@ package
 			TweenLite.to(introImage, 3, {alpha:1});
 			introImage.x = 386; 
 			introImage.y = 286; 
-
+			//glow for fingers 
+			gb = new GlowBody(); 
+			addChild(gb); 
 			addEventListener(Event.ENTER_FRAME, btnTest); 
 		}
 		public function btnTest(e:Event) :void {
-			if(rhxpos > 832 && rhxpos < 1024 && rhypos > 0 && rhypos < 90) { 
-				btnTrigger.dispatch("btn clicked"); 
-				
+			if(GameMain.useKinect){
+				if(rhxpos > 832 && rhxpos < 1024 && rhypos > 0 && rhypos < 90) { 
+					btnTrigger.dispatch("btn clicked"); 
+					
+				}
+			}else {
+				if(GlowBody.xpos > 832 && GlowBody.xpos < 1024 && GlowBody.ypos > 0 && GlowBody.ypos < 90){
+					btnTrigger.dispatch("btn clicked"); 
+				}
 			}
 		}
+		
 		public function btnClicked(msg:String):void {
 			trace(msg);
 			
@@ -177,6 +187,7 @@ package
 		
 		override public function removeLevel():void {
 			//remove textures, children, listeners the shazm! 
+			gb.destroy(); 
 			cloudsPara.remove();  	
 			starsPara.remove(); 
 			//now let's get those starling babies out of here! 

@@ -26,11 +26,12 @@ package
 		private var fireGoomba:Timer; 
 		private var goombaImmune:Timer; 
 		private var introTimer:Timer; 
+		private var gb:GlowBody; 
 		public function GameOverLevel1() 
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
 //			addChild(q); 
-			introTimer = new Timer(5000,1);
+			introTimer = new Timer(0100,1);
 			introTimer.addEventListener(TimerEvent.TIMER_COMPLETE, startUp); 
 			fireGoomba = new Timer(3000); 
 			goombaImmune = new Timer(1000);
@@ -52,16 +53,21 @@ package
 			removeEventListener(TimerEvent.TIMER_COMPLETE,startUp); 
 			fireGoomba.addEventListener(TimerEvent.TIMER,goGoomba);
 			fireGoomba.start();
-			
+			gb = new GlowBody(); 
+			addChild(gb); 
 		}
 		public function goGoomba(event:TimerEvent):void{
 			trace("earth goomba up"); 
 			var ea:EarthAir = new EarthAir();  
-			addChild(ea); 
+			addChild(ea);
+			
 
 		}
 		
 		override public function removeLevel():void {
+			//you are going to need to loop to check 
+			//how many goomba there are
+			gb.remove(); 
 			this.removeChildren(); 
 			this.dispose();
 			trace(numChildren); 

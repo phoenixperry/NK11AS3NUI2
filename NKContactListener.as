@@ -27,13 +27,13 @@ package
 			var actorBFixtureUserData:* = contact.GetFixtureB().GetUserData();
 			
 			
-			//ballActor and PegActor contacted 
+			//ballActor contacted 
 			if (actorA is Kitty1 && actorB is BalloonActor) {
 		
 				trace("kittyhitballoon");
 				actorA.hitByActor(actorB);	
 			}
-			 if (actorB is Kitty1 && actorA is BalloonActor) {
+			if (actorB is Kitty1 && actorA is BalloonActor) {
 				//contact.GetFixtureB().GetBody().GetUserData().contact = true;
 			 
 				actorB.hitByActor(actorA);
@@ -44,13 +44,15 @@ package
 			 if (actorA is EarthAir && actorB is GlowBody) {
 				
 				trace("earth hit joint");
-				actorB.hitByActor(actorA);
+				//contact.GetFixtureA().GetBody().GetUserData().contact = true;
+				actorA.hitByActor(actorB);
 				
 			}
 			 if (actorB is EarthAir && actorA is GlowBody) {
-		
-				actorA.hitByActor(actorB); //check this you might of switched A/B
+				//contact.GetFixtureA().GetBody().GetUserData().contact = true;
+				actorB.hitByActor(actorA); //check this you might of switched A/B
 				trace("joint hit earth");
+		
 				
 			} 
 		}
