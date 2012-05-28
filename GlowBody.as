@@ -56,6 +56,8 @@ package
 		private static var _xpos:Number; 
 		private static var _ypos:Number; 
 		
+		public var xposMem:Number; 
+		public var yposMem:Number; 
 		private var _beenHit:Boolean;
 		public var glowHit:Signal; 		
 		
@@ -183,10 +185,10 @@ package
 		private function updateMouse(e:Event):void
 		{
 			//updateNow(); 
-			_mouseXWorldPhys = (_xpos-b2Movie.width/2) / GameMain.RATIO;
-			_mouseYWorldPhys = (_ypos- b2Movie.height/4) / GameMain.RATIO;
+			_mouseXWorldPhys = (xposMem-b2Movie.width/2) / GameMain.RATIO;
+			_mouseYWorldPhys = (yposMem- b2Movie.height/4) / GameMain.RATIO;
 			//	trace(_mouseXWorldPhys, _mouseYWorldPhys, xpos, ypos); 
-			if(_xpos > 0 && _xpos <stage.stageWidth) { 
+			if(xposMem > 0 && xposMem <stage.stageWidth) { 
 				var ballTarget:b2Vec2= new b2Vec2(_mouseXWorldPhys, _mouseYWorldPhys); 
 				var ballCurrent:b2Vec2 = new b2Vec2(_BallBody.GetPosition().x, _BallBody.GetPosition().y);
 				//trace(_BallBody.GetPosition().x, _BallBody.GetPosition().y); 

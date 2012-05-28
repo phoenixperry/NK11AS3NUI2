@@ -225,8 +225,8 @@ package
 			//trace(pos.x, pos.y); 
 			BalloonActor.xpos = pos.x; 
 			BalloonActor.ypos = pos.y;
-			GlowBody.xpos = pos.x
-			GlowBody.ypos = pos.y; 
+		//	GlowBody.xpos = pos.x
+		//	GlowBody.ypos = pos.y; 
 			
 			
 

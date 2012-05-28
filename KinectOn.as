@@ -57,7 +57,7 @@ package
 			if(Kinect.isSupported()) 
 			{
 				kinect = Kinect.getDevice(); 
-				
+				trace("the kinect is on");
 				
 				var settings:KinectSettings = new KinectSettings();
 				settings.skeletonEnabled = true;
@@ -65,15 +65,16 @@ package
 				this.user = user;
 				removeEventListener(Event.ADDED_TO_STAGE,onAdded);
 				addEventListener(Event.ENTER_FRAME, onEnterFrame); 
-				if(makeGlowBodies) {
+					if(makeGlowBodies) {
 					for (var i:int = 0; i < 14; i++) 
 					{
 						var gb:GlowBody = new GlowBody();  
 						gbArray.push(gb); 
 						addChild(gbArray[i]); 
+						makeGlowBodies = false;
 						
 					}
-				}	
+					}
 				
 			}
 			
@@ -153,49 +154,51 @@ package
 				xpos = Number(headJoint.depthRelativePosition.x*stage.stageWidth);
 				ypos = Number(headJoint.depthRelativePosition.y*stage.stageHeight); 
 				
-				//head 
-				gbArray[12].xpos  = Number(headJoint.depthRelativePosition.x*stage.stageWidth);
-				gbArray[12].ypos = Number(headJoint.depthRelativePosition.y*stage.stageHeight); 
-				
-				//				//right side 
-				gbArray[0].xpos = Number(rs.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[0].ypos = Number(rs.depthRelativePosition.y*stage.stageHeight); 
-				
-				gbArray[1].xpos = Number(rh.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[1].ypos = Number(rh.depthRelativePosition.y*stage.stageHeight); 
 				rhxpos =Number(rh.depthRelativePosition.x*stage.stageWidth);
 				rhypos = Number(rh.depthRelativePosition.y*stage.stageHeight);
-				gbArray[2].xpos = Number(re.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[2].ypos = Number(re.depthRelativePosition.y*stage.stageHeight); 
 				
-				gbArray[3].xpos = Number(rhip.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[3].ypos = Number(rhip.depthRelativePosition.y*stage.stageHeight);
+				//head 
+				gbArray[12].xposMem  = Number(headJoint.depthRelativePosition.x*stage.stageWidth);
+				gbArray[12].yposMem = Number(headJoint.depthRelativePosition.y*stage.stageHeight); 
 				
-				gbArray[4].xpos = Number(rk.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[4].ypos = Number(rk.depthRelativePosition.y*stage.stageHeight); 
+				//right side 
+				gbArray[0].xposMem = Number(rs.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[0].yposMem = Number(rs.depthRelativePosition.y*stage.stageHeight); 
 				
-				gbArray[5].xpos = Number(rf.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[5].ypos = Number(rf.depthRelativePosition.y*stage.stageHeight); 
+				gbArray[1].xposMem = Number(rh.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[1].yposMem = Number(rh.depthRelativePosition.y*stage.stageHeight); 
+		
+				gbArray[2].xposMem = Number(re.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[2].yposMem = Number(re.depthRelativePosition.y*stage.stageHeight); 
+				
+				gbArray[3].xposMem = Number(rhip.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[3].yposMem = Number(rhip.depthRelativePosition.y*stage.stageHeight);
+				
+				gbArray[4].xposMem = Number(rk.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[4].yposMem = Number(rk.depthRelativePosition.y*stage.stageHeight); 
+				
+				gbArray[5].xposMem = Number(rf.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[5].yposMem = Number(rf.depthRelativePosition.y*stage.stageHeight); 
 				
 				
 				//left side 
-				gbArray[6].xpos = Number(ls.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[6].ypos = Number(ls.depthRelativePosition.y*stage.stageHeight); 
+				gbArray[6].xposMem = Number(ls.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[6].yposMem = Number(ls.depthRelativePosition.y*stage.stageHeight); 
 				
-				gbArray[7].xpos = Number(lh.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[7].ypos = Number(lh.depthRelativePosition.y*stage.stageHeight); 
+				gbArray[7].xposMem = Number(lh.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[7].yposMem = Number(lh.depthRelativePosition.y*stage.stageHeight); 
 				
-				gbArray[8].xpos = Number(le.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[8].ypos = Number(le.depthRelativePosition.y*stage.stageHeight); 
+				gbArray[8].xposMem = Number(le.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[8].yposMem = Number(le.depthRelativePosition.y*stage.stageHeight); 
 				
-				gbArray[9].xpos = Number(lhip.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[9].ypos = Number(lhip.depthRelativePosition.y*stage.stageHeight);
+				gbArray[9].xposMem = Number(lhip.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[9].yposMem = Number(lhip.depthRelativePosition.y*stage.stageHeight);
 				
-				gbArray[10].xpos = Number(lk.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[10].ypos = Number(lk.depthRelativePosition.y*stage.stageHeight); 
+				gbArray[10].xposMem = Number(lk.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[10].yposMem = Number(lk.depthRelativePosition.y*stage.stageHeight); 
 				
-				gbArray[11].xpos = Number(lf.depthRelativePosition.x*stage.stageWidth); 
-				gbArray[11].ypos= Number(lf.depthRelativePosition.y*stage.stageHeight); 
+				gbArray[11].xposMem = Number(lf.depthRelativePosition.x*stage.stageWidth); 
+				gbArray[11].yposMem= Number(lf.depthRelativePosition.y*stage.stageHeight); 
 				//	
 				//				//torso use GlowBody.xpos5 
 				////				torsoxpos = Number(torso.depthRelativePosition.x*stage.stageWidth); 
@@ -206,8 +209,8 @@ package
 				//			
 				
 				//sending out for hand detection
-				GameOverStart.rhxpos = gbArray[1].xpos; 
-				GameOverStart.rhypos = gbArray[1].ypos; 
+				GameOverStart.rhxpos = gbArray[1].xposMem; 
+				GameOverStart.rhypos = gbArray[1].yposMem; 
 				
 				
 			}
