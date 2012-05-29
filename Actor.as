@@ -30,8 +30,8 @@ package
 			{	
 				updateMyLook(); 
 				childSpecificUpdating(); //note if you do this you have to have a listener to trigger motion - just be aware of it 
-				trace("constructor child specific updating ran"); 
-				trace("I should only run once per class setup"); 
+				//trace("constructor child specific updating ran"); 
+				//trace("I should only run once per class setup"); 
 			}
 		}
 	

@@ -218,9 +218,6 @@ package
 					_BallBody.SetLinearVelocity(diff); 
 					_BallBody.SetAngularVelocity(0); 
 					_BallBody.IsFixedRotation(); 
-				
-			
-			
 		}
 			// set the rotation of the sprite
 			b2Movie.x = _BallBody.GetPosition().x * GameMain.RATIO; 
@@ -282,14 +279,14 @@ package
 		public static function set ypos(value:Number):void
 		{
 			_ypos = value;
-			trace(_ypos, "I'm _ypos from the class"); 
+			//trace(_ypos, "I'm _ypos from the class"); 
 		}
 		
 		
 		public static function set xpos(value:Number):void
 		{
 			_xpos = value;
-			trace(_xpos, "I'm _xpos from the class");
+			//trace(_xpos, "I'm _xpos from the class");
 		}
 
 

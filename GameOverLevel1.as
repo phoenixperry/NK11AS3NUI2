@@ -49,12 +49,14 @@ package
 			introImage.alpha = 0; 
 			TweenLite.to(introImage, 1, {alpha:1});
 			introTimer.start(); 
-			
+			dataType(); 
 		}
 		protected function dataType() :void { 
 			n2.insert_prev(n1); 
 			n2.insert_next(n3); 
-			trace(n1.get_next_node().get_node_data() .get_node_data()); 
+			trace(n1.get_next_node().get_next_node().get_node_data(), "I'm from the linked list");
+			//each get_next_node moved you up and down the the list from that position. get data
+			//gets data
 		}
 		protected function startUp(event:TimerEvent):void
 		{	

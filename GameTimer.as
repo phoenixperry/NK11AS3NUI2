@@ -23,7 +23,7 @@ package
 		
 		public function saveTime(e:TimerEvent):void {
 			currentTime = e.target.currentCount;  
-			trace(currentTime, "I'm the time!"); 
+			//trace(currentTime, "I'm the time!"); 
 		}
 
 		public function getVirtualTime():Number {
