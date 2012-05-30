@@ -24,74 +24,63 @@ package
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
-	public class EarthAir extends Actor
+	public class Bouncer extends Actor
 	{
 		
-		public static const CACHE_ID:String = "EarthAndAir"; 
+		public static const CACHE_ID:String = "Bouncer"; 
 		protected var dict:Dictionary;
-		protected var earth_mc:MovieClip; 
+		protected var bouncer_mc:MovieClip; 
 		private var ant_gravity:b2Vec2;
 		
-		public var _earthAirBody:b2Body; 
+		public var _bouncerBody:b2Body; 
 		
 		
 		private var _beenHit:Boolean = false;
 		
 		
 		//experiment with singles 
-
+		
 		private var sprites:StarSpriteCostume; 
 		
 		private var bounce:Number = 0.22;
 		
-		public function EarthAir() 
+		public function Bouncer() 
 		{
 			addEventListener(Event.ADDED_TO_STAGE, EarthAirAdded); 
 			
 			
-			sprites = new StarSpriteCostume("EarthAndAirSm", 2);
+			sprites = new StarSpriteCostume("bouncer", 2);
 			
-			earth_mc = sprites.getDressed(); 
-			
-			
-			
-			
-			
-			
-			
+			bouncer_mc = sprites.getDressed(); 
 			
 			dict = new Dictionary();
-			dict["EarthAndAirSm"] = [
+			dict["bouncer"] = [
 				
 				[
 					// density, friction, restitution
 					2, 0, 0,
 					// categoryBits, maskBits, groupIndex, isSensor
 					1, 65535, 0, false,
-					'POLYGON',
+					'CIRCLE',
 					
-					// vertexes of decomposed polygons
-					[
-						
-						[   new b2Vec2(1/GameMain.RATIO, 26/GameMain.RATIO)  ,  new b2Vec2(24/GameMain.RATIO, -2/GameMain.RATIO)  ,  new b2Vec2(44/GameMain.RATIO, 27/GameMain.RATIO)  ,  new b2Vec2(22/GameMain.RATIO, 56/GameMain.RATIO)  ]
-					]
+					// center, radius
+					new b2Vec2(62.000/GameMain.RATIO,63.000/GameMain.RATIO),
+					63.008/GameMain.RATIO
 					
 				]
 				
-			];
-			
-			_earthAirBody= createBody("EarthAndAirSm", GameMain.world, b2Body.b2_dynamicBody,earth_mc); 
-			_earthAirBody.SetFixedRotation(true); 
-			super(_earthAirBody, earth_mc); 
+			];	
+			_bouncerBody= createBody("bouncer", GameMain.world, b2Body.b2_dynamicBody,bouncer_mc); 
+			_bouncerBody.SetFixedRotation(true); 
+			super(_bouncerBody, bouncer_mc); 
 		}
 		
 		private function EarthAirAdded(e:Event):void
 		{	
-			_earthAirBody.SetPosition(new b2Vec2((0-earth_mc.width)/GameMain.RATIO,(Math.random()*stage.stageHeight)/GameMain.RATIO)); 
-			//earth_mc.y = Math.random()*stage.stageHeight; 
-			addChild(earth_mc); 
-			trace("1 goomba added"); 
-			//trace("earth added"); 
+			_bouncerBody.SetPosition(new b2Vec2((0-bouncer_mc.width)/GameMain.RATIO,(Math.random()*stage.stageHeight)/GameMain.RATIO)); 
+			//bouncer_mc.y = Math.random()*stage.stageHeight; 
+			addChild(bouncer_mc); 
+			trace("bouncing ball added"); 
 			addEventListener(Event.ENTER_FRAME, boundsCheck); 
 			
 		}
@@ -178,31 +167,31 @@ package
 			
 			//f = m*a -- do the physics for this. 
 			ant_gravity = new b2Vec2(Math.random()*300, -9.8); 
-			_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
-			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
-			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 
-
+			//_bouncerBody.ApplyForce(ant_gravity, _bouncerBody.GetWorldCenter()); 
+			bouncer_mc.x = _bouncerBody.GetPosition().x * GameMain.RATIO; 
+			bouncer_mc.y = _bouncerBody.GetPosition().y * GameMain.RATIO; 
+			
 		}		
 		
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
-			//earth_mc.alpha =0; 
+			//bouncer_mc.alpha =0; 
 			
 			//	_beenHit = true; 
-				setState(); 
-				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
-				trace("hit state works you are dumb"); 
-				//earth_mc.dispose(); 	
+			setState(); 
+			//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
+			trace("hit state works you are dumb"); 
+			//bouncer_mc.dispose(); 	
 		}
 		private function setState():void { 
 			//do animation for hit here. 
-			trace("earth hit by joint"); 
+			trace("ball hit floor"); 
 		}
 		
 		public function remove ():void
 		{	this.destroy(); 
 			this.removeChildren(); 
-			earth_mc.dispose(); 		
+			bouncer_mc.dispose(); 		
 		}
 		
 		//last two 	

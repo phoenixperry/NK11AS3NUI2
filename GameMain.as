@@ -227,7 +227,7 @@ package
 			BalloonActor.ypos = pos.y;
 			GlowBody.xpos = pos.x
 			GlowBody.ypos = pos.y; 
-	
+			
 		}
 		
 		public function setDebugDraw(debugSprite:flash.display.Sprite):void{

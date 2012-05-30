@@ -4,6 +4,7 @@ package
 	import Box2D.Common.Math.b2Vec2;
 	
 	import com.greensock.TweenLite;
+	import com.greensock.easing.Bounce;
 	import com.phoenixperry.Node;
 	
 	import flash.display.Bitmap;
@@ -13,7 +14,7 @@ package
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
-	import starling.textures.Texture; 
+	import starling.textures.Texture;
 	
 	public class GameOverLevel1 extends LevelGen
 	{	
@@ -33,6 +34,7 @@ package
 		private var n2:Node = new Node(99); 
 		private var n3:Node = new Node(37); 
 		
+		private var bouncer:Bouncer; 
 		public function GameOverLevel1() 
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
@@ -67,6 +69,8 @@ package
 			fireGoomba.start();
 			gb = new GlowBody(); 
 			addChild(gb); 
+			bouncer = new Bouncer(); 
+			addChild(bouncer); 
 		}
 		public function goGoomba(event:TimerEvent):void{
 			trace("earth goomba up"); 

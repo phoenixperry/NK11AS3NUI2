@@ -11,10 +11,10 @@ package
 		private static var isOkToCreate:Boolean = false; 
 		
 		
-		[Embed(source="./assets/level1/sprites/fullSheet/fullSheet1.png")] 
+		[Embed(source="./assets/gameOver/sprites/startClouds.png")] 
 		private var spriteSheet:Class;  
 		
-		[Embed(source="./assets/level1/sprites/fullSheet/fullSheet1.xml",  mimeType="application/octet-stream")]
+		[Embed(source="./assets/gameOver/sprites/startClouds.xml",  mimeType="application/octet-stream")]
 		private var allData:Class;
 		
 		private var _myTexture:Texture; 
