@@ -33,9 +33,7 @@ package
 	
 	public class GameMain extends Sprite
 	{
-		private var level1:LevelOne; 
-		private var level2:LevelTwo; 
-		private var level3:LevelThree; 
+
 		
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
@@ -170,8 +168,7 @@ package
 				//addChild(level2); 
 			}
 			if(e.keyCode == Keyboard.O){ 
-				level1 = new LevelOne(); 
-				addChild(level1);
+				//up arrow testing	
 			}
 			if(useKinect) {
 				k = new KinectOn(); 
@@ -223,8 +220,6 @@ package
 			// store the mouse coordinates
 
 			//trace(pos.x, pos.y); 
-			BalloonActor.xpos = pos.x; 
-			BalloonActor.ypos = pos.y;
 			GlowBody.xpos = pos.x
 			GlowBody.ypos = pos.y; 
 			
