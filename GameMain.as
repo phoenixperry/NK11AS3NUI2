@@ -37,7 +37,7 @@ package
 		
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
-		private static const _useKinect:Boolean = false ; 
+		private static const _useKinect:Boolean = true ; 
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 			
