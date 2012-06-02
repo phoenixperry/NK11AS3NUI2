@@ -74,6 +74,10 @@ package
 		{
 			addEventListener(Event.ADDED_TO_STAGE, startAdded); 
 			
+			/*
+			var sprites = new StarSpriteCostume("btn", 1); 
+			var btn_mc:MovieClip = sprites
+			*/ 
 			var startBits:Bitmap = new startClouds(); 
 			_startTexture = Texture.fromBitmap(startBits, true); 
 			_startXML = XML(new startData()); 

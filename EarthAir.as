@@ -90,7 +90,7 @@ package
 			_earthAirBody.SetPosition(new b2Vec2((0-earth_mc.width)/GameMain.RATIO,(Math.random()*stage.stageHeight)/GameMain.RATIO)); 
 			//earth_mc.y = Math.random()*stage.stageHeight; 
 			addChild(earth_mc); 
-			trace("1 goomba added"); 
+			//trace("1 goomba added"); 
 			//trace("earth added"); 
 			addEventListener(Event.ENTER_FRAME, boundsCheck); 
 			
@@ -177,7 +177,7 @@ package
 		{
 			
 			//f = m*a -- do the physics for this. 
-			ant_gravity = new b2Vec2(Math.random()*300, -9.8); 
+			ant_gravity = new b2Vec2(Math.random()*10, 0); 
 			_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
 			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
 			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 
@@ -187,16 +187,17 @@ package
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
 			//earth_mc.alpha =0; 
-			
+			trace(actor.name); 
 			//	_beenHit = true; 
 				setState(); 
 				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
-				trace("hit state works you are dumb"); 
+				trace("earth hit by glowbody function saying hello"); 
+		
 				//earth_mc.dispose(); 	
 		}
 		private function setState():void { 
 			//do animation for hit here. 
-			trace("earth hit by joint"); 
+			trace("earth setState signing on! Why you hit me bitch?"); 
 		}
 		
 		public function remove ():void

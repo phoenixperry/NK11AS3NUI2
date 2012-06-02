@@ -37,7 +37,7 @@ package
 		
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
-		private static const _useKinect:Boolean = false ; 
+		private static const _useKinect:Boolean = true ; 
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 			
@@ -190,7 +190,7 @@ package
 		
 		private function setupPhysicsWorld():void 
 		{
-			var gravity:b2Vec2 = new b2Vec2(0, 9.8); 
+			var gravity:b2Vec2 = new b2Vec2(0, 0); 
 			var allowSleep:Boolean = false; 
 			 _world = new b2World(gravity, allowSleep); 
 			 addEventListener(Event.ENTER_FRAME, updateW); 

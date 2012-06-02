@@ -41,7 +41,7 @@ package
 		public var ParticleXML:Class; 
 		
 		public var particles:ParticleDesignerPS; 
-		public static const CACHE_ID:String = "GLOWBALL"; 
+		public static const CACHE_ID:String = "GlowBall"; 
 		private var _particleMouseX:Number; 
 		public var py:Number; 
 		
@@ -53,7 +53,7 @@ package
 		protected var _mouseXWorld:Number=0;
 		protected var _mouseYWorld:Number=0;
 		protected var _mousePVec:b2Vec2 = new b2Vec2();
-	
+		
 		//we are the global class based vars for if the kinect is not being used and multi-touch is on
 		private static var _xpos:Number; 
 		private static var _ypos:Number; 
@@ -61,14 +61,15 @@ package
 		//we are the member vars for setting up the individual positions of glow balls 
 		public var xposMem:Number; 
 		public var yposMem:Number; 
-		private var _beenHit:Boolean;
+		private var _beenHit:Boolean = false;
 		public var glowHit:Signal; 		
 		
 		//experiment with singles 
 		private var b2Movie:MovieClip; 
 		private var sprites:StarSpriteCostume; 
 
-		
+		//hit test ghetto style 
+		public var hit:Boolean; 
 		public function GlowBody()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, ballAdded); 
@@ -81,7 +82,7 @@ package
 			dict = new Dictionary();
 			glowHit = new  Signal();
 			glowHit.add(setState);
-			
+		
 			
 			dict["glow"] = [
 				
@@ -107,6 +108,7 @@ package
 		}
 		public function createBody(name:String, world:b2World, bodyType:uint, userData:*):b2Body
 		{
+			
 			var fixtures:Array = dict[name];
 			
 			var body:b2Body;
@@ -224,10 +226,15 @@ package
 			b2Movie.y = _BallBody.GetPosition().y * GameMain.RATIO;  
 			b2Movie.rotation = _BallBody.GetAngle() * (180/Math.PI);
 			particles.emitterX = (_BallBody.GetPosition().x * GameMain.RATIO)+13; 
-			
 			particles.emitterY = (_BallBody.GetPosition().y* GameMain.RATIO)+15; 
 			
 			//trace(_xpos, _ypos); 
+			
+			//was I hit? 
+			if(hit) {
+				GameMain.world.DestroyBody(_BallBody);
+				hit = false; 
+			}
 			
 			
 		}		
@@ -236,7 +243,6 @@ package
 			//not in hit state
 			particles.alpha = 0
 		
-			trace ("this  ran"); 
 //			if (! _beenHit)
 //			{	
 //				_beenHit = true; 
@@ -245,16 +251,17 @@ package
 //			}
 			
 				this.remove(); 
-				this.destroy(); 
-				GameMain.world.DestroyBody(_BallBody);
-				trace("joint hit"); 
-				trace(this.numChildren);
 			
+				trace("glow body hitByActor saying what's up!"); 
+				trace(this.numChildren);
+				setState("Glow body runing it's setState"); 
+				
 		}
 		
 		private function setState(msg:String):void
 		{
 			trace(msg);
+			hit = true; 
 			
 		}
 		
