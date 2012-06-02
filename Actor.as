@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package 
 {
 	import Box2D.Dynamics.b2Body;
@@ -174,5 +173,4 @@ package
 		
 	}
 	
->>>>>>> cb2153de5b206b164f004a6540856fe17a57f385
 }

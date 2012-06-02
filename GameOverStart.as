@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package
 {
 	import com.greensock.*;
@@ -414,5 +414,4 @@ package
 		}
 		
 	}
->>>>>>> cb2153de5b206b164f004a6540856fe17a57f385
 }
