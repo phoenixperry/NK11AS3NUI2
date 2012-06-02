@@ -6,6 +6,10 @@ package
 	import com.as3nui.nativeExtensions.air.kinect.data.SkeletonJoint;
 	import com.as3nui.nativeExtensions.air.kinect.data.User;
 	import com.as3nui.nativeExtensions.air.kinect.events.CameraImageEvent;
+	import com.as3nui.nativeExtensions.air.kinect.data.DeviceCapabilities;
+	
+	import com.as3nui.nativeExtensions.air.kinect.events.DeviceEvent;
+	
 	import com.greensock.TweenLite;
 	
 	import flash.display.Bitmap;
@@ -39,7 +43,6 @@ package
 		private var particleBits:Bitmap; 
 		private var particleImage:Image; 
 		public var user:User;
-		
 		public var gbArray:Array; 
 		public var startScreenKinect:Signal;
 		private var makeGlowBodies:Boolean; 
@@ -48,12 +51,9 @@ package
 		{
 			_skeletonSprite = new Sprite();
 			this.addChild(_skeletonSprite);
-			addEventListener(Event.ADDED_TO_STAGE,onAdded); 
+			
 			makeGlowBodies = true; 
 			gbArray = [];
-		}
-		private function onAdded(e:Event):void {
-			
 			if(Kinect.isSupported()) 
 			{
 				kinect = Kinect.getDevice(); 
@@ -63,20 +63,24 @@ package
 				settings.skeletonEnabled = true;
 				kinect.start(settings); 
 				this.user = user;
-				removeEventListener(Event.ADDED_TO_STAGE,onAdded);
+			kinect.addEventListener(DeviceEvent.STARTED, onAdded, false, 0, true);
+			}
+		}
+		private function onAdded(e:DeviceEvent):void {
+			
+				//removeEventListener(DeviceEvent.STARTED,onAdded);
 				addEventListener(Event.ENTER_FRAME, onEnterFrame); 
 					if(makeGlowBodies) {
-					for (var i:int = 0; i < 14; i++) 
-					{
-						var gb:GlowBody = new GlowBody();  
-						gbArray.push(gb); 
-						addChild(gbArray[i]); 
-						makeGlowBodies = false;
-						
-					}
+						for (var i:int = 0; i < 14; i++) 
+						{
+							var gb:GlowBody = new GlowBody();  
+							gbArray.push(gb); 
+							addChild(gbArray[i]); 
+							makeGlowBodies = false;	
+						}
 					}
 				
-			}
+			
 			
 			startScreenKinect = new Signal(); 
 			

@@ -1,3 +1,4 @@
+
 package 
 {
 	import Box2D.Collision.b2AABB;
@@ -28,4 +29,5 @@ package
 		//	(st.stage.getChildAt(0) as GameMain).setDebugDraw(debugSprite)
 		}
 	}
+
 }
