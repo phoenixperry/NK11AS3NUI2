@@ -259,7 +259,7 @@ package
 				
 		}
 		
-		private function setState(var msg:String):void
+		private function setState( msg:String):void
 		{
 			trace(msg);
 			hit = true; 
