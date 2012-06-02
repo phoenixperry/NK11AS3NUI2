@@ -3,13 +3,11 @@ package
 	import com.as3nui.nativeExtensions.air.kinect.Kinect;
 	import com.as3nui.nativeExtensions.air.kinect.KinectSettings;
 	import com.as3nui.nativeExtensions.air.kinect.constants.CameraResolution;
+	import com.as3nui.nativeExtensions.air.kinect.data.DeviceCapabilities;
 	import com.as3nui.nativeExtensions.air.kinect.data.SkeletonJoint;
 	import com.as3nui.nativeExtensions.air.kinect.data.User;
 	import com.as3nui.nativeExtensions.air.kinect.events.CameraImageEvent;
-	import com.as3nui.nativeExtensions.air.kinect.data.DeviceCapabilities;
-	
 	import com.as3nui.nativeExtensions.air.kinect.events.DeviceEvent;
-	
 	import com.greensock.TweenLite;
 	
 	import flash.display.Bitmap;
@@ -30,6 +28,7 @@ package
 	
 	public class KinectOn extends Sprite
 	{
+		public var numJointsInUse:Number = 11; 
 		//kinect vars
 		private var _skeletonSprite:Sprite;
 		

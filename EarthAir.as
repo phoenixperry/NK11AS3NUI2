@@ -178,7 +178,7 @@ package
 		{
 			
 			//f = m*a -- do the physics for this. 
-			ant_gravity = new b2Vec2(Math.random()*10, 0); 
+			ant_gravity = new b2Vec2(Math.random()*100, 0); 
 			_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
 			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
 			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 

@@ -17,8 +17,11 @@ package
 	import flash.geom.Point;
 	import flash.globalization.CurrencyFormatter;
 	import flash.printing.PrintJob;
+	import flash.text.Font;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
+	
+	import org.osflash.signals.Signal;
 	
 	import starling.core.Starling;
 	import starling.display.Image;
@@ -28,16 +31,26 @@ package
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.text.TextField;
 	import starling.textures.Texture;
-	import starling.utils.Stats;
+	import starling.utils.Stats; 
 	
 	public class GameMain extends Sprite
 	{
-
 		
+
+		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false",fontName="Gotham")]
+		public static var Gotham:Class; 
+		
+		public var killAll:Boolean = false; 
+		//reset var
+		public static var countGlows:Number; 
+	
+		//font
+		private var font:Font; 
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
-		private static const _useKinect:Boolean = false ; 
+		private static const _useKinect:Boolean = true ; 
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 			
@@ -52,6 +65,7 @@ package
 		private var makeSprites:SingletonSpriteSheet; 
 		
 		private var gameTimer:GameTimer; 
+		private var levelOneRunning:Signal; 
 		
 		
 		public function GameMain() 
@@ -63,10 +77,12 @@ package
 		}
 		private function onAdded(e:Event):void
 		{
+			//set up font
+			font = new Gotham(); 
 			setupPhysicsWorld();
 			gameTimer = new GameTimer(); 
 			
-		
+			
 			removeEventListener(Event.ADDED_TO_STAGE, onAdded); 
 
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteLevel);
@@ -75,71 +91,6 @@ package
 			addEventListener(Event.ENTER_FRAME, gameLoop); 
 			
 		}		
-	//	trying to fix the time step. This is going to have to happen. Oh zee pain. 
-//		private var _currentTime:Number = gameTimer.getVirtualTime()/1000; 
-//		private const FIXED_TIMESTEP:Number = 1/60; 
-//		private var fixedTimeStepAccumulator:Number = 0; 
-//		private var fixedTimeStepAccumulatorRatio:Number = 0; 
-//		private var velocityIterations:int = 8; 
-//		private var positionIterations:int = 1; 
-//		
-//		public function process():void {
-//			var newTime:Number = gameTimer.getVirtualTime()/1000;
-//			var dt:Number = newTime - _currentTime; 
-//			_currentTime= newTime; 
-//			const MAX_STEPS:int = 5; 
-//			fixedTimeStepAccumulator +=dt; 
-//			const nSteps:int = Math.floor(fixedTimeStepAccumulator/FIXED_TIMESTEP); 
-//			
-//			if (nSteps > 0) 
-//			{
-//				fixedTimeStepAccumulator -= nSteps* FIXED_TIMESTEP; 
-//			}
-//			fixedTimeStepAccumulatorRatio = fixedTimeStepAccumulator/FIXED_TIMESTEP; 
-//			const nStepsClamped:int= min(nSteps, MAX_STEPS); 
-//			for (var i:int = 0; i < nStepsClamped; i++) 
-//			{
-//				resetSmoothStates(); 
-//				singleStep(FIXED_TIMESTEP); 
-//			}
-//			world.ClearForces(); 
-//			smoothStates(); 
-//			
-//		}
-//		
-//		private function singleStep(dt:Number):void {
-//			_world.Step(dt, velocityIterations, positionIterations); 
-//			_world.DrawDebugData();
-//		}
-////		
-//		
-//		private function smoothStates():void {
-//			const oneMinusRatio:Number = 1.0 - fixedTimeStepAccumulatorRatio; 
-//			for each (var body:b2Body = GameMain._world.GetBodyList(); body; body=body.GetNext())
-//			{ 			
-//				//gonna need to call the Actor.costume update and adjust the 
-//				//stuff from here to there. Oh zee joy
-		// from alan bishops' blog - need to fully comprehend ramifications with this config
-//				texture.position.x = fixedTimestepAccumulatorRatio * box2Dbody.GetPosition().x 
-				//+ (oneMinusRatio * body.previousPosition.x);
-//				texture.position.y = fixedTimestepAccumulatorRatio * box2Dbody.GetPosition().y + 
-				//oneMinusRatio * body.previousPosition.y;
-//				texture.rotation = 
-				//box2Dbody.GetAngle() * fixedTimestepAccumulatorRatio + oneMinusRatio * body.previousAngle;
-//		}
-//		MORE FROM ALAN 
-//		private function resetSmoothStates():void
-//		{
-//			for each (var body:Body in bodies)
-//			{
-//				texture.position.x = body.previousPosition.x = body.box2Dbody.GetPosition().x;
-//				
-//				texture.position.y = body.previousPosition.y = body.box2Dbody.GetPosition().y;
-//				
-//				texture.rotation = body.previousAngle = body.box2Dbody.GetAngle();
-//			}
-//		}
-//		//end of timestep fix 
 		private function updateW(e:Event):void
 		{
 			var timeStep:Number = 1 / 60;
@@ -172,11 +123,13 @@ package
 			}
 			if(useKinect) {
 				k = new KinectOn(); 
-				addChild(k); 	
+				addChild(k); 
+				countGlows = 13; 
 			}
 			else{
 				
 				stage.addEventListener(TouchEvent.TOUCH, onTouch);
+				countGlows = 1; 
 			}
 			//this.addChild(new Stats());
 		}
@@ -248,9 +201,27 @@ package
 				gameOverLevel1 = new GameOverLevel1(); 
 				addChild(gameOverLevel1); 
 				loadLevelOne = false; 
+
 			}
+			if(countGlows == 0){
+				//gameOverStart = new GameOverStart(); 
+				//addChild(gameOverStart); 
+				killLevel(); 
+			}
+			
 		}
 
+		 private function killLevel():void
+		{
+			
+				 var msg:TextField = new TextField(600,400,"Fear destroyed your body", font.fontName, 38, 0xFFFFFF); 
+				 msg.x = stage.stageWidth - msg.width >>1; 
+				 msg.y = stage.stageHeight - msg.height >>1; 
+				 addChild(msg); 
+				 removeEventListener(Event.ENTER_FRAME, gameLoop); 	 
+
+		}	
+		
 		public static function get useKinect():Boolean
 		{
 			return _useKinect;

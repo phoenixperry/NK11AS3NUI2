@@ -32,7 +32,7 @@ package
 		private var fireGoomba3:Timer; 
 		private var goombaImmune:Timer; 
 		private var introTimer:Timer; 
-		private var gb:GlowBody; 
+		public var gb:GlowBody; 
 		
 		private var n1:Node = new Node(12); 
 		private var n2:Node = new Node(99); 
@@ -45,7 +45,7 @@ package
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
 //			addChild(q); 
-			introTimer = new Timer(0100,1);
+			introTimer = new Timer(5000,1);
 			introTimer.addEventListener(TimerEvent.TIMER_COMPLETE, startUp); 
 			
 			goombaImmune = new Timer(1000);
@@ -81,7 +81,7 @@ package
 			addEventListener(Event.ENTER_FRAME,goombaLevels); 
 			loopTime = new Timer(1000); 
 			loopTime.start(); 
-			fireGoomba = new Timer(5000); 
+			fireGoomba = new Timer(3000); 
 			fireGoomba.start();
 			fireGoomba.addEventListener(TimerEvent.TIMER,goGoomba);
 

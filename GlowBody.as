@@ -62,7 +62,7 @@ package
 		//we are the member vars for setting up the individual positions of glow balls 
 		public var xposMem:Number; 
 		public var yposMem:Number; 
-		private var _beenHit:Boolean = false;
+		public var _beenHit:Boolean = false;
 		public var glowHit:Signal; 		
 		
 		//experiment with singles 
@@ -234,7 +234,10 @@ package
 			//was I hit? 
 			if(hit) {
 				GameMain.world.DestroyBody(_BallBody);
+				remove();
 				hit = false; 
+				trace("glow ball has", numChildren); 
+				GameMain.countGlows -= 1; 
 			}
 			
 			
