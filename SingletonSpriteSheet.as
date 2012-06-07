@@ -1,9 +1,10 @@
 package
 {	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	
 	import starling.display.Sprite;
-	import starling.textures.Texture; 
+	import starling.textures.Texture;
 	
 	public class SingletonSpriteSheet extends Sprite
 	{
@@ -19,13 +20,13 @@ package
 		
 		private var _myTexture:Texture; 
 		private var _myXML:XML; 
+		private var _allBits:Bitmap;
 
 		public function SingletonSpriteSheet()
 		{
 			if(!isOkToCreate) throw new Error(this + " is a singleton. Access using getInstance()"); 
 			if(isOkToCreate) {
-			
-				var allBits:Bitmap = new spriteSheet(); 
+				_allBits = new spriteSheet(); 
 				_myTexture = Texture.fromBitmap(allBits, true); 
 				_myXML = XML(new allData()); 
 			
@@ -35,6 +36,12 @@ package
 		}
 		
 		//with this method we will create and access the instance of the method
+
+		public function get allBits():Bitmap
+		{
+			return _allBits;
+		}
+
 		public static function getInstance():SingletonSpriteSheet 
 		{
 			//if there's no instance, make one
@@ -58,7 +65,8 @@ package
 			return _myXML;
 		}
 
-
+	
+		
 
 	}
 }

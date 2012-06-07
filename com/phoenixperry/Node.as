@@ -4,7 +4,7 @@ package com.phoenixperry
 	{//I'm a linked list!! 
 		public var node_data:*; 
 		public var next_node:Node; 
-	
+		
 	public function Node(node_content:*) { 
 			node_data = node_content; 
 			next_node=null; 
