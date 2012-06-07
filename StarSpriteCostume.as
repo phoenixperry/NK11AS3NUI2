@@ -1,6 +1,12 @@
 package
 {
 	
+	
+	import com.phoenixperry.BitmapDataCatcher;
+	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
 	import starling.display.Image;
@@ -8,7 +14,7 @@ package
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
-
+	
 	public class StarSpriteCostume extends Sprite
  	{
 		private var _myXML:XML;
@@ -20,15 +26,17 @@ package
 		private var myMovie:MovieClip; 
 		private var _single_mc:MovieClip; 
 		private var sprites:SingletonSpriteSheet; 
-
-		public function StarSpriteCostume(textureName:String, myFrameRate:int)
+		private var _cacheID:String; 
+		private var bitMapFromSheet:BitmapData; 
+		public function StarSpriteCostume(textureName:String, myFrameRate:int, CACHE_ID:String=null)
 		{
 			//starling 
 			sprites = SingletonSpriteSheet.getInstance();
 			_myXML = sprites.myXML; 
 			myTexture = sprites.myTexture ; 
 			_textureName = textureName; 
-
+			_cacheID = CACHE_ID; 
+			
 		}
 		
 		public function getDressed():MovieClip {
@@ -44,9 +52,14 @@ package
 			
 			Starling.juggler.add(myMovie); 
 			return myMovie; 
-			
-			
+		
 		}
+		
+//		public function cacheMe():BitmapData { 
+//			var target2BitmapData:BitmapData = BitmapDataCatcher.cacheBitmap(_cacheID,bitMapFromSheet, _myXML);
+//			return target2BitmapData; 
+//		}
+	
 		
 //	public function singleOutfit(_myTexture:Texture, _xmlData:XML, _name:String):MovieClip{ 
 		//fix this function. it's busted. Why? 

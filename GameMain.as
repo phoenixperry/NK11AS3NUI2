@@ -1,4 +1,4 @@
-package 
+ package 
 {
 	import Box2D.Collision.Shapes.b2CircleShape;
 	import Box2D.Common.Math.b2Vec2;
@@ -10,6 +10,7 @@ package
 	import Box2D.Dynamics.b2World;
 	
 	import com.greensock.TweenLite;
+	import com.phoenixperry.GameOverSimon;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -33,11 +34,11 @@ package
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.Texture;
-	import starling.utils.Stats; 
+	import starling.utils.Stats;
 	
 	public class GameMain extends Sprite
 	{
-		
+		private static const _useKinect:Boolean = false ; 
 
 		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false",fontName="Gotham")]
 		public static var Gotham:Class; 
@@ -50,7 +51,9 @@ package
 		private var font:Font; 
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
-		private static const _useKinect:Boolean = false ; 
+
+
+
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 			
@@ -61,7 +64,7 @@ package
 		public static var loadLevelOne:Boolean= false; 
 		public static var loadLevelTwo:Boolean = false; 
 		public var gameOverLevel1:GameOverLevel1; 
-		
+		public var gameOverSimon:GameOverSimon; 
 		private var makeSprites:SingletonSpriteSheet; 
 		
 		private var gameTimer:GameTimer; 
@@ -118,8 +121,10 @@ package
 				//level2 = new LevelTwo(); 
 				//addChild(level2); 
 			}
-			if(e.keyCode == Keyboard.O){ 
+			if(e.keyCode == Keyboard.UP){ 
 				//up arrow testing	
+				gameOverSimon = new GameOverSimon(); 
+				addChild(gameOverSimon); 
 			}
 			if(useKinect) {
 				k = new KinectOn(); 
@@ -226,8 +231,10 @@ package
 		{
 			return _useKinect;
 		}
-								 
-	}
 		
 		
+		
+		
+//l2								 
 	}
+}
