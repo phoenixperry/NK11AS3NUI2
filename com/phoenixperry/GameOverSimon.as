@@ -10,7 +10,7 @@ package com.phoenixperry
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture;
+	import starling.textures.Texture; 
 	
 	public class GameOverSimon extends Sprite
 	{
@@ -35,9 +35,6 @@ package com.phoenixperry
 		
 		[Embed(source="./assets/gameOver/sounds/7.mp3", mimeType="audio/mpeg")] 
 		private var sound7:Class; 
-	
-	
-
 		
 		private var n1:Node = new Node(12); 
 		private var n2:Node = new Node(99); 
@@ -98,7 +95,6 @@ package com.phoenixperry
 
 		public  function compare(myName:Number):void{ 
 			trace("my name is" , myName); 
-			
 			if(count <= _btnNumbers.length) 
 			{ 
 				//pull the array. 
@@ -112,10 +108,12 @@ package com.phoenixperry
 				count++ 
 				//}
 			}
+			dataType(); 
 		}
 		private function popRand():void { 
 			var rand:Number = int(Math.random()*6);
 			trace(btnArray[rand], rand); 
+			
 		}
 //		private function onTriggered(e:Event):void
 //		{
@@ -127,13 +125,13 @@ package com.phoenixperry
 //		}
 //		
 //		
-//		protected function dataType() :void { 
-//			n2.insert_prev(n1); 
-//			n2.insert_next(n3); 
-//			trace(n1.get_next_node().get_next_node().get_node_data(), "I'm from the linked list");
-//			//each get_next_node moved you up and down the the list from that position. get data
-//			//gets data
-//		}
+		protected function dataType() :void { 
+			n2.insert_prev(n1); 
+			n2.insert_next(n3); 
+			trace(n1.get_next_node(), "I'm from the linked list");
+			//each get_next_node moved you up and down the the list from that position. get data
+			//gets data
+		}
 //l2 
 	}
 }
