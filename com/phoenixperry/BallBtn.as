@@ -1,6 +1,5 @@
 package com.phoenixperry
 {
-	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
 	import flash.media.Sound;
@@ -10,13 +9,13 @@ package com.phoenixperry
 	
 	import flashx.textLayout.debug.assert;
 	
+	import org.osflash.signals.Signal;
+	
 	import starling.display.Button;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture;
-	
-	import org.osflash.signals.Signal; 
+	import starling.textures.Texture; 
 	
 	public class BallBtn extends Sprite{
 
@@ -35,9 +34,11 @@ package com.phoenixperry
 		private var immunityTime:Timer; 
 		private var quad:Quad; 
 		
+		public var iwasTouched:Signal; 
+		
 		public function BallBtn( _sound:Class,  _name:Number, xpos:Number,  ypos:Number)
 		{
-		
+			iwasTouched = new Signal(); 
 			quad = new Quad(w,h,0xFFFFFF,true); 
 			quad.x = xpos; 
 			quad.y = ypos; 
@@ -51,6 +52,8 @@ package com.phoenixperry
 			immunityTime.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete); 
 			tone= new _sound(); 
 		}
+		
+
 		
 		protected function onTimerComplete(event:TimerEvent):void
 		{
@@ -76,7 +79,7 @@ package com.phoenixperry
 				
 				if((_rhxpos >= _xpos) && (_rhxpos <= _xpos+w) && (_rhypos >= _ypos) && (_rhypos <= _ypos +height) && touched ==false) 
 				{
-					trace("i'm touched"); 
+					trace(myName, "I've been touched!"); 
 					immunityTime.start(); 
 					quad.color = 0xFF00FF; 
 					tone.play(); 
@@ -87,11 +90,13 @@ package com.phoenixperry
 			
 			if(!GameMain.useKinect) {
 				if(( GlowBody.xpos>= _xpos) && (GlowBody.xpos <= _xpos+w) && (GlowBody.ypos >= _ypos) && (GlowBody.ypos <= _ypos +height)&& touched ==false) 
-				{	
+				{		
+					iwasTouched.dispatch(myName);   
 					trace(myName, "I've been touched!"); 
 					if(!immunityTime.running)immunityTime.start(); 
 					quad.color = 0xFF00FF;
 					touched = true; 
+	
 					tone.play(); 
 				}
 		

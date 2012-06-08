@@ -52,15 +52,13 @@ package com.phoenixperry
 		private var myBtn:Button; 
 		private var gb:GlowBody; 
 		
+		private var count:Number = 0; 
 		public function GameOverSimon()
-		{	
+		{
 			//dataType(); 
 			trace("GameOverSimon created"); 
 			addEventListener(Event.ADDED_TO_STAGE, startUp); 
-			
 			btnContainer = new Sprite(); 	
-
-			
 		}	
 		
 		private function startUp(e:Event):void
@@ -70,10 +68,9 @@ package com.phoenixperry
 			removeEventListener(Event.ADDED_TO_STAGE, startUp); 
 			drawBtns(); 
 			addEventListener(Event.ENTER_FRAME, onEnter); 
-		
 		}
 		private function  onEnter(e:Event):void { 
-			
+
 		}
 		private function drawBtns():void
 		{
@@ -86,6 +83,8 @@ package com.phoenixperry
 				var btn:BallBtn = new BallBtn(sound1, i, i*100, 150); 
 				addChild(btn); 
 				trace(i*50); 
+				btn.iwasTouched.add(compare); 
+				btnArray.push(btn); 
 			}
 			
 	//	btnContainer.addEventListener(Event.TRIGGERED, onTriggered); 
@@ -95,13 +94,29 @@ package com.phoenixperry
 		addChild(btnContainer);
 
 		}
-		
-//		private function getRandomBtn():void { 
-//			var rand:Number = int(Math.random()*6);
-//			trace(btnArray[rand], rand); 
-//			
-//		}
-//		
+		// run me when the singal is send a box is touched. send the myName field w/the signal
+
+		public  function compare(myName:Number):void{ 
+			trace("my name is" , myName); 
+			
+			if(count <= _btnNumbers.length) 
+			{ 
+				//pull the array. 
+				
+					if(btnArray[count].myName == myName) { 
+						trace("you got a match"); 
+					}
+				
+				//for each touch - get the myName. get the name of the current object. if the name matches the touch - get the next one. If not - flip on 
+				//end screen 
+				count++ 
+				//}
+			}
+		}
+		private function popRand():void { 
+			var rand:Number = int(Math.random()*6);
+			trace(btnArray[rand], rand); 
+		}
 //		private function onTriggered(e:Event):void
 //		{
 //			trace(e.currentTarget, e.target); 
