@@ -9,6 +9,7 @@ package
 	import com.as3nui.nativeExtensions.air.kinect.events.CameraImageEvent;
 	import com.as3nui.nativeExtensions.air.kinect.events.DeviceEvent;
 	import com.greensock.TweenLite;
+	import com.phoenixperry.BallBtn;
 	
 	import flash.display.Bitmap;
 	import flash.geom.Vector3D;
@@ -214,6 +215,8 @@ package
 				//sending out for hand detection
 				GameOverStart.rhxpos = gbArray[1].xposMem; 
 				GameOverStart.rhypos = gbArray[1].yposMem; 
+				BallBtn.rhxpos =  gbArray[1].xposMem; 
+				BallBtn.rhypos =  gbArray[1].yposMem; 
 				
 				
 			}
