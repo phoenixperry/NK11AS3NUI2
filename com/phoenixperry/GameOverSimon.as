@@ -14,7 +14,6 @@ package com.phoenixperry
 	
 	public class GameOverSimon extends Sprite
 	{
-
 		[Embed(source="./assets/gameOver/sounds/1.mp3", mimeType="audio/mpeg")] 
 		private var sound1:Class; 
 		
@@ -36,9 +35,6 @@ package com.phoenixperry
 		[Embed(source="./assets/gameOver/sounds/7.mp3", mimeType="audio/mpeg")] 
 		private var sound7:Class; 
 		
-		private var n1:Node = new Node(12); 
-		private var n2:Node = new Node(99); 
-		private var n3:Node = new Node(37); 
 	
 		private var _btnNumbers:Vector.<String> = Vector.<String>(["1","2","3","4","5","6"]); 
 		private var btnContainer:Sprite; 
@@ -67,7 +63,7 @@ package com.phoenixperry
 			addEventListener(Event.ENTER_FRAME, onEnter); 
 		}
 		private function  onEnter(e:Event):void { 
-
+			
 		}
 		private function drawBtns():void
 		{
@@ -76,7 +72,6 @@ package com.phoenixperry
 			
 			for (var i:int = 0; i < _btnNumbers.length; i++) 
 			{	
-				
 				var btn:BallBtn = new BallBtn(sound1, i, i*100, 150); 
 				addChild(btn); 
 				trace(i*50); 
@@ -107,14 +102,15 @@ package com.phoenixperry
 				//end screen 
 				count++ 
 				//}
+					
 			}
-			dataType(); 
+		
 		}
 		private function popRand():void { 
 			var rand:Number = int(Math.random()*6);
 			trace(btnArray[rand], rand); 
-			
 		}
+		
 //		private function onTriggered(e:Event):void
 //		{
 //			trace(e.currentTarget, e.target); 
@@ -124,14 +120,17 @@ package com.phoenixperry
 //			
 //		}
 //		
-//		
-		protected function dataType() :void { 
-			n2.insert_prev(n1); 
-			n2.insert_next(n3); 
-			trace(n1.get_next_node(), "I'm from the linked list");
-			//each get_next_node moved you up and down the the list from that position. get data
-			//gets data
+//
+		
+		private function getNode():Node { 
+			var num:Number = int(Math.random()*6); 
+			var n:Node = new Node(num); 
+			return n; 
 		}
+		
+
+		
+		
 //l2 
 	}
 }
