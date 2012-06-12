@@ -1,8 +1,6 @@
 package com.phoenixperry
 
 {
-	import com.phoenixperry.Node;
-	
 	import flash.display.Bitmap;
 	import flash.media.Sound;
 	
@@ -44,11 +42,11 @@ package com.phoenixperry
 		private var currentNum:int; 
 		private var myBtn:Button; 
 		private var gb:GlowBody; 
-		
+		private var list:LinkedList; 
 		private var count:Number = 0; 
+		private var currentCount:Number = 0; 
 		public function GameOverSimon()
 		{
-			//dataType(); 
 			trace("GameOverSimon created"); 
 			addEventListener(Event.ADDED_TO_STAGE, startUp); 
 			btnContainer = new Sprite(); 	
@@ -61,6 +59,10 @@ package com.phoenixperry
 			removeEventListener(Event.ADDED_TO_STAGE, startUp); 
 			drawBtns(); 
 			addEventListener(Event.ENTER_FRAME, onEnter); 
+	
+			var num:Number = popRand(); 
+			list = new LinkedList(num,4,3,2,1,3,4,2,4,2,4,2,4,2,3,2,4,1); 
+			trace(list.length, "linked list working right"); 
 		}
 		private function  onEnter(e:Event):void { 
 			
@@ -80,56 +82,26 @@ package com.phoenixperry
 			}
 			
 	//	btnContainer.addEventListener(Event.TRIGGERED, onTriggered); 
-		
 		btnContainer.x = stage.stageWidth- btnContainer.width >>1; 
 		btnContainer.y = stage.stageHeight - btnContainer.height >>1; 
 		addChild(btnContainer);
-
 		}
 		// run me when the singal is send a box is touched. send the myName field w/the signal
 
-		public  function compare(myName:Number):void{ 
-			trace("my name is" , myName); 
-			if(count <= _btnNumbers.length) 
-			{ 
-				//pull the array. 
-				
-					if(btnArray[count].myName == myName) { 
-						trace("you got a match"); 
-					}
-				
-				//for each touch - get the myName. get the name of the current object. if the name matches the touch - get the next one. If not - flip on 
-				//end screen 
-				count++ 
-				//}
-					
-			}
-		
-		}
-		private function popRand():void { 
-			var rand:Number = int(Math.random()*6);
-			trace(btnArray[rand], rand); 
-		}
-		
-//		private function onTriggered(e:Event):void
-//		{
-//			trace(e.currentTarget, e.target); 
-//			trace("triggered"); 
-//			var btn:Button = e.target as Button; 
-//			getRandomBtn(); 
-//			
-//		}
-//		
-//
-		
-		private function getNode():Node { 
-			var num:Number = int(Math.random()*6); 
-			var n:Node = new Node(num); 
-			return n; 
-		}
-		
 
-		
+		public  function compare(myName:Number):void{ 
+			
+			trace("my name is" , myName); 
+			//var num = list.elementAt(2) as Number;
+//			trace(num, "ll item 2");
+			trace(list.elementAt(1));	
+	
+		}
+		private function popRand():Number { 
+			var rand:Number = int(Math.random()*6);
+
+			return rand
+		}
 		
 //l2 
 	}

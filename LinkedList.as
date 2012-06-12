@@ -1,4 +1,28 @@
-package com.phoenixperry
+
+/*
+The MIT License
+
+Copyright (c) 2011 Jackson Dunstan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+package
 {
 	/**
 	 *   A linked list, which is a single-dimensional chain of objects called
@@ -10,28 +34,27 @@ package com.phoenixperry
 	 *   @author Simon Tatham (sort functionality)
 	 *           http://www.chiark.greenend.org.uk/~sgtatham/algorithms/listsort.html
 	 */
-	import com.phoenixperry.Node;
 	public class LinkedList
 	{
-		public var head:Node;
-		public var tail:Node;
+		public var head:LinkedListNode;
+		public var tail:LinkedListNode;
 		public var length:int;
 		
 		public function LinkedList(...values)
 		{
 			var len:int = this.length = values.length;
-			var head:Node = null;
-			var newNode:Node;
+			var head:LinkedListNode = null;
+			var newNode:LinkedListNode;
 			var i:int;
 			
 			// Equivalent to Array(len)
 			if (len == 1)
 			{
 				len = values[0];
-				head = this.tail = newNode = new Node();
+				head = this.tail = newNode = new LinkedListNode();
 				for (i = 1; i < len; ++i)
 				{
-					newNode = new Node();
+					newNode = new LinkedListNode();
 					newNode.next = head;
 					head.prev = newNode;
 					head = newNode;
@@ -41,10 +64,10 @@ package com.phoenixperry
 			else if (len > 1)
 			{
 				i = len-1;
-				head = this.tail = newNode = new Node(values[i--]);
+				head = this.tail = newNode = new LinkedListNode(values[i--]);
 				for (; i >= 0; --i)
 				{
-					newNode = new Node(values[i]);
+					newNode = new LinkedListNode(values[i]);
 					newNode.next = head;
 					head.prev = newNode;
 					head = newNode;
@@ -71,7 +94,7 @@ package com.phoenixperry
 			else
 			{
 				var halfLength:int = this.length >> 1;
-				var cur:Node;
+				var cur:LinkedListNode;
 				var i:int;
 				var j:int;
 				// Element is in the first half, start at beginning
@@ -124,12 +147,12 @@ package com.phoenixperry
 		public function concat(...args): LinkedList
 		{
 			var ret:LinkedList = new LinkedList();
-			var newNode:Node;
+			var newNode:LinkedListNode;
 			
 			// Add everything from this list
-			for (var cur:Node = this.head; cur; cur = cur.next)
+			for (var cur:LinkedListNode = this.head; cur; cur = cur.next)
 			{
-				newNode = new Node(cur.data);
+				newNode = new LinkedListNode(cur.data);
 				newNode.prev = ret.tail;
 				if (ret.tail)
 				{
@@ -152,7 +175,7 @@ package com.phoenixperry
 					list = arg;
 					for (cur = list.head; cur; cur = cur.next)
 					{
-						newNode = new Node(cur.data);
+						newNode = new LinkedListNode(cur.data);
 						newNode.prev = ret.tail;
 						if (ret.tail)
 						{
@@ -168,7 +191,7 @@ package com.phoenixperry
 					// No flattening for any other type, even Array
 				else
 				{
-					newNode = new Node(arg);
+					newNode = new LinkedListNode(arg);
 					newNode.prev = ret.tail;
 					if (ret.tail)
 					{
@@ -187,7 +210,7 @@ package com.phoenixperry
 		public function every(callback:Function, thisObject:*=null): Boolean
 		{
 			var index:int;
-			for (var cur:Node = this.head; cur; cur = cur.next)
+			for (var cur:LinkedListNode = this.head; cur; cur = cur.next)
 			{
 				if (!callback.call(thisObject, cur.data, index, this))
 				{
@@ -202,12 +225,12 @@ package com.phoenixperry
 		{
 			var ret:LinkedList = new LinkedList();
 			var index:int;
-			var newNode:Node;
-			for (var cur:Node = this.head; cur; cur = cur.next)
+			var newNode:LinkedListNode;
+			for (var cur:LinkedListNode = this.head; cur; cur = cur.next)
 			{
 				if (callback.call(thisObject, cur.data, index, this))
 				{
-					newNode = new Node(cur.data);
+					newNode = new LinkedListNode(cur.data);
 					newNode.prev = ret.tail;
 					if (ret.tail)
 					{
@@ -227,7 +250,7 @@ package com.phoenixperry
 		public function forEach(callback:Function, thisObject:*=null): void
 		{
 			var index:int;
-			for (var cur:Node = this.head; cur; cur = cur.next)
+			for (var cur:LinkedListNode = this.head; cur; cur = cur.next)
 			{
 				callback.call(thisObject, cur.data, index, this);
 				index++;
@@ -237,7 +260,7 @@ package com.phoenixperry
 		public function indexOf(searchElement:*, fromIndex:int=0): int
 		{
 			var index:int;
-			for (var cur:Node = this.head; cur && index < fromIndex; cur = cur.next)
+			for (var cur:LinkedListNode = this.head; cur && index < fromIndex; cur = cur.next)
 			{
 				index++;
 			}
@@ -259,7 +282,7 @@ package com.phoenixperry
 			}
 			
 			var ret:String = "";
-			for (var curNode:Node = this.head; curNode; curNode = curNode.next)
+			for (var curNode:LinkedListNode = this.head; curNode; curNode = curNode.next)
 			{
 				ret += curNode.data + sep;
 			}
@@ -269,7 +292,7 @@ package com.phoenixperry
 		public function lastIndexOf(searchElement:*, fromIndex:int=0x7fffffff): int
 		{
 			var index:int = this.length-1;
-			for (var cur:Node = this.tail; cur && index > fromIndex; cur = cur.prev)
+			for (var cur:LinkedListNode = this.tail; cur && index > fromIndex; cur = cur.prev)
 			{
 				index--;
 			}
@@ -288,10 +311,10 @@ package com.phoenixperry
 		{
 			var ret:LinkedList = new LinkedList();
 			var index:int;
-			var newNode:Node;
-			for (var cur:Node = this.head; cur; cur = cur.next)
+			var newNode:LinkedListNode;
+			for (var cur:LinkedListNode = this.head; cur; cur = cur.next)
 			{
-				newNode = new Node(callback.call(thisObject, cur.data, index, this));
+				newNode = new LinkedListNode(callback.call(thisObject, cur.data, index, this));
 				newNode.prev = ret.tail;
 				if (ret.tail)
 				{
@@ -326,12 +349,12 @@ package com.phoenixperry
 		{
 			var numArgs:int = args.length;
 			var arg:*;
-			var newNode:Node;
+			var newNode:LinkedListNode;
 			
 			for (var i:int; i < numArgs; ++i)
 			{
 				arg = args[i];
-				newNode = new Node(arg);
+				newNode = new LinkedListNode(arg);
 				newNode.prev = this.tail;
 				if (this.tail)
 				{
@@ -348,8 +371,8 @@ package com.phoenixperry
 		
 		public function reverse(): LinkedList
 		{
-			var front:Node = this.head;
-			var back:Node = this.tail;
+			var front:LinkedListNode = this.head;
+			var back:LinkedListNode = this.tail;
 			var temp:*;
 			while (front != back && back.prev != front)
 			{
@@ -387,16 +410,16 @@ package com.phoenixperry
 				return ret;
 			}
 			
-			var cur:Node = this.head;
+			var cur:LinkedListNode = this.head;
 			var i:int;
-			var newNode:Node;
+			var newNode:LinkedListNode;
 			for (; i < startIndex && cur; ++i)
 			{
 				cur = cur.next;
 			}
 			for (; i < endIndex && cur; ++i)
 			{
-				newNode = new Node(cur.data);
+				newNode = new LinkedListNode(cur.data);
 				newNode.prev = ret.tail;
 				if (ret.tail)
 				{
@@ -415,7 +438,7 @@ package com.phoenixperry
 		public function some(callback:Function, thisObject:*=null): Boolean
 		{
 			var index:int;
-			for (var cur:Node = this.head; cur; cur = cur.next)
+			for (var cur:LinkedListNode = this.head; cur; cur = cur.next)
 			{
 				if (callback.call(thisObject, cur.data, index, this))
 				{
@@ -428,17 +451,17 @@ package com.phoenixperry
 		
 		public function sort(cmp:Function): void
 		{
-			var p:Node;
-			var q:Node;
-			var e:Node;
-			var tail:Node;
-			var oldhead:Node;
+			var p:LinkedListNode;
+			var q:LinkedListNode;
+			var e:LinkedListNode;
+			var tail:LinkedListNode;
+			var oldhead:LinkedListNode;
 			var insize:int;
 			var nmerges:int;
 			var psize:int;
 			var qsize:int;
 			var i:int;
-			var list:Node = this.head;
+			var list:LinkedListNode = this.head;
 			
 			/*
 			* Silly special case: if `list' was passed in as null, return
@@ -523,10 +546,10 @@ package com.phoenixperry
 		public function splice(startIndex:int, deleteCount:int, ...values): LinkedList
 		{
 			var ret:LinkedList = new LinkedList();
-			var cur:Node = this.head;
+			var cur:LinkedListNode = this.head;
 			var endIndex:int = startIndex + deleteCount;
 			var i:int;
-			var newNode:Node;
+			var newNode:LinkedListNode;
 			for (; i < startIndex && cur; ++i)
 			{
 				cur = cur.next;
@@ -534,7 +557,7 @@ package com.phoenixperry
 			for (; i < endIndex && cur; ++i)
 			{
 				// Push current node to spliced list
-				newNode = new Node(cur.data);
+				newNode = new LinkedListNode(cur.data);
 				newNode.prev = ret.tail;
 				if (ret.tail)
 				{
@@ -563,7 +586,7 @@ package com.phoenixperry
 			}
 			
 			var ret:String = "";
-			for (var curNode:Node = this.head; curNode; curNode = curNode.next)
+			for (var curNode:LinkedListNode = this.head; curNode; curNode = curNode.next)
 			{
 				ret += curNode.data + ",";
 			}
@@ -578,7 +601,7 @@ package com.phoenixperry
 			}
 			
 			var ret:String = "";
-			for (var curNode:Node = this.head; curNode; curNode = curNode.next)
+			for (var curNode:LinkedListNode = this.head; curNode; curNode = curNode.next)
 			{
 				ret += curNode.data + ",";
 			}
@@ -589,11 +612,11 @@ package com.phoenixperry
 		{
 			var numArgs:int = args.length;
 			var arg:*;
-			var newNode:Node;
+			var newNode:LinkedListNode;
 			for (var i:int; i < numArgs; ++i)
 			{
 				arg = args[i];
-				newNode = new Node(arg);
+				newNode = new LinkedListNode(arg);
 				newNode.next = this.head;
 				if (this.head)
 				{
