@@ -4,13 +4,14 @@ package com.phoenixperry
 	import com.phoenixperry.Node;
 	
 	import flash.display.Bitmap;
+	import flash.events.Event;
 	import flash.media.Sound;
 	
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture; 
+	import starling.textures.Texture;
 	
 	public class GameOverSimon extends Sprite
 	{
@@ -35,6 +36,8 @@ package com.phoenixperry
 		[Embed(source="./assets/gameOver/sounds/7.mp3", mimeType="audio/mpeg")] 
 		private var sound7:Class; 
 		
+		private var firstNode:Node; 
+		private var currentNode:Node; 
 	
 		private var _btnNumbers:Vector.<String> = Vector.<String>(["1","2","3","4","5","6"]); 
 		private var btnContainer:Sprite; 
@@ -44,6 +47,8 @@ package com.phoenixperry
 		private var currentNum:int; 
 		private var myBtn:Button; 
 		private var gb:GlowBody; 
+		
+		private var firstPlay:Boolean=true; 
 		
 		private var count:Number = 0; 
 		public function GameOverSimon()
@@ -60,7 +65,33 @@ package com.phoenixperry
 			addChild(gb); 
 			removeEventListener(Event.ADDED_TO_STAGE, startUp); 
 			drawBtns(); 
+			
+			currentNode = new Node(0); 
+			currentNode.rightAnswer.add(rightAnswer);
+			currentNode.wrongAnswer.add(wrongAnswer);
+			currentNode.endOfSequence.add(endOfSequence);
 			addEventListener(Event.ENTER_FRAME, onEnter); 
+			if(firstPlay)startGame();
+		}
+		
+		private function endOfSequence():void
+		{
+			currentNode = firstNode; 
+			
+			//re run game
+			// TODO Auto Generated method stub
+		}
+		
+		private function wrongAnswer():void
+		{
+			// TODO Auto Generated method stub
+			//end 
+		}
+		
+		private function rightAnswer():void
+		{
+			// TODO Auto Generated method stub	
+			//graphics?? 
 		}
 		private function  onEnter(e:Event):void { 
 			
@@ -88,12 +119,29 @@ package com.phoenixperry
 		}
 		// run me when the singal is send a box is touched. send the myName field w/the signal
 
+		public function startGame():void{ 
+			
+				//put text on screen for instruction
+				var num:Number = popRand(); 
+				btnArray[num].colorMe(); 
+				btnArray[num].tone.play();
+				firstNode = new Node(num); 
+				firstPlay=false; 
+				currentNode = firstNode.next_node; 
+				var nodeNum:Number = currentNode.node_data; 
+				//btnArray[nodeNum]
+				//sc.addEventListener(flash.events.Event.SOUND_COMPLETE, nextSound); 
+		}
+		
+		private function nextSound():void
+		{
+			// TODO Auto Generated method stub
+			
+		}
+		
 		public  function compare(myName:Number):void{ 
 			trace("my name is" , myName); 
-			if(count <= _btnNumbers.length) 
-			{ 
-				//pull the array. 
-				
+					
 					if(btnArray[count].myName == myName) { 
 						trace("you got a match"); 
 					}
@@ -105,10 +153,11 @@ package com.phoenixperry
 					
 			}
 		
-		}
-		private function popRand():void { 
+	
+		private function popRand():Number { 
 			var rand:Number = int(Math.random()*6);
-			trace(btnArray[rand], rand); 
+			//trace(btnArray[rand], rand); 
+			return rand; 
 		}
 		
 //		private function onTriggered(e:Event):void
@@ -121,12 +170,7 @@ package com.phoenixperry
 //		}
 //		
 //
-		
-		private function getNode():Node { 
-			var num:Number = int(Math.random()*6); 
-			var n:Node = new Node(num); 
-			return n; 
-		}
+
 		
 
 		

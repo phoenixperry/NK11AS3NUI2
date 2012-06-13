@@ -1,8 +1,11 @@
 package com.phoenixperry
 {
+	import com.greensock.TweenLite;
+	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
 	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	import flash.net.URLRequest;
 	import flash.ui.Mouse;
 	import flash.utils.Timer;
@@ -12,10 +15,11 @@ package com.phoenixperry
 	import org.osflash.signals.Signal;
 	
 	import starling.display.Button;
+	import starling.display.MovieClip;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture; 
+	import starling.textures.Texture;
 	
 	public class BallBtn extends Sprite{
 
@@ -25,7 +29,7 @@ package com.phoenixperry
 		private var _xpos:Number; 
 		private var _ypos:Number;
 		public var myName:Number; 
-		private var tone:*;  
+		public var tone:*;  
 		private static var _rhxpos:Number; 
 		private static var _rhypos:Number; 
 		private var w:Number=50; 
@@ -33,8 +37,9 @@ package com.phoenixperry
 		public var touched:Boolean; 
 		private var immunityTime:Timer; 
 		private var quad:Quad; 
-		
+		private var quadMc:MovieClip; 
 		public var iwasTouched:Signal; 
+		public var sc:SoundChannel; 
 		
 		public function BallBtn( _sound:Class,  _name:Number, xpos:Number,  ypos:Number)
 		{
@@ -43,6 +48,7 @@ package com.phoenixperry
 			quad.x = xpos; 
 			quad.y = ypos; 
 			addChild(quad); 
+			
 			 _xpos = xpos; 
 			 _ypos = ypos; 
 			myName = _name; 			
@@ -51,16 +57,16 @@ package com.phoenixperry
 			//immunity timer
 			immunityTime.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete); 
 			tone= new _sound(); 
+			sc = new SoundChannel(); 
+			
 		}
 		
 
 		
 		protected function onTimerComplete(event:TimerEvent):void
 		{
-			
 			trace("no longer immune"); 
 			touched = false; 
-			
 		}
 		
 		private function onAdded(e:Event):void {
@@ -69,7 +75,7 @@ package com.phoenixperry
 		}
 		private function playSound():void { 
 			touched = false;
-			tone.play(); 
+			sc = tone.play(); 
 		}
 		
 		private function cHit(e:Event):void
@@ -106,7 +112,11 @@ package com.phoenixperry
 		
 		}
 			
-		
+		public function colorMe():void {
+			quad.color = 0xFF0000; 
+			//TweenLite.to(this, 1, {tint:0xffffff});
+			
+		}
 
 
 		public static function get rhypos():Number
