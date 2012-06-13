@@ -1,10 +1,10 @@
 package com.phoenixperry
-
+	
 {
 	import com.phoenixperry.Node;
 	
 	import flash.display.Bitmap;
-	import flash.events.Event;
+//	import flash.events.Event;
 	import flash.media.Sound;
 	
 	import starling.display.Button;
@@ -38,7 +38,7 @@ package com.phoenixperry
 		
 		private var firstNode:Node; 
 		private var currentNode:Node; 
-	
+		
 		private var _btnNumbers:Vector.<String> = Vector.<String>(["1","2","3","4","5","6"]); 
 		private var btnContainer:Sprite; 
 		private var btnDownState:Texture;
@@ -110,27 +110,28 @@ package com.phoenixperry
 				btnArray.push(btn); 
 			}
 			
-	//	btnContainer.addEventListener(Event.TRIGGERED, onTriggered); 
-		
-		btnContainer.x = stage.stageWidth- btnContainer.width >>1; 
-		btnContainer.y = stage.stageHeight - btnContainer.height >>1; 
-		addChild(btnContainer);
-
+			//	btnContainer.addEventListener(Event.TRIGGERED, onTriggered); 
+			
+			btnContainer.x = stage.stageWidth- btnContainer.width >>1; 
+			btnContainer.y = stage.stageHeight - btnContainer.height >>1; 
+			addChild(btnContainer);
+			
 		}
 		// run me when the singal is send a box is touched. send the myName field w/the signal
-
+		
 		public function startGame():void{ 
 			
-				//put text on screen for instruction
-				var num:Number = popRand(); 
-				btnArray[num].colorMe(); 
-				btnArray[num].tone.play();
-				firstNode = new Node(num); 
-				firstPlay=false; 
-				currentNode = firstNode.next_node; 
-				var nodeNum:Number = currentNode.node_data; 
-				//btnArray[nodeNum]
-				//sc.addEventListener(flash.events.Event.SOUND_COMPLETE, nextSound); 
+			//put text on screen for instruction
+			var num:Number = popRand(); 
+			btnArray[num].colorMe(); 
+			btnArray[num].tone.play();
+			firstNode = new Node(num); 
+			firstPlay=false; 
+			currentNode = firstNode.next_node; 
+			var nodeNum:Number = currentNode.node_data; 
+			//btnArray[nodeNum]
+			//YOU ARE HERE --> add the sound to the sound channel next up
+			//sc.addEventListener(flash.events.Event.SOUND_COMPLETE, nextSound); 
 		}
 		
 		private function nextSound():void
@@ -141,40 +142,40 @@ package com.phoenixperry
 		
 		public  function compare(myName:Number):void{ 
 			trace("my name is" , myName); 
-					
-					if(btnArray[count].myName == myName) { 
-						trace("you got a match"); 
-					}
-				
-				//for each touch - get the myName. get the name of the current object. if the name matches the touch - get the next one. If not - flip on 
-				//end screen 
-				count++ 
-				//}
-					
+			
+			if(btnArray[count].myName == myName) { 
+				trace("you got a match"); 
 			}
+			
+			//for each touch - get the myName. get the name of the current object. if the name matches the touch - get the next one. If not - flip on 
+			//end screen 
+			count++ 
+			//}
+			
+		}
 		
-	
+		
 		private function popRand():Number { 
 			var rand:Number = int(Math.random()*6);
 			//trace(btnArray[rand], rand); 
 			return rand; 
 		}
 		
-//		private function onTriggered(e:Event):void
-//		{
-//			trace(e.currentTarget, e.target); 
-//			trace("triggered"); 
-//			var btn:Button = e.target as Button; 
-//			getRandomBtn(); 
-//			
-//		}
-//		
-//
-
-		
-
+		//		private function onTriggered(e:Event):void
+		//		{
+		//			trace(e.currentTarget, e.target); 
+		//			trace("triggered"); 
+		//			var btn:Button = e.target as Button; 
+		//			getRandomBtn(); 
+		//			
+		//		}
+		//		
+		//
 		
 		
-//l2 
+		
+		
+		
+		//l2 
 	}
 }

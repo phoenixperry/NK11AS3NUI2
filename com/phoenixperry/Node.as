@@ -1,6 +1,6 @@
 package com.phoenixperry{
 	import org.osflash.signals.Signal;
-
+	
 	public class Node {
 		public var rightAnswer:Signal; 
 		
@@ -36,7 +36,7 @@ package com.phoenixperry{
 					generateRandomNode(); 
 					endOfSequence.dispatch(); 
 				}
-
+				
 			}else { 
 				wrongAnswer.dispatch(); 
 			}
@@ -47,6 +47,6 @@ package com.phoenixperry{
 			var n:Node = new Node(num); 
 			next_node = n; 
 		}
-//ls 
+		//ls 
 	}
 }
