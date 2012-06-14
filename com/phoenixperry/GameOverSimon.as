@@ -52,6 +52,7 @@ package com.phoenixperry
 		private var count:Number = 0; 
 		private var solution:Array =[]; 
 		private var demoMode:Boolean = true;
+		private var playCount:Number = 0; 
 		public function GameOverSimon()
 		{
 			//dataType(); 
@@ -91,6 +92,7 @@ package com.phoenixperry
 		
 		private function rightAnswer():void
 		{
+			trace("right answer");
 			// TODO Auto Generated method stub	
 			//graphics?? 
 		}
@@ -130,31 +132,60 @@ package com.phoenixperry
 			firstPlay=false; 
 			currentNode = firstNode.generateDemoNode();
 			solution.push(num); 
+			firstNode.rightAnswer.add(rightAnswer); 
+			firstNode.wrongAnswer.add(wrongAnswer); 
+			firstNode.endOfSequence.add(endOfSequence); 
 
 		}
-		
+		private function demoPlay():void {
+			
+			//this block runs only if in demo mode 
+			if(count < difficulty){ 
+				var num:Number = popRand();
+				btnArray[num].colorMe(); 
+				currentNode.node_data = num; 
+				trace(currentNode.node_data, "im the node data", "i'm the btn lighting up", num); 
+				// TODO Auto Generated method stub
+				count++; 
+				solution.push(num);
+				trace("solution is", num); 
+				currentNode.rightAnswer.add(rightAnswer); 
+				currentNode.wrongAnswer.add(wrongAnswer); 
+				currentNode.endOfSequence.add(endOfSequence); 
+				currentNode = currentNode.generateDemoNode(); 
+				demoMode = false; 
+			}
+			count = 0; 
+			difficulty++; 
+			trace(difficulty); 
+		}
 		private function nextSound():void
 		{
-			//this is trigger through an end sound signal
-			if(count < difficulty){ 
-			var num:Number = popRand();
-			btnArray[num].colorMe(); 
-			currentNode.node_data = num; 
-			trace(currentNode.node_data, "im the node data", "i'm the btn lighting up", num); 
-			// TODO Auto Generated method stub
-			count++; 
-			solution.push(num);
-			trace("solution is", num); 
-			currentNode = currentNode.generateDemoNode(); 
-			}	
-			demoMode = false; 
+			//runs at the end of every sound 
+			if(demoMode) { 
+				demoPlay(); 
+			}
+			else{
+				
+			}			
 	}	
 		
+		public function playGame():void { 
+			if(count ==0) { 
+					
+			}
+			
+		}
 		public  function compare(myName:Number):void{ 
-	
-			trace("my name is" , myName); 
+			if(count==0){
+				currentNode = firstNode.compareNode(myName); 
+				count++; 
+			}
+			else { 
+			currentNode = currentNode.compareNode(myName); 
+			
 //			trace(myName, "is my name"); 
-//			
+			}
 
 			//for each touch - get the myName. get the name of the current object. if the name matches the touch - get the next one. If not - flip on 
 			//end screen 
