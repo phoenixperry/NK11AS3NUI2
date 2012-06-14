@@ -28,12 +28,15 @@ package com.phoenixperry{
 		public function get_next_node():Node {
 			return next_node;
 		}
+		
 		public function compareNode(n:Number):Node{
 			if(this.node_data  == n) { 
-				trace("true"); 
+				//note thiw will always test true on start up because you are creating the nodes. 
+				trace("touch and node a match"); 
 				rightAnswer.dispatch(); 
 				if(next_node==null){ 
 					generateRandomNode(); 
+					
 					endOfSequence.dispatch(); 
 				}
 				
@@ -44,8 +47,8 @@ package com.phoenixperry{
 		}
 		public function generateRandomNode():void { 
 			var num:Number = int(Math.random()*6); 
-			var n:Node = new Node(num); 
-			next_node = n; 
+			next_node = new Node(num);
+
 		}
 		//ls 
 	}

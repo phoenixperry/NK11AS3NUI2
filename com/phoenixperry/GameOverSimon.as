@@ -4,8 +4,9 @@ package com.phoenixperry
 	import com.phoenixperry.Node;
 	
 	import flash.display.Bitmap;
-//	import flash.events.Event;
+	import flash.events.Event;
 	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	
 	import starling.display.Button;
 	import starling.display.Image;
@@ -47,6 +48,7 @@ package com.phoenixperry
 		private var currentNum:int; 
 		private var myBtn:Button; 
 		private var gb:GlowBody; 
+
 		
 		private var firstPlay:Boolean=true; 
 		
@@ -55,22 +57,22 @@ package com.phoenixperry
 		{
 			//dataType(); 
 			trace("GameOverSimon created"); 
-			addEventListener(Event.ADDED_TO_STAGE, startUp); 
+			addEventListener(starling.events.Event.ADDED_TO_STAGE, startUp); 
 			btnContainer = new Sprite(); 	
 		}	
 		
-		private function startUp(e:Event):void
+		private function startUp(e:starling.events.Event):void
 		{
 			gb = new GlowBody(); 
 			addChild(gb); 
-			removeEventListener(Event.ADDED_TO_STAGE, startUp); 
+			removeEventListener(starling.events.Event.ADDED_TO_STAGE, startUp); 
 			drawBtns(); 
 			
 			currentNode = new Node(0); 
 			currentNode.rightAnswer.add(rightAnswer);
 			currentNode.wrongAnswer.add(wrongAnswer);
 			currentNode.endOfSequence.add(endOfSequence);
-			addEventListener(Event.ENTER_FRAME, onEnter); 
+			addEventListener(starling.events.Event.ENTER_FRAME, onEnter); 
 			if(firstPlay)startGame();
 		}
 		
@@ -93,7 +95,7 @@ package com.phoenixperry
 			// TODO Auto Generated method stub	
 			//graphics?? 
 		}
-		private function  onEnter(e:Event):void { 
+		private function  onEnter(e:starling.events.Event):void { 
 			
 		}
 		private function drawBtns():void
@@ -105,8 +107,9 @@ package com.phoenixperry
 			{	
 				var btn:BallBtn = new BallBtn(sound1, i, i*100, 150); 
 				addChild(btn); 
-				trace(i*50); 
+	
 				btn.iwasTouched.add(compare); 
+				btn.soundDone.add(nextSound); 
 				btnArray.push(btn); 
 			}
 			
@@ -115,7 +118,7 @@ package com.phoenixperry
 			btnContainer.x = stage.stageWidth- btnContainer.width >>1; 
 			btnContainer.y = stage.stageHeight - btnContainer.height >>1; 
 			addChild(btnContainer);
-			
+		
 		}
 		// run me when the singal is send a box is touched. send the myName field w/the signal
 		
@@ -124,32 +127,37 @@ package com.phoenixperry
 			//put text on screen for instruction
 			var num:Number = popRand(); 
 			btnArray[num].colorMe(); 
-			btnArray[num].tone.play();
+		
 			firstNode = new Node(num); 
 			firstPlay=false; 
-			currentNode = firstNode.next_node; 
-			var nodeNum:Number = currentNode.node_data; 
-			//btnArray[nodeNum]
+			
+			currentNode=firstNode.compareNode(num); 
+			
+		//	currentNode = firstNode.next_node; 
+			
+			
 			//YOU ARE HERE --> add the sound to the sound channel next up
-			//sc.addEventListener(flash.events.Event.SOUND_COMPLETE, nextSound); 
 		}
 		
 		private function nextSound():void
 		{
+			//this is trigger through an end sound signal
+			var num:Number = popRand();
+			btnArray[num].colorMe(); 
+			var nodeNum:Number = Number(currentNode.node_data); 
+			trace("Sound finished"); 
 			// TODO Auto Generated method stub
 			
 		}
 		
 		public  function compare(myName:Number):void{ 
-			trace("my name is" , myName); 
-			
-			if(btnArray[count].myName == myName) { 
-				trace("you got a match"); 
-			}
-			
+//			trace("my name is" , myName); 
+//			trace(myName, "is my name"); 
+//			
+
 			//for each touch - get the myName. get the name of the current object. if the name matches the touch - get the next one. If not - flip on 
 			//end screen 
-			count++ 
+			//count++ 
 			//}
 			
 		}
