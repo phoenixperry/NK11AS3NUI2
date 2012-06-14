@@ -44,15 +44,14 @@ package com.phoenixperry
 		private var btnContainer:Sprite; 
 		private var btnDownState:Texture;
 		private var btnArray:Array = []; 
-		
 		private var currentNum:int; 
 		private var myBtn:Button; 
 		private var gb:GlowBody; 
-
-		
+		private var difficulty:Number = 2; 
 		private var firstPlay:Boolean=true; 
-		
 		private var count:Number = 0; 
+		private var solution:Array =[]; 
+		private var demoMode:Boolean = true;
 		public function GameOverSimon()
 		{
 			//dataType(); 
@@ -120,38 +119,40 @@ package com.phoenixperry
 			addChild(btnContainer);
 		
 		}
-		// run me when the singal is send a box is touched. send the myName field w/the signal
 		
+//DEMO PLAY 
+//these two functions will play a pattern at the current difficulty level and save that pattern into an array 
 		public function startGame():void{ 
-			
-			//put text on screen for instruction
+			//put text on screen for instruction if first run
 			var num:Number = popRand(); 
 			btnArray[num].colorMe(); 
-		
 			firstNode = new Node(num); 
 			firstPlay=false; 
-			
-			currentNode=firstNode.compareNode(num); 
-			
-		//	currentNode = firstNode.next_node; 
-			
-			
-			//YOU ARE HERE --> add the sound to the sound channel next up
+			currentNode = firstNode.generateDemoNode();
+			solution.push(num); 
+
 		}
 		
 		private function nextSound():void
 		{
 			//this is trigger through an end sound signal
+			if(count < difficulty){ 
 			var num:Number = popRand();
 			btnArray[num].colorMe(); 
-			var nodeNum:Number = Number(currentNode.node_data); 
-			trace("Sound finished"); 
+			currentNode.node_data = num; 
+			trace(currentNode.node_data, "im the node data", "i'm the btn lighting up", num); 
 			// TODO Auto Generated method stub
-			
-		}
+			count++; 
+			solution.push(num);
+			trace("solution is", num); 
+			currentNode = currentNode.generateDemoNode(); 
+			}	
+			demoMode = false; 
+	}	
 		
 		public  function compare(myName:Number):void{ 
-//			trace("my name is" , myName); 
+	
+			trace("my name is" , myName); 
 //			trace(myName, "is my name"); 
 //			
 

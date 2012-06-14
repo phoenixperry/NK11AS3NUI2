@@ -36,7 +36,6 @@ package com.phoenixperry{
 				rightAnswer.dispatch(); 
 				if(next_node==null){ 
 					generateRandomNode(); 
-					
 					endOfSequence.dispatch(); 
 				}
 				
@@ -49,6 +48,11 @@ package com.phoenixperry{
 			var num:Number = int(Math.random()*6); 
 			next_node = new Node(num);
 
+		}
+		public function generateDemoNode():Node { 
+			var num:Number = int(Math.random()*6); 
+			next_node = new Node(num);
+			return next_node; 
 		}
 		//ls 
 	}

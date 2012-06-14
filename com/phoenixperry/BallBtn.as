@@ -42,31 +42,39 @@ package com.phoenixperry
 		public var iwasTouched:Signal; 
 		private var patternDemoTimer:Timer;
 		public var sc:SoundChannel; 
-		
 		public var soundDone:Signal; 
+		
 		
 		public function BallBtn( _sound:Class,  _name:Number, xpos:Number,  ypos:Number)
 		{
-			iwasTouched = new Signal(); 
+			//current shape 
 			quad = new Quad(w,h,0xFFFFFF,true); 
 			quad.x = xpos; 
 			quad.y = ypos; 
 			addChild(quad); 
 			
-			 _xpos = xpos; 
+			//position of object and name associated with it 
+			_xpos = xpos; 
 			 _ypos = ypos; 
 			myName = _name; 			
-			addEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded); 
-			immunityTime = new Timer(2000,1); 
-			//immunity timer
-			immunityTime.addEventListener(TimerEvent.TIMER, onTimerComplete, false, 0, true); 
+		
+			//sounds 
 			tone= new _sound(); 
 			sc = new SoundChannel(); 
-
-			soundDone = new Signal(); 
-			patternDemoTimer = new Timer(2000, 1); 
-		
 			
+			
+			//timers 
+			immunityTime = new Timer(2000,1); 
+			immunityTime.addEventListener(TimerEvent.TIMER, immunityComplete, false, 0, true); 
+			patternDemoTimer = new Timer(2000, 1); 
+			
+			//events
+			addEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded); 
+			
+			//singlas 
+			iwasTouched = new Signal(); 
+			iwasTouched.add(playSound); 
+			soundDone = new Signal(); 	
 		}
 
 		protected function soundPlayed(event:flash.events.Event):void
@@ -75,25 +83,21 @@ package com.phoenixperry
 		}		
 
 		
-		protected function onTimerComplete(event:TimerEvent):void
+		protected function immunityComplete(event:TimerEvent):void
 		{
 			//trace("no longer immune"); 
-			//touched = false; 
-
+			touched = false; 
 		}
 		
 		private function onAdded(e:starling.events.Event):void {
 			removeEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded); 
-			addEventListener(starling.events.Event.ENTER_FRAME,cHit); 	
-			iwasTouched.add(playSound); 
+			addEventListener(starling.events.Event.ENTER_FRAME,cHit); 				
 		}
 		private function playSound(myName:Number):void { 
 			sc = tone.play(); 
 			//sc.soundTransform.volume(0.2);
 			sc.addEventListener(flash.events.Event.SOUND_COMPLETE, soundPlayed, false, 0, true);
 			//WARNING LIKE A MOFO - this might cause a memory leak
-	
-			
 			touched = false;
 		}
 		
@@ -105,9 +109,9 @@ package com.phoenixperry
 				if((_rhxpos >= _xpos) && (_rhxpos <= _xpos+w) && (_rhypos >= _ypos) && (_rhypos <= _ypos +height) && touched ==false) 
 				{
 					trace(myName, "I've been touched!"); 
-					immunityTime.start(); 
+					if(!immunityTime.running)immunityTime.start();
 					quad.color = 0xFF00FF; 
-				
+					
 					touched = true; 
 				}
 
@@ -116,6 +120,7 @@ package com.phoenixperry
 			if(!GameMain.useKinect) {
 				if(( GlowBody.xpos>= _xpos) && (GlowBody.xpos <= _xpos+w) && (GlowBody.ypos >= _ypos) && (GlowBody.ypos <= _ypos +height)&& touched ==false) 
 				{		
+					
 					iwasTouched.dispatch(myName);   
 					trace(myName, "I've been touched!"); 
 					if(!immunityTime.running)immunityTime.start(); 
@@ -133,14 +138,12 @@ package com.phoenixperry
 		public function colorMe():void {
 			quad.color = 0xFF0000; 
 			//TweenLite.to(this, 1, {tint:0xffffff});
-			
 			patternDemoTimer.start();
 			playSound(myName);
-			
-			
+
+			//find a way to flip me off when demo over 
 		}
-
-
+//this is kinect stuff 
 		public static function get rhypos():Number
 		{
 			return _rhypos;
