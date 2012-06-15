@@ -93,6 +93,9 @@ package com.phoenixperry
 			removeEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded); 
 			addEventListener(starling.events.Event.ENTER_FRAME,cHit); 				
 		}
+		public function stopSound():void{ 
+			sc = tone.stop(); 
+		}
 		private function playSound(myName:Number):void { 
 			sc = tone.play(); 
 			//sc.soundTransform.volume(0.2);
@@ -111,7 +114,6 @@ package com.phoenixperry
 					trace(myName, "I've been touched!"); 
 					if(!immunityTime.running)immunityTime.start();
 					quad.color = 0xFF00FF; 
-					
 					touched = true; 
 				}
 
@@ -120,28 +122,23 @@ package com.phoenixperry
 			if(!GameMain.useKinect) {
 				if(( GlowBody.xpos>= _xpos) && (GlowBody.xpos <= _xpos+w) && (GlowBody.ypos >= _ypos) && (GlowBody.ypos <= _ypos +height)&& touched ==false) 
 				{		
-					
 					iwasTouched.dispatch(myName);   
 					trace(myName, "I've been touched!"); 
 					if(!immunityTime.running)immunityTime.start(); 
 					quad.color = 0xFF00FF;
-					touched = true; 
-					
+					touched = true; 	
 				}
-		
-			
 			}
-
-		
 		}
-			
 		public function colorMe():void {
 			quad.color = 0xFF0000; 
 			//TweenLite.to(this, 1, {tint:0xffffff});
 			patternDemoTimer.start();
 			playSound(myName);
-
 			//find a way to flip me off when demo over 
+		}
+		public function whiteOut():void { 
+			quad.color = 0xFFFFFF; 
 		}
 //this is kinect stuff 
 		public static function get rhypos():Number

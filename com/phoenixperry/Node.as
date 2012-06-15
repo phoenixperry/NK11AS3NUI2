@@ -7,15 +7,14 @@ package com.phoenixperry{
 		public var node_data:*;
 		public var next_node:Node;
 		public var wrongAnswer:Signal; 
-		public var endOfSequence:Signal; 
+		
 		
 		public function Node(node_content:*) {
 			node_data=node_content;
 			next_node=null;
 			rightAnswer = new Signal(); 
 			wrongAnswer = new Signal(); 
-			endOfSequence = new Signal(); 
-		}
+		}	
 		public function get_node_data():* {
 			return node_data;
 		}
@@ -32,15 +31,14 @@ package com.phoenixperry{
 		public function compareNode(n:Number):Node{
 			if(this.node_data  == n) { 
 				//note thiw will always test true on start up because you are creating the nodes. 
-				trace("touch and node a match"); 
 				rightAnswer.dispatch(); 
 				if(next_node==null){ 
 					generateRandomNode(); 
-					endOfSequence.dispatch(); 
+					//endOfSequence.dispatch(); 
 				}
 				
 			}else { 
-				wrongAnswer.dispatch(); 
+				wrongAnswer.dispatch(n); 
 			}
 			return this.next_node; 
 		}
@@ -54,6 +52,12 @@ package com.phoenixperry{
 			next_node = new Node(num);
 			return next_node; 
 		}
+		public function popRand():Number { 
+			var rand:Number = int(Math.random()*6);
+			//trace(btnArray[rand], rand); 
+			return rand; 
+		}
 		//ls 
+		
 	}
 }
