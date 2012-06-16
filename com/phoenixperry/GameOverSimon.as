@@ -55,9 +55,8 @@ package com.phoenixperry
 		private var difficulty:Number = 2; 
 		private var count:Number = 0; 
 		private var solution:Array =[]; 
-		private var demoMode:Boolean = true;
 		private var playCount:Number = 0; 
-		private var numRightAnswers =0;
+		private var numRightAnswers:Number=0;
 		public var endOfSequence:Signal; 
 		public var firstPlay:Boolean; 
 		public var runDemo:Timer; 
@@ -84,77 +83,51 @@ package com.phoenixperry
 			currentNode.wrongAnswer.add(wrongAnswer);
 			endOfSequence = new Signal();
 			endOfSequence.add(endSequence); 
-			addEventListener(starling.events.Event.ENTER_FRAME, onEnter); 
 			//when it's time to have instructions move this to a new function. 
 			firstPlay = true; 
 			runDemo = new Timer(2000,1); 
-			runDemo.addEventListener(TimerEvent.TIMER, startGame, false, 0, true); 
+			runDemo.addEventListener(TimerEvent.TIMER, playDemo, false, 0, true); 
 			if(firstPlay) runDemo.start(); 
-		}
-		
-		
-		private function  onEnter(e:starling.events.Event):void { 
-		}
-		
-		private function drawBtns():void
-		{
-			for (var i:int = 0; i < _btnNumbers.length; i++) 
-			{	
-				var btn:BallBtn = new BallBtn(sound1, i, i*100, 150); 
-				addChild(btn); 
-				btn.iwasTouched.add(compare); 
-				btn.soundDone.add(nextSound); 
-				btnArray.push(btn); 
-			}
-			btnContainer.x = stage.stageWidth- btnContainer.width >>1; 
-			btnContainer.y = stage.stageHeight - btnContainer.height >>1; 
-			addChild(btnContainer);
 		}
 		
 //DEMO PLAY 
 //these two functions will play a pattern at the current difficulty level and save that pattern into an array 
-		public function startGame(e:TimerEvent):void{ 
+		public function playDemo(e:TimerEvent):void{ 
 			//put text on screen for instruction if first run
-			solution.splice(0,solution.length); 
-			trace(solution.length, "solution's length");
-			firstNode.node_data = firstNode.popRand();  
-			btnArray[firstNode.node_data].colorMe();  
-			solution.push(firstNode.node_data); 
-			currentNode = firstNode.generateDemoNode();
-			firstNode.rightAnswer.add(rightAnswer); 
-			firstNode.wrongAnswer.add(wrongAnswer); 
-			trace(firstNode.node_data, firstNode.get_next_node().node_data);
-			trace(count); 
+			if (count == 0) { 
+				solution.splice(0,solution.length); 
+				trace(solution.length, "solution's length");
+				firstNode.node_data = firstNode.popRand();  
+				btnArray[firstNode.node_data].colorMe();  
+				solution.push(firstNode.node_data); 
+				firstNode.rightAnswer.add(rightAnswer); 
+				firstNode.wrongAnswer.add(wrongAnswer); 
+				currentNode = firstNode.generateDemoNode();
+				trace(firstNode.node_data, firstNode.get_next_node().node_data, currentNode.node_data); 
+				count++;
+			} 
+			playPattern(); 
 		}
-		private function demoPlay():void {
-			//this block runs only if in demo mode 
-			if(count < difficulty){ 
-				trace("if loop started"); 
-				btnArray[currentNode.node_data].colorMe(); //turns white starts patternDemoTimer plays sound 
-			//	trace(currentNode.node_data, "im the node data", "i'm the btn lighting up", num); 
-				count++; 
-				solution.push(currentNode.node_data); 
-				trace("solution is", currentNode.node_data); 
-				currentNode.rightAnswer.add(rightAnswer); 
-				currentNode.wrongAnswer.add(wrongAnswer); 
-				currentNode = currentNode.generateDemoNode(); 
-				demoMode = false; 
-				trace("node made");
-			}
+		private function playPattern():void { 
+				while(count < difficulty){ 
+					trace("if loop started"); 
+					btnArray[currentNode.node_data].colorMe(); //turns white starts patternDemoTimer plays sound 
+					//	trace(currentNode.node_data, "im the node data", "i'm the btn lighting up", num); 
+					solution.push(currentNode.node_data); 
+					currentNode.rightAnswer.add(rightAnswer); 
+					currentNode.wrongAnswer.add(wrongAnswer); 
+					trace("node made");
+					count++; 
+					trace(count, "i'm the count"); 
+					trace(solution.length, "solution's length after the loop");
+					currentNode = currentNode.generateDemoNode(); 
+				}
+			 
 			count = 0; 
 			difficulty++; 
 			trace(difficulty, "I'm the difficulty"); 
-		}
-		private function nextSound():void
-		{
-			//runs at the end of every sound 
-			if(demoMode) { 
-				demoPlay(); 
-			}
-			else{
 			playGame(); 
-			}			
-	}	
+		}
 		
 		public function playGame():void { 
 			//after demo loop take the btns white
@@ -173,13 +146,11 @@ package com.phoenixperry
 				currentNode = firstNode.compareNode(myName); 
 			}
 			else { 
-				trace(myName, "i'm casuing the crash"); 
 			//if we are on any current node, compare and get the next node in the chain
 			currentNode = currentNode.compareNode(myName); 
 //			trace(myName, "is my name"); 
 			}
 			//up count to we don't loop back to the start.  
-			count++; 
 		}
 
 		private function wrongAnswer(n:Number):void	
@@ -199,36 +170,34 @@ package com.phoenixperry
 				{
 					btnArray[i].whiteOut(); 
 				}	
-				runDemo.start(); 
 				count =0; 
 				numRightAnswers = 0; 
-				currentNode = null; 
-				
+				//currentNode = null; 
+				runDemo.start(); 
 			}
 		}		
 
 		private function endSequence():void
 		{
-			currentNode = firstNode; 
+			//currentNode = firstNode; 
 			trace("end of sequence"); 
 			//re run game
 			// TODO Auto Generated method stub
 		}
 		
-	
-		
-		//		private function onTriggered(e:Event):void
-		//		{
-		//			trace(e.currentTarget, e.target); 
-		//			trace("triggered"); 
-		//			var btn:Button = e.target as Button; 
-		//			getRandomBtn(); 
-		//			
-		//		}
-		//		
-		//
-		
-		
+		private function drawBtns():void
+		{
+			for (var i:int = 0; i < _btnNumbers.length; i++) 
+			{	
+				var btn:BallBtn = new BallBtn(sound1, i, i*100, 150); 
+				addChild(btn); 
+				btn.iwasTouched.add(compare); 
+				btnArray.push(btn); 
+			}
+			btnContainer.x = stage.stageWidth- btnContainer.width >>1; 
+			btnContainer.y = stage.stageHeight - btnContainer.height >>1; 
+			addChild(btnContainer);
+		}
 		
 		
 		
