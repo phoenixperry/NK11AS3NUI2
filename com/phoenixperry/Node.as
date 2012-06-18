@@ -48,13 +48,15 @@ package com.phoenixperry{
 
 		}
 		public function generateDemoNode():Node { 
-			var num:Number = int(Math.random()*6); 
+			var num:Number = int(Math.random()*5); 
 			next_node = new Node(num);
+			trace(num, "i'm the generated Demo Node"); 
 			return next_node; 
 		}
 		public function popRand():Number { 
-			var rand:Number = int(Math.random()*6);
-			//trace(btnArray[rand], rand); 
+			var rand:Number = int(Math.random()*5);
+			trace(rand, "I'm most likely the first Node"); 
+			
 			return rand; 
 		}
 		//ls 

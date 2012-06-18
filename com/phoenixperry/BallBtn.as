@@ -9,6 +9,7 @@ package com.phoenixperry
 	import flash.media.SoundChannel;
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
+	import flash.media.SoundTransform;
 	
 	import flashx.textLayout.debug.assert;
 	
@@ -97,11 +98,13 @@ package com.phoenixperry
 			sc = tone.stop(); 
 		}
 		private function playSound(myName:Number):void { 
+
 			sc = tone.play(); 
-			//sc.soundTransform.volume(0.2);
+			
 			sc.addEventListener(flash.events.Event.SOUND_COMPLETE, soundPlayed, false, 0, true);
 			//WARNING LIKE A MOFO - this might cause a memory leak
 			touched = false;
+			
 		}
 		
 		private function cHit(e:starling.events.Event):void

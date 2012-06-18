@@ -10,8 +10,9 @@ package com.phoenixperry
 	import flash.media.SoundChannel;
 	import flash.utils.Timer;
 	
-	import org.as3commons.collections.utils.NullComparator;
 	import org.osflash.signals.Signal;
+	import org.osmf.events.TimeEvent;
+	import org.osmf.traits.PlayTrait;
 	
 	import starling.display.Button;
 	import starling.display.Image;
@@ -52,7 +53,7 @@ package com.phoenixperry
 		private var currentNum:int; 
 		private var myBtn:Button; 
 		private var gb:GlowBody; 
-		private var difficulty:Number = 2; 
+		private var difficulty:Number = 3; 
 		private var count:Number = 0; 
 		private var solution:Array =[]; 
 		private var playCount:Number = 0; 
@@ -60,13 +61,14 @@ package com.phoenixperry
 		public var endOfSequence:Signal; 
 		public var firstPlay:Boolean; 
 		public var runDemo:Timer; 
+		private var patternTimer:Timer; 
+		private var gameTimer:Timer; 
 		public function GameOverSimon()
 		{
 			//dataType(); 
 			trace("GameOverSimon created"); 
 			addEventListener(starling.events.Event.ADDED_TO_STAGE, startUp); 
 			btnContainer = new Sprite(); 	
-	
 		}	
 		
 		private function startUp(e:starling.events.Event):void
@@ -87,7 +89,11 @@ package com.phoenixperry
 			firstPlay = true; 
 			runDemo = new Timer(2000,1); 
 			runDemo.addEventListener(TimerEvent.TIMER, playDemo, false, 0, true); 
-			if(firstPlay) runDemo.start(); 
+			if(firstPlay) runDemo.start();
+			patternTimer = new Timer(1000); 
+			patternTimer.addEventListener(TimerEvent.TIMER, playPattern, false, 0, true); 
+			gameTimer = new Timer(2000);
+			gameTimer.addEventListener(TimerEvent.TIMER, playGame, false, 0, true); 
 		}
 		
 //DEMO PLAY 
@@ -102,39 +108,56 @@ package com.phoenixperry
 				solution.push(firstNode.node_data); 
 				firstNode.rightAnswer.add(rightAnswer); 
 				firstNode.wrongAnswer.add(wrongAnswer); 
-				currentNode = firstNode.generateDemoNode();
-				trace(firstNode.node_data, firstNode.get_next_node().node_data, currentNode.node_data); 
+				currentNode = firstNode.generateDemoNode(); 
 				count++;
+				patternTimer.start(); 
+			
 			} 
-			playPattern(); 
 		}
-		private function playPattern():void { 
-				while(count < difficulty){ 
+		private function playPattern(e:TimerEvent):void { 
+				if(count < difficulty){ 
 					trace("if loop started"); 
-					btnArray[currentNode.node_data].colorMe(); //turns white starts patternDemoTimer plays sound 
 					//	trace(currentNode.node_data, "im the node data", "i'm the btn lighting up", num); 
 					solution.push(currentNode.node_data); 
 					currentNode.rightAnswer.add(rightAnswer); 
 					currentNode.wrongAnswer.add(wrongAnswer); 
 					trace("node made");
 					count++; 
-					trace(count, "i'm the count"); 
-					trace(solution.length, "solution's length after the loop");
+				///	trace(count, "i'm the count"); 
+					//trace(solution.length, "solution's length after the loop");
+					if(firstPlay){
+					btnArray[currentNode.node_data].colorMe(); 
 					currentNode = currentNode.generateDemoNode(); 
+					firstPlay = false; 
+					}
+					else { 
+						currentNode = currentNode.generateDemoNode(); 
+						btnArray[currentNode.node_data].colorMe();
+					}
 				}
-			 
+			if(count == difficulty-1) { 
 			count = 0; 
-			difficulty++; 
+			difficulty ++; 
 			trace(difficulty, "I'm the difficulty"); 
-			playGame(); 
+			patternTimer.stop(); 
+			gameTimer.start(); 
+			gameTimer.start();  
+				//only for debug 
+				for (var i:int = 0; i < solution.length; i++) 
+				{
+					trace(solution[i], " is", "solution ", i ); 
+				}
+			}
 		}
 		
-		public function playGame():void { 
+		public function playGame(e:TimerEvent):void { 
 			//after demo loop take the btns white
+			
 			if(count ==0) { 
 				for (var i:int = 0; i < btnArray.length; i++) 
 				{
 					btnArray[i].whiteOut(); 
+		
 				}	
 			}
 			
@@ -144,6 +167,7 @@ package com.phoenixperry
 			if(count==0){
 				//if we are at the start of the loop get the first item in the chain. 
 				currentNode = firstNode.compareNode(myName); 
+				count++;
 			}
 			else { 
 			//if we are on any current node, compare and get the next node in the chain
@@ -170,10 +194,13 @@ package com.phoenixperry
 				{
 					btnArray[i].whiteOut(); 
 				}	
-				count =0; 
+				count = 0; 
 				numRightAnswers = 0; 
 				//currentNode = null; 
 				runDemo.start(); 
+				gameTimer.stop(); 
+				firstPlay = true;
+				
 			}
 		}		
 
