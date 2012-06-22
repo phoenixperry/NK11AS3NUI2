@@ -46,7 +46,7 @@ package
 		
 		public function Bouncer() 
 		{
-			addEventListener(Event.ADDED_TO_STAGE, EarthAirAdded); 
+			addEventListener(Event.ADDED_TO_STAGE, bouncerAdded); 
 			
 			
 			sprites = new StarSpriteCostume("bouncer", 2);
@@ -58,7 +58,7 @@ package
 				
 				[
 					// density, friction, restitution
-					2, 0, 0,
+					.6, .02, .38,
 					// categoryBits, maskBits, groupIndex, isSensor
 					1, 65535, 0, false,
 					'CIRCLE',
@@ -75,10 +75,9 @@ package
 			super(_bouncerBody, bouncer_mc); 
 		}
 		
-		private function EarthAirAdded(e:Event):void
+		private function bouncerAdded(e:Event):void
 		{	
-			_bouncerBody.SetPosition(new b2Vec2((0-bouncer_mc.width)/GameMain.RATIO,(Math.random()*stage.stageHeight)/GameMain.RATIO)); 
-			//bouncer_mc.y = Math.random()*stage.stageHeight; 
+		
 			addChild(bouncer_mc); 
 			trace("bouncing ball added"); 
 			addEventListener(Event.ENTER_FRAME, boundsCheck); 
@@ -159,15 +158,11 @@ package
 		}
 		override protected function childSpecificUpdating():void
 		{ 
-			addEventListener(Event.ENTER_FRAME, updateEarth); 	
+			addEventListener(Event.ENTER_FRAME, updateBouncer); 	
 		}
 		
-		private function updateEarth(e:Event):void
+		private function updateBouncer(e:Event):void
 		{
-			
-			//f = m*a -- do the physics for this. 
-			ant_gravity = new b2Vec2(Math.random()*300, -9.8); 
-			//_bouncerBody.ApplyForce(ant_gravity, _bouncerBody.GetWorldCenter()); 
 			bouncer_mc.x = _bouncerBody.GetPosition().x * GameMain.RATIO; 
 			bouncer_mc.y = _bouncerBody.GetPosition().y * GameMain.RATIO; 
 			

@@ -7,9 +7,9 @@ package com.phoenixperry
 	import flash.events.TimerEvent;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
 	import flash.utils.Timer;
-	import flash.media.SoundTransform;
 	
 	import flashx.textLayout.debug.assert;
 	
@@ -98,8 +98,8 @@ package com.phoenixperry
 			sc = tone.stop(); 
 		}
 		private function playSound(myName:Number):void { 
-
-			sc = tone.play(); 
+			//uncomment me to turn sound off / on 
+			//sc = tone.play(); 
 			
 			sc.addEventListener(flash.events.Event.SOUND_COMPLETE, soundPlayed, false, 0, true);
 			//WARNING LIKE A MOFO - this might cause a memory leak
@@ -125,11 +125,13 @@ package com.phoenixperry
 			if(!GameMain.useKinect) {
 				if(( GlowBody.xpos>= _xpos) && (GlowBody.xpos <= _xpos+w) && (GlowBody.ypos >= _ypos) && (GlowBody.ypos <= _ypos +height)&& touched ==false) 
 				{		
+					if(GameOverSimon.gameStarted) { 
 					iwasTouched.dispatch(myName);   
 					trace(myName, "I've been touched!"); 
-					if(!immunityTime.running)immunityTime.start(); 
+						if(!immunityTime.running)immunityTime.start(); 
 					quad.color = 0xFF00FF;
 					touched = true; 	
+					}
 				}
 			}
 		}

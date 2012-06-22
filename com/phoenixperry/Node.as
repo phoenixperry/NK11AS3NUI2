@@ -29,23 +29,26 @@ package com.phoenixperry{
 		}
 		
 		public function compareNode(n:Number):Node{
+			trace(n, "I'm what is getting passed in the compare", this.node_data); 
 			if(this.node_data  == n) { 
 				//note thiw will always test true on start up because you are creating the nodes. 
 				rightAnswer.dispatch(); 
-				if(next_node==null){ 
+				if(next_node==null) {
 					generateRandomNode(); 
-					//endOfSequence.dispatch(); 
+				//endOfSequence.dispatch(); 
 				}
-				
-			}else { 
+			} else { 
 				wrongAnswer.dispatch(n); 
+				if(next_node==null) 
+				{ 
+					generateRandomNode(); 
+				}
 			}
-			return this.next_node; 
+			return this.next_node; 	
 		}
 		public function generateRandomNode():void { 
 			var num:Number = int(Math.random()*6); 
 			next_node = new Node(num);
-
 		}
 		public function generateDemoNode():Node { 
 			var num:Number = int(Math.random()*5); 

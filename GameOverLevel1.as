@@ -38,7 +38,7 @@ package
 		
 		private var goobaFireTime:Number=1000; 
 		private var loopTime:Timer; 
-		private var bouncer:Bouncer; 
+
 		public function GameOverLevel1() 
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
@@ -68,8 +68,7 @@ package
 			gb = new GlowBody();  
 			addChild(gb); 
 			}
-			bouncer = new Bouncer(); 
-			addChild(bouncer); 
+
 			addEventListener(Event.ENTER_FRAME,goombaLevels); 
 			loopTime = new Timer(1000); 
 			loopTime.start(); 

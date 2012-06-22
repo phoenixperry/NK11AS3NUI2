@@ -152,7 +152,6 @@ package
 						var polygonShape:b2PolygonShape = new b2PolygonShape();
 						polygonShape.SetAsArray(polygons[p], polygons[p].length);
 						fixtureDef.shape=polygonShape;
-						
 						body.CreateFixture(fixtureDef);
 						
 						
@@ -194,7 +193,6 @@ package
 				setState(); 
 				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
 				trace("earth hit by glowbody function saying hello"); 
-		
 				//earth_mc.dispose(); 	
 		}
 		private function setState():void { 

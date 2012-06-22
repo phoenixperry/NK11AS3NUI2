@@ -148,11 +148,10 @@
 		
 		private function setupPhysicsWorld():void 
 		{
-			var gravity:b2Vec2 = new b2Vec2(0, 0); 
+			var gravity:b2Vec2 = new b2Vec2(0,9.8); 
 			var allowSleep:Boolean = false; 
 			 _world = new b2World(gravity, allowSleep); 
 			 addEventListener(Event.ENTER_FRAME, updateW); 
-			
 			 GameMain.world.SetContactListener(new NKContactListener());
 			
 		}

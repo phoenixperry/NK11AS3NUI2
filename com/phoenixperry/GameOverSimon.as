@@ -9,6 +9,7 @@ package com.phoenixperry
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.utils.Timer;
+	import flash.geom.Point;
 	
 	import org.osflash.signals.Signal;
 	import org.osmf.events.TimeEvent;
@@ -43,6 +44,12 @@ package com.phoenixperry
 		[Embed(source="./assets/gameOver/sounds/7.mp3", mimeType="audio/mpeg")] 
 		private var sound7:Class; 
 		
+		//walls 
+		private var SIDE_WALL_THICKNESS:Number = 1; 
+		private var SIDE_WALL_HEIGHT:Number = GameMain.GAME_HEIGHT; 
+		private var LEFT_WALL_POSITION:Point; 
+		private var RIGHT_WALL_POSITION:Point; 
+		
 		private var firstNode:Node; 
 		private var currentNode:Node; 
 		
@@ -63,6 +70,9 @@ package com.phoenixperry
 		public var runDemo:Timer; 
 		private var patternTimer:Timer; 
 		private var gameTimer:Timer; 
+		public static var gameStarted:Boolean = false; 
+		private var bouncer:Bouncer; 
+		
 		public function GameOverSimon()
 		{
 			//dataType(); 
@@ -94,6 +104,12 @@ package com.phoenixperry
 			patternTimer.addEventListener(TimerEvent.TIMER, playPattern, false, 0, true); 
 			gameTimer = new Timer(2000);
 			gameTimer.addEventListener(TimerEvent.TIMER, playGame, false, 0, true); 
+			bouncer = new Bouncer(); 
+			makeAWall(); 
+			addChild(bouncer); 
+			bouncer.x = 80; 
+			bouncer.y = -100;
+		
 		}
 		
 //DEMO PLAY 
@@ -102,7 +118,7 @@ package com.phoenixperry
 			//put text on screen for instruction if first run
 			if (count == 0) { 
 				solution.splice(0,solution.length); 
-				trace(solution.length, "solution's length");
+				//trace(solution.length, "solution's length");
 				firstNode.node_data = firstNode.popRand();  
 				btnArray[firstNode.node_data].colorMe();  
 				solution.push(firstNode.node_data); 
@@ -111,13 +127,14 @@ package com.phoenixperry
 				currentNode = firstNode.generateDemoNode(); 
 				count++;
 				patternTimer.start(); 
+				
+				
 			
 			} 
 		}
 		private function playPattern(e:TimerEvent):void { 
 				if(count < difficulty){ 
 					trace("if loop started"); 
-					//	trace(currentNode.node_data, "im the node data", "i'm the btn lighting up", num); 
 					solution.push(currentNode.node_data); 
 					currentNode.rightAnswer.add(rightAnswer); 
 					currentNode.wrongAnswer.add(wrongAnswer); 
@@ -152,7 +169,7 @@ package com.phoenixperry
 		
 		public function playGame(e:TimerEvent):void { 
 			//after demo loop take the btns white
-			
+			gameStarted = true; 
 			if(count ==0) { 
 				for (var i:int = 0; i < btnArray.length; i++) 
 				{
@@ -164,13 +181,14 @@ package com.phoenixperry
 		}
 		
 		public  function compare(myName:Number):void{ 
-			if(count==0){
+			if(count==0 ){
 				//if we are at the start of the loop get the first item in the chain. 
 				currentNode = firstNode.compareNode(myName); 
 				count++;
 			}
 			else { 
 			//if we are on any current node, compare and get the next node in the chain
+			
 			currentNode = currentNode.compareNode(myName); 
 //			trace(myName, "is my name"); 
 			}
@@ -200,6 +218,7 @@ package com.phoenixperry
 				runDemo.start(); 
 				gameTimer.stop(); 
 				firstPlay = true;
+				gameStarted = false; 
 				
 			}
 		}		
@@ -226,7 +245,41 @@ package com.phoenixperry
 			addChild(btnContainer);
 		}
 		
-		
+		private function makeAWall():void {
+			LEFT_WALL_POSITION = new Point(0,0); 
+			RIGHT_WALL_POSITION = new Point(GameMain.GAME_WIDTH, 0); 
+			var BTM_WALL_POSITION:Point = new Point(0, GameMain.GAME_HEIGHT); 
+			
+			var wallShapeCoords:Array = new Array(); 
+			wallShapeCoords.push(
+				new Array( 
+					new Point(0,0), 
+					new Point(SIDE_WALL_THICKNESS, 0),
+					new Point(SIDE_WALL_THICKNESS, SIDE_WALL_HEIGHT),
+					new Point(0, SIDE_WALL_HEIGHT)
+				)
+			); 
+			var floorCoords:Array = new Array(); 
+			floorCoords.push(
+				new Array(
+					new Point(0, 0), 
+					new Point(GameMain.GAME_WIDTH, 0), 
+					
+					new Point(GameMain.GAME_WIDTH, SIDE_WALL_THICKNESS), 
+					new Point(0, SIDE_WALL_THICKNESS)
+				)
+			); 
+			
+			//add left wall 
+			var leftWall:ArbiStaticActor = new ArbiStaticActor(this, LEFT_WALL_POSITION, wallShapeCoords); 
+			//items.push(leftWall); 
+			
+			var rightWall:ArbiStaticActor = new ArbiStaticActor(this, RIGHT_WALL_POSITION, wallShapeCoords); 
+			//items.push(rightWall); 
+			
+			var btmWall:ArbiStaticActor = new ArbiStaticActor(this, BTM_WALL_POSITION, floorCoords); 
+			
+		}
 		
 		//l2 
 	}

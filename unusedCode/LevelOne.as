@@ -1,6 +1,5 @@
 package 
 {
-	import flash.display3D.textures.Texture;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	
