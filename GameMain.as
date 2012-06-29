@@ -10,7 +10,8 @@
 	import Box2D.Dynamics.b2World;
 	
 	import com.greensock.TweenLite;
-	import com.phoenixperry.GameOverSimon;
+	import com.phoenixperry.GOSimonTwo;
+//	import com.phoenixperry.GameOverSimon;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -64,7 +65,7 @@
 		public static var loadLevelOne:Boolean= false; 
 		public static var loadLevelTwo:Boolean = false; 
 		public var gameOverLevel1:GameOverLevel1; 
-		public var gameOverSimon:GameOverSimon; 
+		public var gameOverSimon:GOSimonTwo; 
 		private var makeSprites:SingletonSpriteSheet; 
 		
 		private var gameTimer:GameTimer; 
@@ -123,7 +124,7 @@
 			}
 			if(e.keyCode == Keyboard.UP){ 
 				//up arrow testing	
-				gameOverSimon = new GameOverSimon(); 
+				gameOverSimon = new GOSimonTwo(); 
 				addChild(gameOverSimon); 
 			}
 			if(useKinect) {

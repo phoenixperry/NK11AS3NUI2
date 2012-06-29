@@ -99,7 +99,7 @@ package com.phoenixperry
 		}
 		private function playSound(myName:Number):void { 
 			//uncomment me to turn sound off / on 
-			//sc = tone.play(); 
+		   //sc = tone.play(); 
 			
 			sc.addEventListener(flash.events.Event.SOUND_COMPLETE, soundPlayed, false, 0, true);
 			//WARNING LIKE A MOFO - this might cause a memory leak
@@ -125,7 +125,7 @@ package com.phoenixperry
 			if(!GameMain.useKinect) {
 				if(( GlowBody.xpos>= _xpos) && (GlowBody.xpos <= _xpos+w) && (GlowBody.ypos >= _ypos) && (GlowBody.ypos <= _ypos +height)&& touched ==false) 
 				{		
-					if(GameOverSimon.gameStarted) { 
+					if(GOSimonTwo.gameStarted) { 
 					iwasTouched.dispatch(myName);   
 					trace(myName, "I've been touched!"); 
 						if(!immunityTime.running)immunityTime.start(); 
