@@ -37,7 +37,7 @@ package
 	
 		
 		private var goobaFireTime:Number=1000; 
-		private var loopTime:Timer; 
+
 
 		public function GameOverLevel1() 
 		{
@@ -70,8 +70,7 @@ package
 			}
 
 			addEventListener(Event.ENTER_FRAME,goombaLevels); 
-			loopTime = new Timer(1000); 
-			loopTime.start(); 
+	
 			fireGoomba = new Timer(1000); 
 			fireGoomba.start();
 			fireGoomba.addEventListener(TimerEvent.TIMER,goGoomba);
@@ -84,17 +83,7 @@ package
 		}
 		public function goombaLevels(e:Event):void { 
 		
-			//trace(time);
-//			if(loopTime.currentCount==1) { 
-//				levelOne(); 
-//				trace("level one up"); 
-//			} 
-//			if(loopTime.currentCount==2) { 
-//				levelTwo(); 
-//			}
-//			if (loopTime.currentCount==4) { 
-//				levelThree(); 
-//			}
+		//see how many goomba have been fired - x goomba = level 1 
 		}
 		
 
@@ -107,7 +96,6 @@ package
 		
 
 			}
-			loopTime.stop(); 
 			fireGoomba.removeEventListener(TimerEvent.TIMER,goGoomba); 
 			
 			this.removeChildren(); 

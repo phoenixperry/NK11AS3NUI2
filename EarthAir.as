@@ -89,7 +89,9 @@ package
 		
 		private function EarthAirAdded(e:Event):void
 		{	
-			_earthAirBody.SetPosition(new b2Vec2((0-earth_mc.width)/GameMain.RATIO,(Math.random()*stage.stageHeight)/GameMain.RATIO)); 
+			var rand:Number = Math.random()*stage.stageWidth; 
+			
+			_earthAirBody.SetPosition(new b2Vec2((rand+earth_mc.width)/GameMain.RATIO,(0-earth_mc.height)/GameMain.RATIO)); 
 			//earth_mc.y = Math.random()*stage.stageHeight; 
 			addChild(earth_mc); 
 			//trace("1 goomba added"); 
@@ -178,8 +180,8 @@ package
 		{
 			
 			//f = m*a -- do the physics for this. 
-			ant_gravity = new b2Vec2(Math.random()*100, 0); 
-			_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
+			//ant_gravity = new b2Vec2(Math.random()*100, 0); 
+			//_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
 			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
 			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 
 
