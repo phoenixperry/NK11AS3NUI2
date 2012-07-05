@@ -111,6 +111,13 @@ package com.phoenixperry
 			bouncer.y = -100;
 		
 		}
+		public function instructions():void { 
+			
+		}
+		public function startBtn():void { 
+			
+		}
+		
 		
 //DEMO PLAY 
 //these two functions will play a pattern at the current difficulty level and save that pattern into an array 
