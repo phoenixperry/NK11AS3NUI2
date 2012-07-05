@@ -49,7 +49,7 @@ package
 			addEventListener(Event.ADDED_TO_STAGE, bouncerAdded); 
 			
 			
-			sprites = new StarSpriteCostume("bouncer", 1);
+			sprites = new StarSpriteCostume("bouncer", 2);
 			
 			bouncer_mc = sprites.getDressed(); 
 			
@@ -58,7 +58,7 @@ package
 				
 				[
 					// density, friction, restitution
-					1, .02, 0,
+					.6, .02, .38,
 					// categoryBits, maskBits, groupIndex, isSensor
 					1, 65535, 0, false,
 					'CIRCLE',
