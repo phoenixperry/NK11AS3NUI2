@@ -11,7 +11,7 @@
 	
 	import com.greensock.TweenLite;
 	import com.phoenixperry.GOSimonTwo;
-	import com.phoenixperry.OscTest; 
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -127,8 +127,8 @@
 				addChild(gameOverSimon); 
 			}
 			if(e.keyCode == Keyboard.RIGHT) { 
-				var osc:OscTest = new OscTest(); 
-				addChild(osc); 
+				//var osc:OscTest = new OscTest(); 
+				//addChild(osc); 
 			}
 			
 			if(useKinect) {
