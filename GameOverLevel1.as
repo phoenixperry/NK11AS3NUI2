@@ -10,13 +10,14 @@ package
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
 	import flash.media.Sound;
+	import flash.ui.GameInput;
 	import flash.utils.Timer;
 	
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture; 
+	import starling.textures.Texture;
 	
 	public class GameOverLevel1 extends LevelGen
 	{	
@@ -33,11 +34,13 @@ package
 		private var goombaImmune:Timer; 
 		private var introTimer:Timer; 
 		public var gb:GlowBody; 
-		
-	
-		
 		private var goobaFireTime:Number=1000; 
-
+		
+		//for incoming numbers 
+		private var getX:Number; 
+		private var getY:Number; 
+		private var speedKnob:Number; 
+		private var attackBtn:Number; 
 
 		public function GameOverLevel1() 
 		{
@@ -55,11 +58,13 @@ package
 			introImage.alpha = 0; 
 			TweenLite.to(introImage, 1, {alpha:1});
 			introTimer.start(); 
+			
 
 		}
 
 		protected function startUp(event:TimerEvent):void
 		{	
+			
 			TweenLite.to(introImage, 1, {alpha:0});
 			// TODO Auto-generated method stub
 			removeEventListener(TimerEvent.TIMER_COMPLETE,startUp); 
@@ -67,6 +72,7 @@ package
 			if(!GameMain.useKinect){
 			gb = new GlowBody();  
 			addChild(gb); 
+		
 			}
 
 			addEventListener(Event.ENTER_FRAME,goombaLevels); 
@@ -82,10 +88,21 @@ package
 			addChild(ea);
 		}
 		public function goombaLevels(e:Event):void { 
-		
+			//and here is where you set your xy
+			trace(getX); 
+			trace(getY);
+			getInputs(); 
 		//see how many goomba have been fired - x goomba = level 1 
 		}
 		
+		private function getInputs():void
+		{
+			getX = GameMain.getX/100 *stage.stageWidth;
+			getY = GameMain.getY/100 *stage.stageHeight;
+			speedKnob = GameMain.speedKnob; 
+			attackBtn = GameMain.attackBtn; 
+			
+		}		
 
 		override public function removeLevel():void {
 			//you are going to need to loop to check 
