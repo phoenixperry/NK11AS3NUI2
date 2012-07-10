@@ -6,11 +6,11 @@ package
 	
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Bounce;
-
 	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
 	import flash.media.Sound;
+	import flash.ui.GameInput;
 	import flash.utils.Timer;
 	
 	import starling.display.Image;
@@ -36,6 +36,11 @@ package
 		public var gb:GlowBody; 
 		private var goobaFireTime:Number=1000; 
 		
+		//for incoming numbers 
+		private var getX:Number; 
+		private var getY:Number; 
+		private var speedKnob:Number; 
+		private var attackBtn:Number; 
 
 		public function GameOverLevel1() 
 		{
@@ -83,10 +88,21 @@ package
 			addChild(ea);
 		}
 		public function goombaLevels(e:Event):void { 
-		
+			//and here is where you set your xy
+			trace(getX); 
+			trace(getY);
+			getInputs(); 
 		//see how many goomba have been fired - x goomba = level 1 
 		}
 		
+		private function getInputs():void
+		{
+			getX = GameMain.getX/100 *stage.stageWidth;
+			getY = GameMain.getY/100 *stage.stageHeight;
+			speedKnob = GameMain.speedKnob; 
+			attackBtn = GameMain.attackBtn; 
+			
+		}		
 
 		override public function removeLevel():void {
 			//you are going to need to loop to check 

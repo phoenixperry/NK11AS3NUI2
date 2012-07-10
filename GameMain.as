@@ -15,8 +15,12 @@
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.DataEvent;
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.geom.Point;
 	import flash.globalization.CurrencyFormatter;
+	import flash.net.XMLSocket;
 	import flash.printing.PrintJob;
 	import flash.text.Font;
 	import flash.ui.Keyboard;
@@ -27,6 +31,8 @@
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.display.Stage;
+	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
 	import starling.events.KeyboardEvent;
 	import starling.events.Touch;
@@ -51,8 +57,7 @@
 		private var font:Font; 
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
-
-
+	
 
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
@@ -69,32 +74,39 @@
 		
 		private var gameTimer:GameTimer; 
 		private var levelOneRunning:Signal; 
-		
+	
+		private static var _serialServer:XMLSocket;
+		private static var _attackBtn:Number;
+		private static var _speedKnob:Number; 
+		private static var _getX:Number; 
+		private static var _getY:Number;
 		
 		public function GameMain() 
 		{
 			makeSprites = SingletonSpriteSheet.getInstance(); 
-			addEventListener(Event.ADDED_TO_STAGE, onAdded);
+			addEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded);
+			initServer(); 
 		
 			
 		}
-		private function onAdded(e:Event):void
+		private function onAdded(e:starling.events.Event):void
 		{
 			//set up font
 			font = new Gotham(); 
 			setupPhysicsWorld();
 			gameTimer = new GameTimer(); 
-			
-			
-			removeEventListener(Event.ADDED_TO_STAGE, onAdded); 
+		
+		
+			removeEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded); 
 
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteLevel);
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, levelCreator);
 			
-			addEventListener(Event.ENTER_FRAME, gameLoop); 
+			addEventListener(starling.events.Event.ENTER_FRAME, gameLoop); 
+	
 			
 		}		
-		private function updateW(e:Event):void
+		private function updateW(e:starling.events.Event):void
 		{
 			var timeStep:Number = 1 / 60;
 			var velocityIterations:int = 6;
@@ -156,7 +168,7 @@
 			var gravity:b2Vec2 = new b2Vec2(0,9.8); 
 			var allowSleep:Boolean = false; 
 			 _world = new b2World(gravity, allowSleep); 
-			 addEventListener(Event.ENTER_FRAME, updateW); 
+			 addEventListener(starling.events.Event.ENTER_FRAME, updateW); 
 			 GameMain.world.SetContactListener(new NKContactListener());
 			
 		}
@@ -227,7 +239,7 @@
 				 msg.x = stage.stageWidth - msg.width >>1; 
 				 msg.y = stage.stageHeight - msg.height >>1; 
 				 addChild(msg); 
-				 removeEventListener(Event.ENTER_FRAME, gameLoop); 	 
+				 removeEventListener(starling.events.Event.ENTER_FRAME, gameLoop); 	 
 
 		}	
 		
@@ -237,6 +249,98 @@
 		}
 		
 		
+		public function initServer():void {
+			serialServer=new XMLSocket  ;
+			serialServer.connect("127.0.0.1",3333);
+			
+			serialServer.addEventListener(flash.events.DataEvent.DATA,onReceiveData);
+			
+			serialServer.addEventListener(flash.events.Event.CONNECT,onServer);
+			serialServer.addEventListener(flash.events.Event.CLOSE,onServer);
+			serialServer.addEventListener(flash.events.IOErrorEvent.IO_ERROR,onServer);
+			
+		}
+		public function onServer(e:flash.events.Event):void {
+			trace(e);
+		}
+		
+		public function onReceiveData(dataEvent:flash.events.DataEvent):void {
+			
+			var Data:DataEvent=dataEvent;
+			//trace(Data);
+			
+			// This grabs the data from Data var which is the string passed
+			// from our processing server.
+			var test=Data.data;
+			//trace(test);
+			
+			// This splits the variables we are passing.
+			var parts:Array=test.split(",");
+			//trace("parts0 this is the first variable: " + parts[0]);
+			//trace("parts1 this is the second variable: " + parts[1]);
+			
+			attackBtn = parts[0]; 
+			speedKnob = parts[1]; 
+			getX = parts[2]; 
+			getY = parts[3]; 
+			//note this array only accepts ints so I had to mult by 100 in processing
+			//here I reverse that so I can apply the stage multiplyer. 
+			//this could also be done directly in processing or via a function
+			
+			
+		}
+
+		public static function get serialServer():XMLSocket
+		{
+			return _serialServer;
+		}
+
+		public static function set serialServer(value:XMLSocket):void
+		{
+			_serialServer = value;
+		}
+
+		public static function get attackBtn():Number
+		{
+			return _attackBtn;
+		}
+
+		public static function set attackBtn(value:Number):void
+		{
+			_attackBtn = value;
+		}
+
+		public static function get speedKnob():Number
+		{
+			return _speedKnob;
+		}
+
+		public static function set speedKnob(value:Number):void
+		{
+			_speedKnob = value;
+		}
+
+		public static function get getX():Number
+		{
+			return _getX;
+		}
+
+		public static function set getX(value:Number):void
+		{
+			_getX = value;
+		}
+
+		public static function get getY():Number
+		{
+			return _getY;
+		}
+
+		public static function set getY(value:Number):void
+		{
+			_getY = value;
+		}
+		
+
 		
 		
 //l2								 
