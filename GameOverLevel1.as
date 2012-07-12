@@ -87,10 +87,9 @@ package
 			var ea:EarthAir = new EarthAir();  
 			addChild(ea);
 		}
+		
 		public function goombaLevels(e:Event):void { 
 			//and here is where you set your xy
-			trace(getX); 
-			trace(getY);
 			getInputs(); 
 		//see how many goomba have been fired - x goomba = level 1 
 		}
