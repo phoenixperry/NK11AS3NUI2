@@ -44,7 +44,7 @@
 	
 	public class GameMain extends Sprite
 	{
-		private static const _useKinect:Boolean = true ; 
+		private static const _useKinect:Boolean = false ; 
 
 		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false",fontName="Gotham")]
 		public static var Gotham:Class; 

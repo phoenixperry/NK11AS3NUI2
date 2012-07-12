@@ -46,7 +46,8 @@ package
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
 //			addChild(q); 
-			introTimer = new Timer(10000,1);
+			//change this timer to change the lenght the fear clip is up
+			introTimer = new Timer(100,1);
 			introTimer.addEventListener(TimerEvent.TIMER_COMPLETE, startUp); 
 			
 			goombaImmune = new Timer(1000);

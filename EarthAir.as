@@ -172,10 +172,16 @@ package
 		}		
 
 		private function adjustForce(e:KeyboardEvent):void { 
-			//if(e.keyCode == Keyboard.A) { 
-		//	_earthAirBody.ApplyTorque(30); 
-
-		//	}
+		if(e.keyCode == Keyboard.A) { 
+			var pos:b2Vec2 = new b2Vec2(1,10); 
+			var r:b2Mat22 = new b2Mat22(); 
+			var t:b2Transform = new b2Transform(pos,r); 
+			//_earthAirBody.SetTransform(t); 
+			var pos2:b2Vec2 = new b2Vec2(10,1); 
+			_earthAirBody.ApplyForce(pos, pos2);
+			_earthAirBody.ApplyImpulse(pos2,pos2); 
+			trace("adjusting force");
+			}
 		}
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
