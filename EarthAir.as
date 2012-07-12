@@ -1,4 +1,3 @@
-
 package
 {
 	
@@ -15,6 +14,7 @@ package
 	import flash.display.Bitmap;
 	import flash.geom.Point;
 	import flash.ui.GameInput;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	
 	import starling.core.Starling;
@@ -22,6 +22,7 @@ package
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.KeyboardEvent;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
@@ -36,32 +37,14 @@ package
 		public var _earthAirBody:b2Body; 
 		
 		
-		private var _beenHit:Boolean = false;
-		
-		
-		//experiment with singles 
-
+		private var _beenHit:Boolean = false;		
 		private var sprites:StarSpriteCostume; 
-		
-		private var bounce:Number = 0.22;
-		
+	
 		public function EarthAir() 
 		{
-			addEventListener(Event.ADDED_TO_STAGE, EarthAirAdded); 
-			
-			
+			addEventListener(Event.ADDED_TO_STAGE, EarthAirAdded);
 			sprites = new StarSpriteCostume("EarthAndAirSm", 2);
-			
-			earth_mc = sprites.getDressed(); 
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			earth_mc = sprites.getDressed();
 			dict = new Dictionary();
 			dict["EarthAndAirSm"] = [
 				
@@ -89,6 +72,7 @@ package
 		
 		private function EarthAirAdded(e:Event):void
 		{	
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, adjustForce); 			
 			var rand:Number = Math.random()*stage.stageWidth; 
 			
 			_earthAirBody.SetPosition(new b2Vec2((rand+earth_mc.width)/GameMain.RATIO,(0-earth_mc.height)/GameMain.RATIO)); 
@@ -178,15 +162,21 @@ package
 		
 		private function updateEarth(e:Event):void
 		{
-			
 			//f = m*a -- do the physics for this. 
 			//ant_gravity = new b2Vec2(Math.random()*100, 0); 
 			//_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
 			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
 			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 
+		
 
 		}		
-		
+
+		private function adjustForce(e:KeyboardEvent):void { 
+			//if(e.keyCode == Keyboard.A) { 
+		//	_earthAirBody.ApplyTorque(30); 
+
+		//	}
+		}
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
 			//earth_mc.alpha =0; 
