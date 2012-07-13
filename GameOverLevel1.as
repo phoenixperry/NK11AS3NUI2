@@ -42,7 +42,8 @@ package
 		private var speedKnob:Number; 
 		private var attackBtn:Number; 
 		private var dropEvil:Number =0; 
-
+		
+		private var currentLevel =0; 
 		public function GameOverLevel1() 
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
@@ -60,7 +61,7 @@ package
 			introImage.alpha = 0; 
 			TweenLite.to(introImage, 1, {alpha:1});
 			introTimer.start(); 
-			
+
 
 		}
 
@@ -79,30 +80,37 @@ package
 
 			addEventListener(Event.ENTER_FRAME,goombaLevels); 
 	
-			fireGoomba = new Timer(1000); 
+			fireGoomba = new Timer(1000);  
 			fireGoomba.start();
 			fireGoomba.addEventListener(TimerEvent.TIMER,goGoomba);
 
 		}
 		public function goGoomba(event:TimerEvent):void{
-			//trace("earth goomba up"); 
-			
-			if(dropEvil%5==0 && this.numChildren > 2) {
-			var ea2:EarthAirChaser = new EarthAirChaser(); 
-			addChild(ea2); 
-			}else {
-				var ea:EarthAir = new EarthAir();  
-				addChild(ea);
+			//this is the game code for level 0 
+			if(currentLevel == 0) {
+				if(dropEvil%5==0 && this.numChildren > 2) {
+				var ea2:EarthAirChaser = new EarthAirChaser(); 
+				addChild(ea2); 
+				}else {
+					var ea:EarthAir = new EarthAir();  
+					addChild(ea);
+				}
+				dropEvil++; 
 			}
-			dropEvil++; 
+			//this is the game code for level 1 
 		}
+		
 		
 		public function goombaLevels(e:Event):void { 
 			//and here is where you set your xy
-			getInputs(); 
+		getInputs(); 
 		//see how many goomba have been fired - x goomba = level 1 
+		 if (fireGoomba.currentCount < 0) currentLevel=0; 
+		 if(fireGoomba.currentCount > 60 && fireGoomba.currentCount < 120 ) currentLevel = 1; 
+		 if(fireGoomba.currentCount > 120 && fireGoomba.currentCount << 180) currentLevel =3;
+		 
 		}
-		
+
 		private function getInputs():void
 		{
 			getX = GameMain.getX/100 *stage.stageWidth;
@@ -111,7 +119,7 @@ package
 			attackBtn = GameMain.attackBtn; 
 			
 		}		
-
+		
 		override public function removeLevel():void {
 			//you are going to need to loop to check 
 			//how many goomba there are
