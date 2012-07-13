@@ -74,7 +74,7 @@ package
 		
 		private function EarthAirAdded(e:Event):void
 		{	
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, adjustForce); 			
+			//stage.addEventListener(KeyboardEvent.KEY_DOWN, adjustForce); 			
 			var rand:Number = Math.random()*stage.stageWidth; 
 			
 			_earthAirBody.SetPosition(new b2Vec2((rand+earth_mc.width)/GameMain.RATIO,(0-earth_mc.height)/GameMain.RATIO)); 
@@ -177,7 +177,7 @@ package
 
 		private function adjustForce(e:KeyboardEvent):void { 
 		if(e.keyCode == Keyboard.A) { 
-			if(GameMain.getX == NaN) { 
+		
 			//this one makes me smart 
 			//var driveTo:b2Vec2 = new b2Vec2( GlowBody.xpos/GameMain.RATIO,  GlowBody.ypos/GameMain.RATIO); 
 			
@@ -193,7 +193,7 @@ package
 			_earthAirBody.SetAngularVelocity(0); 
 			_earthAirBody.IsFixedRotation(); 
 			}
-		}
+		
 		}
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state

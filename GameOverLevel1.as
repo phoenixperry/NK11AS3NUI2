@@ -44,6 +44,9 @@ package
 		private var dropEvil:Number =0; 
 		
 		private var currentLevel =0; 
+		
+		private var oddsOfFall, oddsOfFear, oddsOfEvil; 
+		
 		public function GameOverLevel1() 
 		{
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
@@ -67,7 +70,6 @@ package
 
 		protected function startUp(event:TimerEvent):void
 		{	
-			
 			TweenLite.to(introImage, 1, {alpha:0});
 			// TODO Auto-generated method stub
 			removeEventListener(TimerEvent.TIMER_COMPLETE,startUp); 
@@ -85,32 +87,55 @@ package
 			fireGoomba.addEventListener(TimerEvent.TIMER,goGoomba);
 
 		}
+		//this section really does run the game speed in commpleteness 
 		public function goGoomba(event:TimerEvent):void{
-			//this is the game code for level 0 
-			if(currentLevel == 0) {
-				if(dropEvil%5==0 && this.numChildren > 2) {
-				var ea2:EarthAirChaser = new EarthAirChaser(); 
-				addChild(ea2); 
-				}else {
-					var ea:EarthAir = new EarthAir();  
-					addChild(ea);
+			var ea:EarthAir = new EarthAir(); 
+			addChild(ea); 
+			
+				var rnd:Number = Math.random(); 
+			//	trace(rnd, "odds of a fall"); 
+				if(rnd  < oddsOfFall) { 
+					if(rnd < oddsOfFear) { 
+						if(rnd < oddsOfEvil) {
+							var ea2:EarthAirChaser = new EarthAirChaser(); 
+							addChild(ea2); 
+							//trace("dropped super baddy"); 
+						}else {
+							var ea:EarthAir = new EarthAir(); 
+							addChild(ea); 
+							//trace("dropped normal baddy"); 
+						}
+					}
 				}
-				dropEvil++; 
-			}
-			//this is the game code for level 1 
 		}
 		
-		
+		//this is the function that sets everything 
 		public function goombaLevels(e:Event):void { 
 			//and here is where you set your xy
 		getInputs(); 
 		//see how many goomba have been fired - x goomba = level 1 
-		 if (fireGoomba.currentCount < 0) currentLevel=0; 
-		 if(fireGoomba.currentCount > 60 && fireGoomba.currentCount < 120 ) currentLevel = 1; 
-		 if(fireGoomba.currentCount > 120 && fireGoomba.currentCount << 180) currentLevel =3;
-		 
+		 if (fireGoomba.currentCount == 0) { 
+			 currentLevel=1; 
+			 oddsOfFall=0.4
+			 oddsOfFear=0.4;
+			 oddsOfEvil=0.2;	 
+			 trace("level 1");
+		 }
+		 if(fireGoomba.currentCount > 60 && fireGoomba.currentCount < 120 ) { 
+			 currentLevel=2; 
+			 oddsOfFall=0.6
+			 oddsOfFear=0.5;
+			 oddsOfEvil=0.3;	 
+			 trace("level 2");
+		 }
+		 if(fireGoomba.currentCount > 120 && fireGoomba.currentCount < 180) { 
+		 	currentLevel=3; 
+		 	oddsOfFall=0.8
+		 	oddsOfFear=0.85;
+		 	oddsOfEvil=0.9;	 
+		 	trace("level 3");
 		}
-
+	}
 		private function getInputs():void
 		{
 			getX = GameMain.getX/100 *stage.stageWidth;
