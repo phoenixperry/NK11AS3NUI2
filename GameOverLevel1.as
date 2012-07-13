@@ -6,6 +6,7 @@ package
 	
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Bounce;
+	import com.phoenixperry.EarthAirChaser;
 	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
@@ -17,8 +18,7 @@ package
 	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.textures.Texture;
-	
+	import starling.textures.Texture; 
 	public class GameOverLevel1 extends LevelGen
 	{	
 		[Embed(source="./assets/gameOver/sprites/FearisTheMindKiller.jpg")]
@@ -41,6 +41,7 @@ package
 		private var getY:Number; 
 		private var speedKnob:Number; 
 		private var attackBtn:Number; 
+		private var dropEvil:Number =0; 
 
 		public function GameOverLevel1() 
 		{
@@ -85,8 +86,15 @@ package
 		}
 		public function goGoomba(event:TimerEvent):void{
 			//trace("earth goomba up"); 
-			var ea:EarthAir = new EarthAir();  
-			addChild(ea);
+			
+			if(dropEvil%5==0 && this.numChildren > 2) {
+			var ea2:EarthAirChaser = new EarthAirChaser(); 
+			addChild(ea2); 
+			}else {
+				var ea:EarthAir = new EarthAir();  
+				addChild(ea);
+			}
+			dropEvil++; 
 		}
 		
 		public function goombaLevels(e:Event):void { 

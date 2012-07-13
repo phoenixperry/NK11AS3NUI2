@@ -80,6 +80,7 @@
 		private static var _speedKnob:Number; 
 		private static var _getX:Number; 
 		private static var _getY:Number;
+		public var ipadOn:Boolean; 
 		
 		public function GameMain() 
 		{
@@ -280,9 +281,13 @@
 			//trace("parts1 this is the second variable: " + parts[1]);
 			
 			attackBtn = parts[0]; 
-			speedKnob = parts[1]; 
+			speedKnob = parts[1];
+			
 			getX = parts[2]; 
 			getY = parts[3]; 
+			getX = int(getX/100 *stage.stageWidth);
+			getY = int(getY/100 *stage.stageHeight); 
+			trace(getX); 
 			//note this array only accepts ints so I had to mult by 100 in processing
 			//here I reverse that so I can apply the stage multiplyer. 
 			//this could also be done directly in processing or via a function

@@ -1,4 +1,4 @@
-package
+package com.phoenixperry
 {
 	
 	import Box2D.Collision.*;
@@ -11,13 +11,12 @@ package
 	import Box2D.Dynamics.b2BodyDef;
 	import Box2D.Dynamics.b2FixtureDef;
 	
-	import com.as3nui.nativeExtensions.air.kinect.data.PointCloudRegion;
-	
 	import flash.display.Bitmap;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
-	import flash.ui.GameInput;
-	import flash.ui.Keyboard;
+
 	import flash.utils.Dictionary;
+	import flash.utils.Timer;
 	
 	import starling.core.Starling;
 	import starling.display.Image;
@@ -28,7 +27,7 @@ package
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
-	public class EarthAir extends Actor
+	public class EarthAirChaser extends Actor
 	{
 		
 		public static const CACHE_ID:String = "EarthAndAir"; 
@@ -36,15 +35,17 @@ package
 		protected var earth_mc:MovieClip; 
 		private var ant_gravity:b2Vec2;
 		
-		public var _earthAirBody:b2Body; 
+		public var _EarthAirChaserBody:b2Body; 
 		
 		
 		private var _beenHit:Boolean = false;		
 		private var sprites:StarSpriteCostume; 
-	
-		public function EarthAir() 
+		
+		private var knowPosition:Timer;  
+		
+		public function EarthAirChaser() 
 		{
-			addEventListener(Event.ADDED_TO_STAGE, EarthAirAdded);
+			addEventListener(Event.ADDED_TO_STAGE, EarthAirChaserAdded);
 			sprites = new StarSpriteCostume("EarthAndAirSm", 2);
 			earth_mc = sprites.getDressed();
 			dict = new Dictionary();
@@ -67,24 +68,28 @@ package
 				
 			];
 			
-			_earthAirBody= createBody("EarthAndAirSm", GameMain.world, b2Body.b2_dynamicBody,earth_mc); 
-			_earthAirBody.SetFixedRotation(true); 
-			super(_earthAirBody, earth_mc); 
+			_EarthAirChaserBody= createBody("EarthAndAirSm", GameMain.world, b2Body.b2_dynamicBody,earth_mc); 
+			_EarthAirChaserBody.SetFixedRotation(true); 
+			earth_mc.color = 0xFF0000; 
+			super(_EarthAirChaserBody, earth_mc); 
 		}
 		
-		private function EarthAirAdded(e:Event):void
+		private function EarthAirChaserAdded(e:Event):void
 		{	
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, adjustForce); 			
+	
+			
+			
 			var rand:Number = Math.random()*stage.stageWidth; 
 			
-			_earthAirBody.SetPosition(new b2Vec2((rand+earth_mc.width)/GameMain.RATIO,(0-earth_mc.height)/GameMain.RATIO)); 
+			_EarthAirChaserBody.SetPosition(new b2Vec2((rand+earth_mc.width)/GameMain.RATIO,(0-earth_mc.height)/GameMain.RATIO)); 
 			//earth_mc.y = Math.random()*stage.stageHeight; 
 			addChild(earth_mc); 
 			//trace("1 goomba added"); 
 			//trace("earth added"); 
+			knowPosition = new Timer(500,1); 
+			knowPosition.addEventListener(TimerEvent.TIMER, goToBody); 
+			knowPosition.start();			
 		
-
-			
 		}
 		
 		protected function boundsCheck():void
@@ -109,7 +114,7 @@ package
 			var bodyDef:b2BodyDef = new b2BodyDef();
 			bodyDef.type = bodyType;
 			bodyDef.userData = userData;
-			bodyDef.userData.name="earthAir"; 
+			bodyDef.userData.name="EarthAirChaser"; 
 			//fixes sticking but lord oh lord at what cost 
 			bodyDef.bullet = false; 
 			
@@ -168,46 +173,42 @@ package
 			boundsCheck();
 			//f = m*a -- do the physics for this. 
 			//ant_gravity = new b2Vec2(Math.random()*100, 0); 
-			//_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
-	
-			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
-			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 
-		
+			//_EarthAirChaserBody.ApplyForce(ant_gravity, _EarthAirChaserBody.GetWorldCenter()); 
+			
+			earth_mc.x = _EarthAirChaserBody.GetPosition().x * GameMain.RATIO; 
+			earth_mc.y = _EarthAirChaserBody.GetPosition().y * GameMain.RATIO; 
+			
 		}		
-
-		private function adjustForce(e:KeyboardEvent):void { 
-		if(e.keyCode == Keyboard.A) { 
-			if(GameMain.getX == NaN) { 
-			//this one makes me smart 
-			//var driveTo:b2Vec2 = new b2Vec2( GlowBody.xpos/GameMain.RATIO,  GlowBody.ypos/GameMain.RATIO); 
-			
-			//this one goes for the finger 
-			var driveTo:b2Vec2 = new b2Vec2(GameMain.getX/GameMain.RATIO, GameMain.getY/GameMain.RATIO); 
-			
-			var locVec:b2Vec2 = new b2Vec2(earth_mc.x/GameMain.RATIO, earth_mc.y/GameMain.RATIO); 
-			var diff:b2Vec2 = new b2Vec2(driveTo.x-locVec.x, driveTo.y-locVec.y); 
-		//	diff.Normalize(); 
-		//diff.Multiply(14); 		
-			var center:b2Vec2 = _earthAirBody.GetPosition(); 
-			_earthAirBody.SetLinearVelocity(diff); 
-			_earthAirBody.SetAngularVelocity(0); 
-			_earthAirBody.IsFixedRotation(); 
-			}
-		}
+		
+		private function goToBody(e:TimerEvent):void { 
+		
+				
+					//this one makes me smart 
+					var driveTo:b2Vec2 = new b2Vec2( GlowBody.xpos/GameMain.RATIO,  GlowBody.ypos/GameMain.RATIO); 
+					
+					trace("fired"); 
+					var locVec:b2Vec2 = new b2Vec2(earth_mc.x/GameMain.RATIO, earth_mc.y/GameMain.RATIO); 
+					var diff:b2Vec2 = new b2Vec2(driveTo.x-locVec.x, driveTo.y-locVec.y); 
+					//	diff.Normalize(); 
+					diff.Multiply(.5); 		
+					_EarthAirChaserBody.SetLinearVelocity(diff); 
+					_EarthAirChaserBody.SetAngularVelocity(0); 
+					_EarthAirChaserBody.IsFixedRotation(); 
 		}
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
 			//earth_mc.alpha =0; 
 			trace(actor.name); 
 			//	_beenHit = true; 
-				setState(); 
-				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
-				trace("earth hit by glowbody function saying hello"); 
-				//earth_mc.dispose(); 	
+			setState(); 
+			//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
+			trace("earth hit by glowbody function saying hello"); 
+			//earth_mc.dispose(); 	
 		}
 		private function setState():void { 
 			//do animation for hit here. 
 			trace("earth setState signing on! Why you hit me bitch?"); 
+
 		}
 		
 		public function remove ():void
@@ -216,8 +217,8 @@ package
 			earth_mc.dispose(); 		
 		}
 		
-
-				
+		
+		
 		
 		//last two 	
 	}

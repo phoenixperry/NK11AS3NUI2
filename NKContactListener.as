@@ -6,6 +6,8 @@ package
 	import Box2D.Dynamics.Contacts.b2Contact;
 	import Box2D.Dynamics.b2ContactListener;
 	
+	import com.phoenixperry.EarthAirChaser;
+	
 	import org.osflash.signals.Signal;
 	
 	public class NKContactListener extends b2ContactListener
@@ -27,7 +29,7 @@ package
 			var actorB:Actor = contact.GetFixtureB().GetBody().GetUserData();
 
 			trace(actorA, contact.GetFixtureA().GetBody().GetUserData(), actorB); 
-			if(actorA is EarthAir) { 
+			if(actorA is EarthAir || EarthAirChaser) { 
 				actorB.hitByActor(actorA); 
 			}
 			
