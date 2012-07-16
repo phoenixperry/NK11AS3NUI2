@@ -74,7 +74,7 @@ package
 		
 		private function EarthAirAdded(e:Event):void
 		{	
-			//stage.addEventListener(KeyboardEvent.KEY_DOWN, adjustForce); 			
+	
 			var rand:Number = Math.random()*stage.stageWidth; 
 			
 			_earthAirBody.SetPosition(new b2Vec2((rand+earth_mc.width)/GameMain.RATIO,(0-earth_mc.height)/GameMain.RATIO)); 
@@ -93,6 +93,7 @@ package
 			if(earth_mc.x >stage.stageWidth +earth_mc.x/2 || earth_mc.y > stage.stageHeight +earth_mc.y/2||earth_mc.x < -200|| earth_mc.y < -200){
 				this.remove(); 
 			}
+			adjustForce(); 
 		}		
 		
 		public function createBody(name:String,  world:b2World, bodyType:uint, userData:*):b2Body
@@ -169,14 +170,13 @@ package
 			//f = m*a -- do the physics for this. 
 			//ant_gravity = new b2Vec2(Math.random()*100, 0); 
 			//_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
-	
 			earth_mc.x = _earthAirBody.GetPosition().x * GameMain.RATIO; 
 			earth_mc.y = _earthAirBody.GetPosition().y * GameMain.RATIO; 
 		
 		}		
 
-		private function adjustForce(e:KeyboardEvent):void { 
-		if(e.keyCode == Keyboard.A) { 
+		private function adjustForce():void { 
+		if(GameMain.ipadActive == true) { 
 		
 			//this one makes me smart 
 			//var driveTo:b2Vec2 = new b2Vec2( GlowBody.xpos/GameMain.RATIO,  GlowBody.ypos/GameMain.RATIO); 
@@ -215,9 +215,6 @@ package
 			this.removeChildren(); 
 			earth_mc.dispose(); 		
 		}
-		
-
-				
 		
 		//last two 	
 	}

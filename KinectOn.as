@@ -46,7 +46,7 @@ package
 		public var gbArray:Array; 
 		public var startScreenKinect:Signal;
 		private var makeGlowBodies:Boolean; 
-		
+	
 		public function KinectOn()
 		{
 			_skeletonSprite = new Sprite();
@@ -217,8 +217,6 @@ package
 				GameOverStart.rhypos = gbArray[1].yposMem; 
 				BallBtn.rhxpos =  gbArray[1].xposMem; 
 				BallBtn.rhypos =  gbArray[1].yposMem; 
-				
-				
 			}
 		}
 		public function renderSkeleton():void { 
@@ -231,6 +229,11 @@ package
 				
 			}
 		}
-		
+		public function jointsLeft():Number { 
+			var num:Number = gbArray.length; 
+			return num;
+			trace(num); 
+		}
+
 	}
 }

@@ -29,9 +29,6 @@ package
 				_allBits = new spriteSheet(); 
 				_myTexture = Texture.fromBitmap(_allBits, true); 
 				_myXML = XML(new allData()); 
-			
-				
-				
 			}
 		}
 		

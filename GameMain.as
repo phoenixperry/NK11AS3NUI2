@@ -11,6 +11,7 @@
 	
 	import com.greensock.TweenLite;
 	import com.phoenixperry.GOSimonTwo;
+	import com.phoenixperry.HeroFont;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -18,6 +19,8 @@
 	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.globalization.CurrencyFormatter;
 	import flash.net.XMLSocket;
@@ -51,14 +54,15 @@
 		
 		public var killAll:Boolean = false; 
 		//reset var
+		
+		//this is the count of remaining glowbodies 
 		public static var countGlows:Number; 
-	
+		
 		//font
 		private var font:Font; 
 		private var gameOverStart:GameOverStart;
 	    private var k:KinectOn;
 	
-
 		private var _mouseX:Number = 0;
 		private var _mouseY:Number = 0;
 			
@@ -80,15 +84,17 @@
 		private static var _speedKnob:Number; 
 		private static var _getX:Number; 
 		private static var _getY:Number;
-		public var ipadOn:Boolean; 
+
+		public static var ipadActive:Boolean = false; 
+		private var ipadCheck:Timer; 
+		private var myX:Number; 
+		private var myY:Number; 
 		
 		public function GameMain() 
 		{
 			makeSprites = SingletonSpriteSheet.getInstance(); 
 			addEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded);
 			initServer(); 
-		
-			
 		}
 		private function onAdded(e:starling.events.Event):void
 		{
@@ -97,23 +103,37 @@
 			setupPhysicsWorld();
 			gameTimer = new GameTimer(); 
 		
-		
 			removeEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded); 
 
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteLevel);
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, levelCreator);
 			
 			addEventListener(starling.events.Event.ENTER_FRAME, gameLoop); 
-	
+
+			ipadCheck = new Timer(200); 
+			ipadCheck.addEventListener(TimerEvent.TIMER, checkit); 
 			
-		}		
+			myX = 0; 
+			myY = 0; 
+		}
+		
+		private function checkit(e:TimerEvent):void { 
+			if(myX == getX && myY == getY) { 
+				ipadActive = false; 
+			}else{
+				ipadActive = true; 
+			}
+			trace(ipadActive); 
+			myX=getX; 
+			myY=getY; 
+		}
+		
 		private function updateW(e:starling.events.Event):void
 		{
 			var timeStep:Number = 1 / 60;
 			var velocityIterations:int = 6;
 			var positionIterations:int = 2;
-			
-			
+		
 			_world.Step(timeStep, velocityIterations, positionIterations);
 			_world.ClearForces();
 			_world.DrawDebugData();
@@ -223,25 +243,22 @@
 				gameOverLevel1 = new GameOverLevel1(); 
 				addChild(gameOverLevel1); 
 				loadLevelOne = false; 
-
 			}
 			if(countGlows == 0){
 				//gameOverStart = new GameOverStart(); 
 				//addChild(gameOverStart); 
 				killLevel(); 
 			}
-			
+			ipadActive = false; 
 		}
 
-		 private function killLevel():void
+		private function killLevel():void
 		{
-			
 				 var msg:TextField = new TextField(600,400,"Fear destroyed your body", font.fontName, 38, 0xFFFFFF); 
 				 msg.x = stage.stageWidth - msg.width >>1; 
 				 msg.y = stage.stageHeight - msg.height >>1; 
 				 addChild(msg); 
 				 removeEventListener(starling.events.Event.ENTER_FRAME, gameLoop); 	 
-
 		}	
 		
 		public static function get useKinect():Boolean
@@ -259,42 +276,38 @@
 			serialServer.addEventListener(flash.events.Event.CONNECT,onServer);
 			serialServer.addEventListener(flash.events.Event.CLOSE,onServer);
 			serialServer.addEventListener(flash.events.IOErrorEvent.IO_ERROR,onServer);
-			
 		}
+		
 		public function onServer(e:flash.events.Event):void {
 			trace(e);
 		}
-		
-		public function onReceiveData(dataEvent:flash.events.DataEvent):void {
+		public function onReceiveData(dataEvent:flash.events.DataEvent):void { 
 			
 			var Data:DataEvent=dataEvent;
 			//trace(Data);
-			
 			// This grabs the data from Data var which is the string passed
 			// from our processing server.
 			var test=Data.data;
 			//trace(test);
-			
 			// This splits the variables we are passing.
 			var parts:Array=test.split(",");
 			//trace("parts0 this is the first variable: " + parts[0]);
 			//trace("parts1 this is the second variable: " + parts[1]);
-			
 			attackBtn = parts[0]; 
 			speedKnob = parts[1];
-			
+		
 			getX = parts[2]; 
 			getY = parts[3]; 
 			getX = int(getX/100 *stage.stageWidth);
 			getY = int(getY/100 *stage.stageHeight); 
 			trace(getX); 
+		
 			//note this array only accepts ints so I had to mult by 100 in processing
 			//here I reverse that so I can apply the stage multiplyer. 
 			//this could also be done directly in processing or via a function
-			
-			
+			ipadCheck.start(); 
 		}
-
+		
 		public static function get serialServer():XMLSocket
 		{
 			return _serialServer;
