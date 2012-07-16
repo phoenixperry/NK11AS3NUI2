@@ -7,11 +7,13 @@ package
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Bounce;
 	import com.phoenixperry.EarthAirChaser;
+	import com.phoenixperry.HeroFont;
 	import com.phoenixperry.IntroAnimation;
 	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
 	import flash.media.Sound;
+	import flash.text.Font;
 	import flash.ui.GameInput;
 	import flash.utils.Timer;
 	
@@ -26,16 +28,17 @@ package
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	
-	import com.phoenixperry.IntroAnimation; 
 	public class GameOverLevel1 extends LevelGen
 	{	
-		[Embed(source="./assets/gameOver/sprites/FearisTheMindKiller.jpg")]
-		private var intro:Class;
+		
+		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false", fontName="Gotham")]
+		private static var Gotham:Class;  
+		
+		private var font:Font = new Gotham(); 
+		private var endText:TextField; 
 		
 		private var sprites:StarSpriteCostume;
-		private var introBits:Bitmap; 
-		private var introTexture:Texture; 
-		private var introImage:Image; 
+		
 		
 		private var fireGoomba:Timer; 
 		private var fireGoomba2:Timer; 
@@ -64,6 +67,7 @@ package
 		private var onLevel2:starling.text.TextField;
 		private var onLevel3:starling.text.TextField;
 		private var onLevel4:starling.text.TextField;
+		
 		private var level1Complete:Signal; 
 		private var level2Complete:Signal; 
 		private var level3Complete:Signal; 
@@ -71,12 +75,19 @@ package
 		private var level2_mc:MovieClip; 
 		private var level3_mc:MovieClip; 
 		private var intro_ani:IntroAnimation; 
+		private var msg:TextField; 
+
+		
+		
+		
 		public function GameOverLevel1() 
 		{
+	
+
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
 //			addChild(q); 
 			//change this timer to change the lenght the fear clip is up
-			introTimer = new Timer(100,1);
+			introTimer = new Timer(17000,1);
 			introTimer.addEventListener(TimerEvent.TIMER_COMPLETE, startUp); 
 			
 			goombaImmune = new Timer(1000);
@@ -96,7 +107,7 @@ package
 			level1Complete.add(endLevel1); 
 			level2Complete.add(endLevel2); 
 			level3Complete.add(endLevel3); 
-			
+	
 		}
 		private function endLevel1():void{
 			removeChild(level1_mc); 
@@ -117,8 +128,6 @@ package
 
 		protected function startUp(event:TimerEvent):void
 		{	
-			TweenLite.to(introImage, 1, {alpha:0});
-			// TODO Auto-generated method stub
 			removeEventListener(TimerEvent.TIMER_COMPLETE,startUp); 
 			
 			if(!GameMain.useKinect){
@@ -135,6 +144,13 @@ package
 			addChild(level1_mc); 
 			
 			gameUI(); 
+			
+			endText = new TextField(500, 200, "GAME OVER", font.fontName, 38, 0xFFFFFF);  
+			endText.x = stage.stageWidth - endText.width >>1 ;
+			endText.y = stage.stageHeight - endText.height >> 1;
+			endText.alpha = 0; 
+			addChild(endText); 
+			
 			}
 
 			addEventListener(Event.ENTER_FRAME,goombaLevels); 
@@ -203,6 +219,7 @@ package
 		}
 	
 		 updateHearts(); 
+
 	}
 		
 		private function drawLevelUpUI():void { 
@@ -214,7 +231,6 @@ package
 			getY = GameMain.getY/100 *stage.stageHeight;
 			speedKnob = GameMain.speedKnob; 
 			attackBtn = GameMain.attackBtn; 
-			
 		}		
 		private function gameUI():void { 
 		
@@ -264,10 +280,13 @@ package
 					heart2.dispose(); 
 					heart3.dispose(); 
 					heart4.dispose(); 
+					endText.alpha = 100; 
+						
 				}
 			}
 		}
 	
+
 		override public function removeLevel():void {
 			//you are going to need to loop to check 
 			//how many goomba there are
@@ -275,7 +294,7 @@ package
 			gb.remove();
 			gb.destroy();
 			}
-			
+
 			fireGoomba.removeEventListener(TimerEvent.TIMER,goGoomba); 
 			this.removeChildren(); 
 			this.dispose();

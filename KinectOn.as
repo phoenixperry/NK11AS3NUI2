@@ -43,10 +43,10 @@ package
 		private var particleBits:Bitmap; 
 		private var particleImage:Image; 
 		public var user:User;
-		public var gbArray:Array; 
+		public static var gbArray:Array; 
 		public var startScreenKinect:Signal;
 		private var makeGlowBodies:Boolean; 
-	
+		
 		public function KinectOn()
 		{
 			_skeletonSprite = new Sprite();
@@ -63,23 +63,23 @@ package
 				settings.skeletonEnabled = true;
 				kinect.start(settings); 
 				this.user = user;
-			kinect.addEventListener(DeviceEvent.STARTED, onAdded, false, 0, true);
+				kinect.addEventListener(DeviceEvent.STARTED, onAdded, false, 0, true);
 			}
 		}
 		private function onAdded(e:DeviceEvent):void {
 			
-				//removeEventListener(DeviceEvent.STARTED,onAdded);
-				addEventListener(Event.ENTER_FRAME, onEnterFrame); 
-					if(makeGlowBodies) {
-						for (var i:int = 0; i < 14; i++) 
-						{
-							var gb:GlowBody = new GlowBody();  
-							gbArray.push(gb); 
-							addChild(gbArray[i]); 
-							makeGlowBodies = false;	
-						}
-					}
-				
+			//removeEventListener(DeviceEvent.STARTED,onAdded);
+			addEventListener(Event.ENTER_FRAME, onEnterFrame); 
+			if(makeGlowBodies) {
+				for (var i:int = 0; i < 14; i++) 
+				{
+					var gb:GlowBody = new GlowBody();  
+					gbArray.push(gb); 
+					addChild(gbArray[i]); 
+					makeGlowBodies = false;	
+				}
+			}
+			
 			
 			
 			startScreenKinect = new Signal(); 
@@ -171,7 +171,7 @@ package
 				
 				gbArray[1].xposMem = Number(rh.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[1].yposMem = Number(rh.depthRelativePosition.y*stage.stageHeight); 
-		
+				
 				gbArray[2].xposMem = Number(re.depthRelativePosition.x*stage.stageWidth); 
 				gbArray[2].yposMem = Number(re.depthRelativePosition.y*stage.stageHeight); 
 				
@@ -234,6 +234,6 @@ package
 			return num;
 			trace(num); 
 		}
-
+		
 	}
 }

@@ -11,10 +11,11 @@ package com.phoenixperry
 	import Box2D.Dynamics.b2BodyDef;
 	import Box2D.Dynamics.b2FixtureDef;
 	
+	import com.as3nui.nativeExtensions.air.kinect.Kinect;
+	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
-
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
@@ -42,6 +43,7 @@ package com.phoenixperry
 		private var sprites:StarSpriteCostume; 
 		
 		private var knowPosition:Timer;  
+		private var kPoint:Point; 
 		
 		public function EarthAirChaser() 
 		{
@@ -181,19 +183,40 @@ package com.phoenixperry
 		}		
 		
 		private function goToBody(e:TimerEvent):void { 
-		
 				
-					//this one makes me smart 
-					var driveTo:b2Vec2 = new b2Vec2( GlowBody.xpos/GameMain.RATIO,  GlowBody.ypos/GameMain.RATIO); 
+					if(GameMain.useKinect ==false) { 
+						//this one makes me smart 
+						var driveTo:b2Vec2 = new b2Vec2( GlowBody.xpos/GameMain.RATIO,  GlowBody.ypos/GameMain.RATIO); 
+						
+						trace("fired"); 
+						var locVec:b2Vec2 = new b2Vec2(earth_mc.x/GameMain.RATIO, earth_mc.y/GameMain.RATIO); 
+						var diff:b2Vec2 = new b2Vec2(driveTo.x-locVec.x, driveTo.y-locVec.y); 
+						//	diff.Normalize(); 
+						diff.Multiply(.5); 		
+						_EarthAirChaserBody.SetLinearVelocity(diff); 
+						_EarthAirChaserBody.SetAngularVelocity(0); 
+						_EarthAirChaserBody.IsFixedRotation(); 
+					}
 					
-					trace("fired"); 
-					var locVec:b2Vec2 = new b2Vec2(earth_mc.x/GameMain.RATIO, earth_mc.y/GameMain.RATIO); 
-					var diff:b2Vec2 = new b2Vec2(driveTo.x-locVec.x, driveTo.y-locVec.y); 
-					//	diff.Normalize(); 
-					diff.Multiply(.5); 		
-					_EarthAirChaserBody.SetLinearVelocity(diff); 
-					_EarthAirChaserBody.SetAngularVelocity(0); 
-					_EarthAirChaserBody.IsFixedRotation(); 
+					if(GameMain.useKinect == true) {
+						//get a random joint 
+						var rand = Math.random() * GameMain.countGlows; 
+						
+						var x:Number = KinectOn.gbArray[rand-1].x; 
+						var y:Number = KinectOn.gbArray[rand-1].y; 
+						
+						//this one makes me smart 
+						var driveTo:b2Vec2 = new b2Vec2(x/GameMain.RATIO,  y/GameMain.RATIO); 
+						
+						trace("fired"); 
+						var locVec:b2Vec2 = new b2Vec2(earth_mc.x/GameMain.RATIO, earth_mc.y/GameMain.RATIO); 
+						var diff:b2Vec2 = new b2Vec2(driveTo.x-locVec.x, driveTo.y-locVec.y); 
+						//	diff.Normalize(); 
+						diff.Multiply(.5); 		
+						_EarthAirChaserBody.SetLinearVelocity(diff); 
+						_EarthAirChaserBody.SetAngularVelocity(0); 
+						_EarthAirChaserBody.IsFixedRotation(); 
+					}
 		}
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state

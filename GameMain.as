@@ -47,7 +47,7 @@
 	
 	public class GameMain extends Sprite
 	{
-		private static const _useKinect:Boolean = false ; 
+		private static const _useKinect:Boolean = true ; 
 
 		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false",fontName="Gotham")]
 		public static var Gotham:Class; 
@@ -89,10 +89,10 @@
 		private var ipadCheck:Timer; 
 		private var myX:Number; 
 		private var myY:Number; 
-		
+		public static var kPoint:Point; 
 		public function GameMain() 
 		{
-			makeSprites = SingletonSpriteSheet.getInstance(); 
+			makeSprites = SingletonSpriteSheet.getInstance();
 			addEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded);
 			initServer(); 
 		}
@@ -105,6 +105,7 @@
 		
 			removeEventListener(starling.events.Event.ADDED_TO_STAGE, onAdded); 
 
+			
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteLevel);
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, levelCreator);
 			
@@ -167,7 +168,7 @@
 			if(useKinect) {
 				k = new KinectOn(); 
 				addChild(k); 
-				countGlows = 13; 
+				countGlows = 13;
 			}
 			else{
 				
@@ -191,7 +192,6 @@
 			 _world = new b2World(gravity, allowSleep); 
 			 addEventListener(starling.events.Event.ENTER_FRAME, updateW); 
 			 GameMain.world.SetContactListener(new NKContactListener());
-			
 		}
 		
 		
@@ -203,7 +203,6 @@
 		static public function set world(value:b2World):void 
 		{
 			_world = value;
-		
 		}
 		
 		private function onTouch (e:TouchEvent):void
@@ -212,12 +211,10 @@
 			var touch:Touch = e.getTouch(stage);
 			var pos:Point = touch.getLocation(stage);
 			//trace ( touch.phase );
-			// store the mouse coordinates
-
+			// store the mouse coordinate
 			//trace(pos.x, pos.y); 
 			GlowBody.xpos = pos.x
 			GlowBody.ypos = pos.y; 
-			
 		}
 		
 		public function setDebugDraw(debugSprite:flash.display.Sprite):void{
@@ -245,27 +242,17 @@
 				loadLevelOne = false; 
 			}
 			if(countGlows == 0){
-				//gameOverStart = new GameOverStart(); 
+ 				//gameOverStart = new GameOverStart(); 
 				//addChild(gameOverStart); 
-				killLevel(); 
+				//killLevel(); 
 			}
 			ipadActive = false; 
 		}
 
-		private function killLevel():void
-		{
-				 var msg:TextField = new TextField(600,400,"Fear destroyed your body", font.fontName, 38, 0xFFFFFF); 
-				 msg.x = stage.stageWidth - msg.width >>1; 
-				 msg.y = stage.stageHeight - msg.height >>1; 
-				 addChild(msg); 
-				 removeEventListener(starling.events.Event.ENTER_FRAME, gameLoop); 	 
-		}	
-		
 		public static function get useKinect():Boolean
 		{
 			return _useKinect;
 		}
-		
 		
 		public function initServer():void {
 			serialServer=new XMLSocket  ;
