@@ -18,7 +18,7 @@ package
 		{
 			st = new Starling(GameMain, stage); 
 			st.start(); 
-		// 	stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
+		 	//stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
 			trace("fuck it"); 
 		}
 		

@@ -246,7 +246,7 @@
 				//addChild(gameOverStart); 
 				//killLevel(); 
 			}
-			ipadActive = false; 
+
 		}
 
 		public static function get useKinect():Boolean
@@ -255,6 +255,8 @@
 		}
 		
 		public function initServer():void {
+			//ran
+			trace("dfgsdfgsgf");
 			serialServer=new XMLSocket  ;
 			serialServer.connect("127.0.0.1",3333);
 			

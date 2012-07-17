@@ -133,6 +133,7 @@ package
 			if(!GameMain.useKinect){
 			gb = new GlowBody();  
 			addChild(gb); 
+			}
 			sprites = new StarSpriteCostume("heart", 1);
 			heart1 = sprites.getDressed();
 			heart2 = sprites.getDressed(); 
@@ -151,14 +152,13 @@ package
 			endText.alpha = 0; 
 			addChild(endText); 
 			
-			}
 
 			addEventListener(Event.ENTER_FRAME,goombaLevels); 
 	
 			fireGoomba = new Timer(1000);  
 			fireGoomba.start();
 			fireGoomba.addEventListener(TimerEvent.TIMER,goGoomba);
-
+			gameUI(); 
 		}
 		//this section really does run the game speed in commpleteness 
 		public function goGoomba(event:TimerEvent):void{
@@ -177,6 +177,7 @@ package
 						}
 					}
 				}
+			
 		}
 		
 		//this is the function that sets everything 
@@ -218,7 +219,6 @@ package
 			level3Complete.dispatch();  
 		}
 	
-		 updateHearts(); 
 
 	}
 		
@@ -231,6 +231,7 @@ package
 			getY = GameMain.getY/100 *stage.stageHeight;
 			speedKnob = GameMain.speedKnob; 
 			attackBtn = GameMain.attackBtn; 
+			updateHearts(); 
 		}		
 		private function gameUI():void { 
 		
@@ -257,18 +258,23 @@ package
 				if(GameMain.countGlows < 9) {
 					removeChild(heart1); 
 					heart1.dispose(); 
+	
 				}
 				if(GameMain.countGlows < 6) { 
 					removeChild(heart2); 
-					heart2.dispose(); 	
+					heart2.dispose(); 
 				}
 				if(GameMain.countGlows < 3) { 
 					removeChild(heart3); 
-					heart3.dispose(); 
+					heart3.dispose();
 				}
 				if(GameMain.countGlows == 0) { 
 					removeChild(heart4); 
-					heart4.dispose(); 				
+					heart4.dispose(); 
+				}
+				
+				if(GameMain.countGlows == 0) { 
+					endText.alpha = 1;
 				}
 			}else {
 				if(GameMain.countGlows == 0 ) {

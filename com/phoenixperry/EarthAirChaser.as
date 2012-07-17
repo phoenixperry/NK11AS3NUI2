@@ -202,8 +202,8 @@ package com.phoenixperry
 						//get a random joint 
 						var rand = Math.random() * GameMain.countGlows; 
 						
-						var x:Number = KinectOn.gbArray[rand-1].x; 
-						var y:Number = KinectOn.gbArray[rand-1].y; 
+						//var x:Number = KinectOn.gbArray[rand-1].x; 
+						//var y:Number = KinectOn.gbArray[rand-1].y; 
 						
 						//this one makes me smart 
 						var driveTo:b2Vec2 = new b2Vec2(x/GameMain.RATIO,  y/GameMain.RATIO); 

@@ -43,7 +43,7 @@ package
 		private var particleBits:Bitmap; 
 		private var particleImage:Image; 
 		public var user:User;
-		public static var gbArray:Array; 
+		public var gbArray:Array; 
 		public var startScreenKinect:Signal;
 		private var makeGlowBodies:Boolean; 
 		
@@ -217,6 +217,8 @@ package
 				GameOverStart.rhypos = gbArray[1].yposMem; 
 				BallBtn.rhxpos =  gbArray[1].xposMem; 
 				BallBtn.rhypos =  gbArray[1].yposMem; 
+				
+				
 			}
 		}
 		public function renderSkeleton():void { 
@@ -228,11 +230,6 @@ package
 				var joint:SkeletonJoint = user.skeletonJoints[i];
 				
 			}
-		}
-		public function jointsLeft():Number { 
-			var num:Number = gbArray.length; 
-			return num;
-			trace(num); 
 		}
 		
 	}

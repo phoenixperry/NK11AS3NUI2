@@ -93,7 +93,7 @@ package
 			if(earth_mc.x >stage.stageWidth +earth_mc.x/2 || earth_mc.y > stage.stageHeight +earth_mc.y/2||earth_mc.x < -200|| earth_mc.y < -200){
 				this.remove(); 
 			}
-			adjustForce(); 
+			
 		}		
 		
 		public function createBody(name:String,  world:b2World, bodyType:uint, userData:*):b2Body
@@ -167,6 +167,7 @@ package
 		private function updateEarth(e:Event):void
 		{
 			boundsCheck();
+			adjustForce(); 
 			//f = m*a -- do the physics for this. 
 			//ant_gravity = new b2Vec2(Math.random()*100, 0); 
 			//_earthAirBody.ApplyForce(ant_gravity, _earthAirBody.GetWorldCenter()); 
@@ -176,6 +177,7 @@ package
 		}		
 
 		private function adjustForce():void { 
+			//uncomment block
 		if(GameMain.ipadActive == true) { 
 		
 			//this one makes me smart 

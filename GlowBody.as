@@ -233,6 +233,8 @@ package
 			
 			//was I hit? 
 			if(hit) {
+				//uncomment these two when done debugging 
+				
 				GameMain.world.DestroyBody(_BallBody);
 				remove();
 				hit = false; 
@@ -245,21 +247,19 @@ package
 		
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
-			particles.alpha = 0
 		
-//			if (! _beenHit)
-//			{	
-//				_beenHit = true; 
-//				//dispatchEvent(new PegEvent(PegEvent.PEG_LIT_UP)); 
-//				
-//			}
-			
+				if(actor is GlowBody) { 
+					hit = false; 
+				} else { 
+				//change this when not debugging 
+				particles.alpha = 0;
 				this.remove(); 
+				hit = true; 
 			
 				trace("glow body hitByActor saying what's up!"); 
 				trace(this.numChildren);
 				setState("Glow body runing it's setState"); 
-				
+				}
 		}
 		
 		private function setState( msg:String):void

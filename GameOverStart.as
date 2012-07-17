@@ -91,8 +91,8 @@ package
 		private function startAdded(e:Event):void
 		{
 			
-			trace(_startXML); 
-			trace(_startTexture); 
+			//trace(_startXML); 
+			//trace(_startTexture); 
 			var textureAtlas:TextureAtlas = new TextureAtlas(_startTexture, _startXML); 
 			var frames:Vector.<Texture> = textureAtlas.getTextures("StartScreen"); 
 			start_mc = new MovieClip(frames, 1); 
@@ -147,7 +147,7 @@ package
 		}
 		
 		public function btnClicked(msg:String):void {
-			trace(msg);
+			//trace(msg);
 			
 			TweenLite.to(dieBtn_mc, 1, {x:832, y:480,  alpha:0.5});
 			var q:starling.display.Quad = new starling.display.Quad(192, 7, 0x62b6bd, true); 
