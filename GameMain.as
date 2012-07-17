@@ -141,15 +141,15 @@
 			
 		}		
 		//this function sets the game up to auto loop once it's been started via keypress 
-		private function restart():void { 
+		private function restart():void {  
+		; 
 			gameOverStart = new GameOverStart(); 
 			gameOverStart.alpha = 0; 
 			addChild(gameOverStart); 
 			TweenLite.to(gameOverStart, 3, {x:0, y:0, alpha:1});
 			
 			if(useKinect) {
-				k = new KinectOn(); 
-				addChild(k); 
+				k = new KinectOn();  
 				countGlows = 13;
 			}
 			else{

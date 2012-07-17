@@ -198,12 +198,12 @@ package com.phoenixperry
 						_EarthAirChaserBody.IsFixedRotation(); 
 					}
 					
-					if(GameMain.useKinect == true) {
+					if(GameMain.useKinect == true && GameMain.countGlows >= 1) {
 						//get a random joint 
-						var rand = Math.random() * GameMain.countGlows; 
+						var rand = int(Math.random() * GameMain.countGlows-1); 
 						
-						//var x:Number = KinectOn.gbArray[rand-1].x; 
-						//var y:Number = KinectOn.gbArray[rand-1].y; 
+						var x:Number = KinectOn.gbArray[rand].xposMem; 
+						var y:Number = KinectOn.gbArray[rand].yposMem; 
 						
 						//this one makes me smart 
 						var driveTo:b2Vec2 = new b2Vec2(x/GameMain.RATIO,  y/GameMain.RATIO); 
@@ -216,6 +216,16 @@ package com.phoenixperry
 						_EarthAirChaserBody.SetLinearVelocity(diff); 
 						_EarthAirChaserBody.SetAngularVelocity(0); 
 						_EarthAirChaserBody.IsFixedRotation(); 
+					}
+					
+					if(GameMain.countGlows ==0) { 
+						boundsCheck();
+						//f = m*a -- do the physics for this. 
+						//ant_gravity = new b2Vec2(Math.random()*100, 0); 
+						//_EarthAirChaserBody.ApplyForce(ant_gravity, _EarthAirChaserBody.GetWorldCenter()); 
+						
+						earth_mc.x = _EarthAirChaserBody.GetPosition().x * GameMain.RATIO; 
+						earth_mc.y = _EarthAirChaserBody.GetPosition().y * GameMain.RATIO; 
 					}
 		}
 		public override function hitByActor(actor:Actor):void {

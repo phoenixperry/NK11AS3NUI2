@@ -279,6 +279,7 @@ package
 				
 				if(GameMain.countGlows == 0) { 
 					endText.alpha = 1;
+					killLevel.start();
 				}
 			}else {
 				if(GameMain.countGlows == 0 ) {

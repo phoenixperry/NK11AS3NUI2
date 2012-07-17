@@ -132,7 +132,6 @@ package
 			
 			for each(var user:User in kinect.usersWithSkeleton)
 			{
-				
 				//get the head joint and set the x,y for the balloon later
 				headJoint = user.getJointByName("head"); 
 				torso = user.getJointByName("torso"); 
