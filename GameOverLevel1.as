@@ -77,8 +77,9 @@ package
 		private var intro_ani:IntroAnimation; 
 		private var msg:TextField; 
 
+		private var killLevel:Timer; 
 		
-		
+		public var restartGame:Signal; 
 		
 		public function GameOverLevel1() 
 		{
@@ -107,6 +108,9 @@ package
 			level1Complete.add(endLevel1); 
 			level2Complete.add(endLevel2); 
 			level3Complete.add(endLevel3); 
+			restartGame = new Signal(); 
+			killLevel = new Timer(2000,1); 
+			killLevel.addEventListener(TimerEvent.TIMER, endLevel); 
 	
 		}
 		private function endLevel1():void{
@@ -286,12 +290,16 @@ package
 					heart2.dispose(); 
 					heart3.dispose(); 
 					heart4.dispose(); 
-					endText.alpha = 100; 
+					endText.alpha = 100;
+					killLevel.start(); 
 						
 				}
 			}
 		}
-	
+		public function endLevel(e:TimerEvent):void { 
+			removeLevel(); 
+			restartGame.dispatch(); 
+		}
 
 		override public function removeLevel():void {
 			//you are going to need to loop to check 

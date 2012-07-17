@@ -43,7 +43,7 @@ package
 		private var particleBits:Bitmap; 
 		private var particleImage:Image; 
 		public var user:User;
-		public var gbArray:Array; 
+		public static var gbArray:Array; 
 		public var startScreenKinect:Signal;
 		private var makeGlowBodies:Boolean; 
 		

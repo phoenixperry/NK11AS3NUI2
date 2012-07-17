@@ -140,12 +140,29 @@
 			_world.DrawDebugData();
 			
 		}		
-		
-		private function levelCreator(e:KeyboardEvent):void {
-			if(loadLevelOne){
-				gameOverLevel1 = new GameOverLevel1(); 
-				addChild(gameOverLevel1); 
+		//this function sets the game up to auto loop once it's been started via keypress 
+		private function restart():void { 
+			gameOverStart = new GameOverStart(); 
+			gameOverStart.alpha = 0; 
+			addChild(gameOverStart); 
+			TweenLite.to(gameOverStart, 3, {x:0, y:0, alpha:1});
+			
+			if(useKinect) {
+				k = new KinectOn(); 
+				addChild(k); 
+				countGlows = 13;
 			}
+			else{
+				countGlows = 1; 
+			}
+			
+		}
+		//note a keyboard event will restart the whole game. this function is largely for development and first start 
+		private function levelCreator(e:KeyboardEvent):void {
+//			if(loadLevelOne){
+//				gameOverLevel1 = new GameOverLevel1(); 
+//				addChild(gameOverLevel1); 
+//			}
 			if(e.keyCode == Keyboard.LEFT) {
 				gameOverStart = new GameOverStart(); 
 				gameOverStart.alpha = 0; 
@@ -238,6 +255,7 @@
 		public function gameLoop(e:starling.events.Event):void{
 			if(loadLevelOne){
 				gameOverLevel1 = new GameOverLevel1(); 
+				gameOverLevel1.restartGame.add(restart); 
 				addChild(gameOverLevel1); 
 				loadLevelOne = false; 
 			}
@@ -256,7 +274,6 @@
 		
 		public function initServer():void {
 			//ran
-			trace("dfgsdfgsgf");
 			serialServer=new XMLSocket  ;
 			serialServer.connect("127.0.0.1",3333);
 			
