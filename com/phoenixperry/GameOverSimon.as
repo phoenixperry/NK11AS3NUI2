@@ -71,7 +71,7 @@ package com.phoenixperry
 		private var patternTimer:Timer; 
 		private var gameTimer:Timer; 
 		public static var gameStarted:Boolean = false; 
-		private var bouncer:Bouncer; 
+	//	private var bouncer:Bouncer; 
 		
 		public function GameOverSimon()
 		{
@@ -104,16 +104,16 @@ package com.phoenixperry
 			patternTimer.addEventListener(TimerEvent.TIMER, playPattern, false, 0, true); 
 			gameTimer = new Timer(2000);
 			gameTimer.addEventListener(TimerEvent.TIMER, playGame, false, 0, true); 
-			bouncer = new Bouncer(); 
+		//bouncer = new Bouncer(); 
 			makeAWall(); 
-		//	addChild(bouncer); 
-		//	bouncer.x = 80; 
-		//	bouncer.y = -100;
-		
+			//	addChild(bouncer); 
+			//	bouncer.x = 80; 
+			//	bouncer.y = -100;
+			
 		}
 		
-//DEMO PLAY 
-//these two functions will play a pattern at the current difficulty level and save that pattern into an array 
+		//DEMO PLAY 
+		//these two functions will play a pattern at the current difficulty level and save that pattern into an array 
 		public function playDemo(e:TimerEvent):void{ 
 			//put text on screen for instruction if first run
 			if (count == 0) { 
@@ -127,38 +127,35 @@ package com.phoenixperry
 				currentNode = firstNode.generateDemoNode(); 
 				count++;
 				patternTimer.start(); 
-				
-				
-			
 			} 
 		}
 		private function playPattern(e:TimerEvent):void { 
-				if(count < difficulty){ 
-					trace("if loop started"); 
-					solution.push(currentNode.node_data); 
-					currentNode.rightAnswer.add(rightAnswer); 
-					currentNode.wrongAnswer.add(wrongAnswer); 
-					trace("node made");
-					count++; 
+			if(count < difficulty){ 
+				trace("if loop started"); 
+				solution.push(currentNode.node_data); 
+				currentNode.rightAnswer.add(rightAnswer); 
+				currentNode.wrongAnswer.add(wrongAnswer); 
+				trace("node made");
+				count++; 
 				///	trace(count, "i'm the count"); 
-					//trace(solution.length, "solution's length after the loop");
-					if(firstPlay){
+				//trace(solution.length, "solution's length after the loop");
+				if(firstPlay){
 					btnArray[currentNode.node_data].colorMe(); 
 					currentNode = currentNode.generateDemoNode(); 
 					firstPlay = false; 
-					}
-					else { 
-						currentNode = currentNode.generateDemoNode(); 
-						btnArray[currentNode.node_data].colorMe();
-					}
 				}
+				else { 
+					currentNode = currentNode.generateDemoNode(); 
+					btnArray[currentNode.node_data].colorMe();
+				}
+			}
 			if(count == difficulty-1) { 
-			count = 0; 
-			difficulty ++; 
-			trace(difficulty, "I'm the difficulty"); 
-			patternTimer.stop(); 
-			gameTimer.start(); 
-			gameTimer.start();  
+				count = 0; 
+				difficulty ++; 
+				trace(difficulty, "I'm the difficulty"); 
+				patternTimer.stop(); 
+				gameTimer.start(); 
+				gameTimer.start();  
 				//only for debug 
 				for (var i:int = 0; i < solution.length; i++) 
 				{
@@ -174,7 +171,7 @@ package com.phoenixperry
 				for (var i:int = 0; i < btnArray.length; i++) 
 				{
 					btnArray[i].whiteOut(); 
-		
+					
 				}	
 			}
 			
@@ -187,14 +184,14 @@ package com.phoenixperry
 				count++;
 			}
 			else { 
-			//if we are on any current node, compare and get the next node in the chain
-			
-			currentNode = currentNode.compareNode(myName); 
-//			trace(myName, "is my name"); 
+				//if we are on any current node, compare and get the next node in the chain
+				
+				currentNode = currentNode.compareNode(myName); 
+				//			trace(myName, "is my name"); 
 			}
 			//up count to we don't loop back to the start.  
 		}
-
+		
 		private function wrongAnswer(n:Number):void	
 		{
 			trace(n, "im a wrong answer"); 
@@ -222,7 +219,7 @@ package com.phoenixperry
 				
 			}
 		}		
-
+		
 		private function endSequence():void
 		{
 			//currentNode = firstNode; 

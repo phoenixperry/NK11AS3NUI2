@@ -116,6 +116,7 @@ package
 			restartGame = new Signal(); 
 			killLevel = new Timer(2000,1); 
 			killLevel.addEventListener(TimerEvent.TIMER, endLevel); 
+			
 		}
 		
 		private function endLevel1():void{
@@ -210,13 +211,13 @@ package
 		//see how many goomba have been fired - x goomba = level 1 
 		 if (fireGoomba.currentCount == 0) { 
 			 currentLevel=1; 
-			 oddsOfFall=0.4
+			 oddsOfFall=0.4;
 			 oddsOfFear=0.4;
 			 oddsOfEvil=0.1;	 
 			// trace("level 1");
 		 }
 		 
-		 if(fireGoomba.currentCount > 5 && fireGoomba.currentCount < 120 ) { 
+		 if(fireGoomba.currentCount > 60 && fireGoomba.currentCount < 120 ) { 
 			 currentLevel=2; 
 			 oddsOfFall=0.6
 			 oddsOfFear=0.5;
@@ -227,11 +228,11 @@ package
 		 	currentLevel=3; 
 		 	oddsOfFall=0.8
 		 	oddsOfFear=0.85;
-		 	oddsOfEvil=0.9;	 
+		 	oddsOfEvil=0.7;	 
 		 //	trace("level 3");  
 		}
 
-		if(fireGoomba.currentCount == 5){ 
+		if(fireGoomba.currentCount == 60){ 
 			level1Complete.dispatch(); 
 			endLevel1(); 
 		}

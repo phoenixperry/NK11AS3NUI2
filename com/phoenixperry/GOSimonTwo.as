@@ -71,7 +71,7 @@ package com.phoenixperry
 		private var patternTimer:Timer; 
 		private var gameTimer:Timer; 
 		public static var gameStarted:Boolean = false; 
-		private var bouncer:Bouncer; 
+	//	private var bouncer:Bouncer; 
 		
 		private var repeatSequence:Boolean = false; 
 		public function GOSimonTwo()
@@ -105,7 +105,7 @@ package com.phoenixperry
 			patternTimer.addEventListener(TimerEvent.TIMER, playPattern, false, 0, true); 
 			gameTimer = new Timer(2000);
 			gameTimer.addEventListener(TimerEvent.TIMER, playGame, false, 0, true); 
-			bouncer = new Bouncer(); 
+//			bouncer = new Bouncer(); 
 			makeAWall(); 
 			//	addChild(bouncer); 
 			//	bouncer.x = 80; 
@@ -168,7 +168,7 @@ package com.phoenixperry
 				}
 			}
 		}
-	
+		
 		public function addSequenceListeners():void { 
 			runDemo.addEventListener(TimerEvent.TIMER, runSequence); 
 			

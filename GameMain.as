@@ -10,7 +10,7 @@
 	import Box2D.Dynamics.b2World;
 	
 	import com.greensock.TweenLite;
-	import com.phoenixperry.GOSimonTwo;
+	import com.phoenixperry.GameOverSimon;
 	import com.phoenixperry.HeartAnimation;
 	import com.phoenixperry.HeroFont;
 	
@@ -30,7 +30,6 @@
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	
-	
 	import org.osflash.signals.Signal;
 	
 	import starling.core.Starling;
@@ -46,10 +45,11 @@
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Stats;
+	import flash.ui.Mouse;
 	
 	public class GameMain extends Sprite
 	{
-		private static const _useKinect:Boolean = false ; 
+		private static const _useKinect:Boolean = true ; 
 
 		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false",fontName="Gotham")]
 		public static var Gotham:Class; 
@@ -79,7 +79,7 @@
 		public static var loadLevelOne:Boolean= false; 
 		public static var loadLevelTwo:Boolean = false; 
 		public var gameOverLevel1:GameOverLevel1; 
-		public var gameOverSimon:GOSimonTwo; 
+		public var gameOverSimonA:GameOverSimon; 
 		private var makeSprites:SingletonSpriteSheet; 
 		
 		private var gameTimer:GameTimer; 
@@ -132,7 +132,7 @@
 			bg= new bgSound(); 
 			sc = new SoundChannel(); 
 			playSound();
-			
+			autoStart(); 
 			
 		}
 		
@@ -167,13 +167,40 @@
 			TweenLite.to(gameOverStart, 3, {x:0, y:0, alpha:1});
 			
 			if(useKinect) {
-				k = new KinectOn();  
+				KinectOn.gbArray = []; 
+				
+					for (var i:int = 0; i < 14; i++) 
+					{
+						var gb:GlowBody = new GlowBody();  
+						KinectOn.gbArray.push(gb); 
+						addChild(KinectOn.gbArray[i]); 
+					
+				}
 				countGlows = 13;
 			}
 			else{
 				countGlows = 1; 
 			}
 			
+		}
+		private function autoStart():void { 
+			//this code can be commented out to launch via keyboard for debugging 
+			Mouse.hide();
+			gameOverStart = new GameOverStart(); 
+			gameOverStart.alpha = 0; 
+			addChild(gameOverStart); 
+			TweenLite.to(gameOverStart, 3, {x:0, y:0, alpha:1});
+			
+			if(useKinect) {
+				k = new KinectOn(); 
+				addChild(k); 
+				countGlows = 13;
+			}
+			else{
+				
+				stage.addEventListener(TouchEvent.TOUCH, onTouch);
+				countGlows = 1; 
+			}
 		}
 		//note a keyboard event will restart the whole game. this function is largely for development and first start 
 		private function levelCreator(e:KeyboardEvent):void {
@@ -192,8 +219,8 @@
 			}
 			if(e.keyCode == Keyboard.UP){ 
 				//up arrow testing	
-				gameOverSimon = new GOSimonTwo(); 
-				addChild(gameOverSimon); 
+				gameOverSimonA = new GameOverSimon(); 
+				addChild(gameOverSimonA); 
 			}
 			if(e.keyCode == Keyboard.RIGHT) { 
 				//var osc:OscTest = new OscTest(); 

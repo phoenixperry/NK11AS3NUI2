@@ -198,7 +198,7 @@ package com.phoenixperry
 						_EarthAirChaserBody.IsFixedRotation(); 
 					}
 					
-					if(GameMain.useKinect == true && GameMain.countGlows >= 1) {
+					if(GameMain.useKinect == true && GameMain.countGlows >= 1 && !KinectOn.makeGlowBodies) {
 						//get a random joint 
 						var rand = int(Math.random() * GameMain.countGlows-1); 
 						

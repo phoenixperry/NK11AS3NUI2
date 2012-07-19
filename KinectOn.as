@@ -8,6 +8,8 @@ package
 	import com.as3nui.nativeExtensions.air.kinect.data.User;
 	import com.as3nui.nativeExtensions.air.kinect.events.CameraImageEvent;
 	import com.as3nui.nativeExtensions.air.kinect.events.DeviceEvent;
+	import com.as3nui.nativeExtensions.air.kinect.events.UserEvent;
+	import com.as3nui.nativeExtensions.air.kinect.namespaces.as3nui;
 	import com.greensock.TweenLite;
 	import com.phoenixperry.BallBtn;
 	
@@ -45,15 +47,14 @@ package
 		public var user:User;
 		public static var gbArray:Array; 
 		public var startScreenKinect:Signal;
-		private var makeGlowBodies:Boolean; 
+		public static var makeGlowBodies:Boolean; 
 		
 		public function KinectOn()
 		{
 			_skeletonSprite = new Sprite();
 			this.addChild(_skeletonSprite);
 			
-			makeGlowBodies = true; 
-			gbArray = [];
+		
 			if(Kinect.isSupported()) 
 			{
 				kinect = Kinect.getDevice(); 
@@ -66,10 +67,12 @@ package
 				kinect.addEventListener(DeviceEvent.STARTED, onAdded, false, 0, true);
 			}
 		}
-		private function onAdded(e:DeviceEvent):void {
-			
-			//removeEventListener(DeviceEvent.STARTED,onAdded);
+		public function onAdded(e:DeviceEvent):void {
 			addEventListener(Event.ENTER_FRAME, onEnterFrame); 
+			makeGlowBodies = true; 
+			gbArray = [];
+			//removeEventListener(DeviceEvent.STARTED,onAdded);
+	
 			if(makeGlowBodies) {
 				for (var i:int = 0; i < 14; i++) 
 				{
@@ -83,9 +86,21 @@ package
 			
 			
 			startScreenKinect = new Signal(); 
-			
+		//	addEventListener(UserEvent.USERS_UPDATED, onUser); 
+			 
 		}
-		
+		public function onUser (e:UserEvent):void { 
+			addEventListener(Event.ENTER_FRAME, onEnterFrame); 
+			if(makeGlowBodies) {
+				for (var i:int = 0; i < 14; i++) 
+				{
+					var gb:GlowBody = new GlowBody();  
+					gbArray.push(gb); 
+					addChild(gbArray[i]); 
+					makeGlowBodies = false;	
+				}
+		}
+		}
 		protected function onEnterFrame(event:Event):void
 		{
 			drawSkeletons();

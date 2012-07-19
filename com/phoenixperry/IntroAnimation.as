@@ -39,7 +39,7 @@ package com.phoenixperry
 		}
 		
 		 private function onAdded(e:Event):void
-		{	timer.start(); 
+		{	timer.start();
 			removeEventListener(Event.ADDED_TO_STAGE, onAdded); 	
 			sprites = new StarSpriteCostume("triUp", 1);
 			triUp = sprites.getDressed();
@@ -75,6 +75,11 @@ package com.phoenixperry
 			leftCube.y = 1024;
 			leftCube.alpha = 0; 
 			addChild(leftCube); 
+			
+//			q = new starling.display.Quad(stage.stageWidth, stage.stageHeight,0xb93717, true); 
+//			q.blendMode = blendMode.
+//			addChild(q); 
+			
 			
 		 }
 		

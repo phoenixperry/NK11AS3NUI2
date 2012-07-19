@@ -24,7 +24,7 @@ package com.phoenixperry
 	import starling.textures.Texture;
 	
 	public class BallBtn extends Sprite{
-
+		
 		private var btnSkin:Bitmap; 
 		private var btnTexture:Texture; 
 		public var myBtn:Button; 
@@ -56,9 +56,9 @@ package com.phoenixperry
 			
 			//position of object and name associated with it 
 			_xpos = xpos; 
-			 _ypos = ypos; 
+			_ypos = ypos; 
 			myName = _name; 			
-		
+			
 			//sounds 
 			tone= new _sound(); 
 			sc = new SoundChannel(); 
@@ -77,12 +77,12 @@ package com.phoenixperry
 			iwasTouched.add(playSound); 
 			soundDone = new Signal(); 	
 		}
-
+		
 		protected function soundPlayed(event:flash.events.Event):void
 		{
 			soundDone.dispatch();	
 		}		
-
+		
 		
 		protected function immunityComplete(event:TimerEvent):void
 		{
@@ -99,7 +99,7 @@ package com.phoenixperry
 		}
 		private function playSound(myName:Number):void { 
 			//uncomment me to turn sound off / on 
-		   //sc = tone.play(); 
+			//sc = tone.play(); 
 			
 			sc.addEventListener(flash.events.Event.SOUND_COMPLETE, soundPlayed, false, 0, true);
 			//WARNING LIKE A MOFO - this might cause a memory leak
@@ -119,18 +119,18 @@ package com.phoenixperry
 					quad.color = 0xFF00FF; 
 					touched = true; 
 				}
-
+				
 			}
 			
 			if(!GameMain.useKinect) {
 				if(( GlowBody.xpos>= _xpos) && (GlowBody.xpos <= _xpos+w) && (GlowBody.ypos >= _ypos) && (GlowBody.ypos <= _ypos +height)&& touched ==false) 
 				{		
-					if(GOSimonTwo.gameStarted) { 
-					iwasTouched.dispatch(myName);   
-					trace(myName, "I've been touched!"); 
+					if(GameOverSimon.gameStarted) { 
+						iwasTouched.dispatch(myName);   
+						trace(myName, "I've been touched!"); 
 						if(!immunityTime.running)immunityTime.start(); 
-					quad.color = 0xFF00FF;
-					touched = true; 	
+						quad.color = 0xFF00FF;
+						touched = true; 	
 					}
 				}
 			}
@@ -145,27 +145,27 @@ package com.phoenixperry
 		public function whiteOut():void { 
 			quad.color = 0xFFFFFF; 
 		}
-//this is kinect stuff 
+		//this is kinect stuff 
 		public static function get rhypos():Number
 		{
 			return _rhypos;
 		}
-
+		
 		public static function set rhypos(value:Number):void
 		{
 			_rhypos = value;
 		}
-
+		
 		public static function get rhxpos():Number
 		{
 			return _rhxpos;
 		}
-
+		
 		public static function set rhxpos(value:Number):void
 		{
 			_rhxpos = value;
 		}
-
-
+		
+		
 	}
 }

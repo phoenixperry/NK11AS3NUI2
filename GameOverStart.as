@@ -197,7 +197,7 @@ package
 				introImage = new Image(introTexture); 
 				addChild(introImage);
 				introImage.alpha = 0; 
-				TweenLite.to(introImage, 3, {alpha:.5});
+				TweenLite.to(introImage, 3, {alpha:1});
 				introImage.x = 386; 
 				introImage.y = 286; 
 			//	TweenLite.to(introImage, 1.5, {alpha:0})
