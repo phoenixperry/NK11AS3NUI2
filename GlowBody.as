@@ -17,9 +17,14 @@ package
 	import flash.display.Bitmap;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.ui.GameInput;
 	import flash.utils.Dictionary;
+	import flash.utils.Timer;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
 	
 	import org.osflash.signals.Signal;
 	
@@ -41,6 +46,12 @@ package
 		[Embed(source="./assets/gameOver/sprites/particle.xml", mimeType="application/octet-stream")]
 		public var ParticleXML:Class; 
 		
+		[Embed(source="./assets/gameOver/sounds/triangle2.mp3", mimeType="audio/mpeg")] 
+		private var hitSound:Class; 
+		private var hitTone:*; 
+		private var sc2:SoundChannel; 
+		
+	
 		public var particles:ParticleDesignerPS; 
 		public static const CACHE_ID:String = "GlowBall"; 
 		private var _particleMouseX:Number; 
@@ -71,6 +82,9 @@ package
 
 		//hit test ghetto style 
 		public var hit:Boolean; 
+
+
+		
 		public function GlowBody()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, ballAdded); 
@@ -83,7 +97,7 @@ package
 			dict = new Dictionary();
 			glowHit = new  Signal();
 			glowHit.add(setState);
-		
+
 			
 			dict["glow"] = [
 				
@@ -181,6 +195,8 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, ballAdded); 
 			//addChild(b2Movie); 
 			//b2Movie.alpha=0; 
+			hitTone = new hitSound(); 
+			sc2 = new SoundChannel(); 
 			
 		}
 		override protected function childSpecificUpdating():void
@@ -247,12 +263,13 @@ package
 		
 		public override function hitByActor(actor:Actor):void {
 			//not in hit state
-		
+				
 				if(actor is GlowBody) { 
 					hit = false; 
 				} else { 
 				//change this when not debugging 
 				particles.alpha = 0;
+				playHitNoise()
 				this.remove(); 
 				hit = true; 
 			
@@ -268,6 +285,11 @@ package
 			hit = true; 
 			
 		}
+
+		private function playHitNoise():void { 
+			sc2 = hitTone.play(); 
+		}
+		
 		
 		public function remove ():void
 		{

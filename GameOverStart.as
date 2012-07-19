@@ -3,6 +3,8 @@ package
 {
 	import com.greensock.*;
 	import com.greensock.easing.*;
+	import com.greensock.plugins.*;
+	import com.phoenixperry.HeartAnimation;
 	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
@@ -19,7 +21,7 @@ package
 	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
-
+	TweenPlugin.activate([TintPlugin]);
 	
 	public class GameOverStart extends LevelGen
 	{
@@ -48,6 +50,9 @@ package
 		private var introTexture:Texture; 
 		private var introImage:Image;
 		private var gb:GlowBody; 
+		private var heart:HeartAnimation;  
+
+		private var timer:Timer
 		[Embed(source="./assets/gameOver/sprites/letters.png")]
 		private var intro:Class;
 		
@@ -84,10 +89,13 @@ package
 			_startXML = XML(new startData()); 
 			btnTrigger = new Signal(); 
 			btnTrigger.add(btnClicked); 
-			deleteLevelTimer = new Timer(2000,1);
+			deleteLevelTimer = new Timer(3000,1);
 			deleteLevelTimer.addEventListener(TimerEvent.TIMER_COMPLETE, timeToDie); 
+			timer = new Timer(500); 
+			timer.addEventListener(TimerEvent.TIMER, btnColor); 
 		}
 		
+
 		private function startAdded(e:Event):void
 		{
 			
@@ -99,12 +107,12 @@ package
 			addChild(start_mc); 
 		//	start_mc.blendMode = BlendMode.ADD; 
 
-			cloudsPara = new Parallex(Clouds, Clouds, 1024, 768, 2046, .2, false);  
+			cloudsPara = new Parallex(Clouds, Clouds, 1024, 768, 2046, .5, true);  
 			cloudsPara.multiplyIt(); 
 			cloudsPara.alpha = .5; 
 			addChild(cloudsPara); 
 		
-			starsPara = new Parallex(myStars, myStars, 1023, 768, 2046,.05, false); 
+			starsPara = new Parallex(myStars, myStars, 1023, 768, 2046,.2, true); 
 			starsPara.screenIt(); 
 			addChild(starsPara); 
 			starsPara.alpha = 1; 
@@ -115,33 +123,54 @@ package
 //		
 			var frames1:Vector.<Texture> = textureAtlas.getTextures("die");
 			dieBtn_mc = new MovieClip(frames1,1); 
+			dieBtn_mc.color = 0xa32827; 
+			dieBtn_mc.alpha = 0.2; 
 			addChild(dieBtn_mc); 
-			TweenLite.to(dieBtn_mc, 2, {x:832, y:0, alpha:1, ease:Cubic.easeOut});
-			dieBtn_mc.y = 100; 
+			TweenLite.to(dieBtn_mc, 2, {x:832, y:0, ease:Cubic.easeOut});
+			dieBtn_mc.y = 0; 
 			dieBtn_mc.x = 1024; 
 			
-			introBits = new intro(); 
-			introTexture = Texture.fromBitmap(introBits); 
-			introImage = new Image(introTexture); 
-			addChild(introImage);
-			introImage.alpha = 0; 
-			TweenLite.to(introImage, 3, {alpha:1});
-			introImage.x = 386; 
-			introImage.y = 286; 
+
 			//glow for fingers 
 			gb = new GlowBody(); 
 			addChild(gb); 
 			addEventListener(Event.ENTER_FRAME, btnTest); 
+			
+			
+			heart  = new HeartAnimation(); 
+			addChild(heart); 
+			heart.x = stage.stageWidth/2 - heart.width; 
+			heart.y = stage.stageHeight/2 - heart.height; 
+			timer.start(); 
+		
 		}
+		
+		private function btnColor(e:TimerEvent):void { 
+			if(timer.currentCount %2) { 
+				dieBtn_mc.color = 0xa32827; 
+				dieBtn_mc.alpha = 1; 
+			
+			}
+			else { 
+				dieBtn_mc.alpha = 0.2; 
+			}
+		}
+		
 		public function btnTest(e:Event) :void {
 			if(GameMain.useKinect){
 				if(rhxpos > 832 && rhxpos < 1024 && rhypos > 0 && rhypos < 90) { 
+	
+			
 					btnTrigger.dispatch("btn clicked"); 
+			
 					
 				}
 			}else {
 				if(GlowBody.xpos > 832 && GlowBody.xpos < 1024 && GlowBody.ypos > 0 && GlowBody.ypos < 90){
-					btnTrigger.dispatch("btn clicked"); 
+			
+					btnTrigger.dispatch("btn clicked");
+					
+						
 				}
 			}
 		}
@@ -149,18 +178,30 @@ package
 		public function btnClicked(msg:String):void {
 			//trace(msg);
 			
-			TweenLite.to(dieBtn_mc, 1, {x:832, y:480,  alpha:0.5});
-			var q:starling.display.Quad = new starling.display.Quad(192, 7, 0x62b6bd, true); 
+			TweenLite.to(dieBtn_mc, 1, {x:832, y:480});
+
+			TweenLite.to(heart, 1, {alpha:0});
+
+			var q:starling.display.Quad = new starling.display.Quad(192, 7, 0xa32827, true); 
 			addChild(q); 
 			q.x = 1024; 
 			q.y = 568; 
-			TweenLite.to(q, 2, {x:832, y:568, alpha:1, ease:Cubic.easeOut});
-			dieBtn_mc.color = 0x62b6bd;
+			TweenLite.to(q, 2, {x:832, y:568, ease:Cubic.easeOut});
+			//dieBtn_mc.color = 0x62b6bd;
 				deleteLevelTimer.start(); 
 				TweenLite.to(cloudsPara, 1.5, {alpha:0});
 				TweenLite.to(starsPara, 1.5, {alpha:0});
 				TweenLite.to(start_mc, 1.5, {alpha:0})
-				TweenLite.to(introImage, 1.5, {alpha:0})
+				introBits = new intro(); 
+				introTexture = Texture.fromBitmap(introBits); 
+				introImage = new Image(introTexture); 
+				addChild(introImage);
+				introImage.alpha = 0; 
+				TweenLite.to(introImage, 3, {alpha:.5});
+				introImage.x = 386; 
+				introImage.y = 286; 
+			//	TweenLite.to(introImage, 1.5, {alpha:0})
+				heart.stopSound(); 
 		}
 
 		public static function get rhxpos():Number

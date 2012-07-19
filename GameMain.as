@@ -11,6 +11,7 @@
 	
 	import com.greensock.TweenLite;
 	import com.phoenixperry.GOSimonTwo;
+	import com.phoenixperry.HeartAnimation;
 	import com.phoenixperry.HeroFont;
 	
 	import flash.display.Bitmap;
@@ -19,15 +20,16 @@
 	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.events.ProgressEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
-	import flash.globalization.CurrencyFormatter;
+	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
 	import flash.net.XMLSocket;
 	import flash.printing.PrintJob;
 	import flash.text.Font;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
+	
 	
 	import org.osflash.signals.Signal;
 	
@@ -47,10 +49,14 @@
 	
 	public class GameMain extends Sprite
 	{
-		private static const _useKinect:Boolean = true ; 
+		private static const _useKinect:Boolean = false ; 
 
 		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false",fontName="Gotham")]
 		public static var Gotham:Class; 
+		
+		[Embed(source="./assets/gameOver/sounds/drone.mp3", mimeType="audio/mpeg")] 
+		private var bgSound:Class; 
+		
 		
 		public var killAll:Boolean = false; 
 		//reset var
@@ -90,6 +96,11 @@
 		private var myX:Number; 
 		private var myY:Number; 
 		public static var kPoint:Point; 
+
+		public  var sc:SoundChannel; 
+		public var bg:*; 
+		
+		
 		public function GameMain() 
 		{
 			makeSprites = SingletonSpriteSheet.getInstance();
@@ -98,6 +109,7 @@
 		}
 		private function onAdded(e:starling.events.Event):void
 		{
+		
 			//set up font
 			font = new Gotham(); 
 			setupPhysicsWorld();
@@ -116,6 +128,12 @@
 			
 			myX = 0; 
 			myY = 0; 
+			
+			bg= new bgSound(); 
+			sc = new SoundChannel(); 
+			playSound();
+			
+			
 		}
 		
 		private function checkit(e:TimerEvent):void { 
@@ -314,6 +332,27 @@
 			ipadCheck.start(); 
 		}
 		
+		private function playSound():void { 
+			sc = bg.play();
+			
+		//	for continual looping 
+			sc.addEventListener(flash.events.Event.SOUND_COMPLETE, onComplete);
+			var transform:SoundTransform = new SoundTransform(0.3); 
+			sc.soundTransform = transform; 
+		}
+
+		public function stopSound():void{ 
+			sc = bg.stop(); 
+		}
+		
+//		endless loop
+		public function onComplete(event:flash.events.Event):void
+				{
+					sc.removeEventListener(event.type, onComplete);
+					playSound();
+					
+				}
+
 		public static function get serialServer():XMLSocket
 		{
 			return _serialServer;

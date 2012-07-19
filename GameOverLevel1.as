@@ -8,11 +8,14 @@ package
 	import com.greensock.easing.Bounce;
 	import com.phoenixperry.EarthAirChaser;
 	import com.phoenixperry.HeroFont;
+	import com.phoenixperry.HitTest;
 	import com.phoenixperry.IntroAnimation;
 	
 	import flash.display.Bitmap;
 	import flash.events.TimerEvent;
 	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
 	import flash.text.Font;
 	import flash.ui.GameInput;
 	import flash.utils.Timer;
@@ -34,9 +37,13 @@ package
 		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false", fontName="Gotham")]
 		private static var Gotham:Class;  
 		
+		[Embed(source="./assets/gameOver/sounds/drumLoop.mp3", mimeType="audio/mpeg")] 
+		private var drums:Class; 
+		private var tone:*; 
+		private var sc:SoundChannel; 
+		
 		private var font:Font = new Gotham(); 
 		private var endText:TextField; 
-		
 		private var sprites:StarSpriteCostume;
 		
 		
@@ -62,7 +69,7 @@ package
 		private var heart2:starling.display.MovieClip; 
 		private var heart3:starling.display.MovieClip; 
 		private var heart4:starling.display.MovieClip;  
-		
+		private var triBG:MovieClip;  	
 		private var onLevel1:starling.text.TextField;
 		private var onLevel2:starling.text.TextField;
 		private var onLevel3:starling.text.TextField;
@@ -76,15 +83,13 @@ package
 		private var level3_mc:MovieClip; 
 		private var intro_ani:IntroAnimation; 
 		private var msg:TextField; 
-
+	
 		private var killLevel:Timer; 
 		
 		public var restartGame:Signal; 
 		
 		public function GameOverLevel1() 
 		{
-	
-
 //			var q:Quad = new Quad(300,300,0xFF00FF,true); 
 //			addChild(q); 
 			//change this timer to change the lenght the fear clip is up
@@ -111,8 +116,8 @@ package
 			restartGame = new Signal(); 
 			killLevel = new Timer(2000,1); 
 			killLevel.addEventListener(TimerEvent.TIMER, endLevel); 
-	
 		}
+		
 		private function endLevel1():void{
 			removeChild(level1_mc); 
 			sprites = new StarSpriteCostume("level2",1); 
@@ -132,12 +137,23 @@ package
 
 		protected function startUp(event:TimerEvent):void
 		{	
+			tone = new drums(); 
+			sc = new SoundChannel(); 
+			playSound();				
 			removeEventListener(TimerEvent.TIMER_COMPLETE,startUp); 
+			
 			
 			if(!GameMain.useKinect){
 			gb = new GlowBody();  
 			addChild(gb); 
 			}
+			
+			sprites = new StarSpriteCostume("tri_backgroun",1); 
+			triBG = sprites.getDressed(); 
+			triBG.x = stage.stageWidth/2 - triBG.width/2; 
+			triBG.y = stage.stageHeight/2 - triBG.height/2; 
+			addChild(triBG); 
+			
 			sprites = new StarSpriteCostume("heart", 1);
 			heart1 = sprites.getDressed();
 			heart2 = sprites.getDressed(); 
@@ -163,6 +179,9 @@ package
 			fireGoomba.start();
 			fireGoomba.addEventListener(TimerEvent.TIMER,goGoomba);
 			gameUI(); 
+		
+
+			
 		}
 		//this section really does run the game speed in commpleteness 
 		public function goGoomba(event:TimerEvent):void{
@@ -214,13 +233,16 @@ package
 
 		if(fireGoomba.currentCount == 5){ 
 			level1Complete.dispatch(); 
+			endLevel1(); 
 		}
 		 
 		if(fireGoomba.currentCount == 120) { 
 			level2Complete.dispatch(); 
+			endLevel2(); 
 		}
 		if(fireGoomba.currentCount == 180) {
 			level3Complete.dispatch();  
+			endLevel3(); 
 		}
 	
 
@@ -244,17 +266,17 @@ package
 			addChild(heart2); 
 			addChild(heart3); 
 			addChild(heart4);
-			heart4.x =840; 
-			heart4.y = 40; 
+			heart4.x =940; 
+			heart4.y = 500 + (heart2.height*3) +30;
 			
-			heart3.x = 881; 
-			heart3.y = 40; 
+			heart3.x = 940; 
+			heart3.y = 500 + (heart2.height*2) +20; 
 			
-			heart2.x = 921;
-			heart2.y = 40; 
+			heart2.x = 940;
+			heart2.y = 500 + (heart2.height) +10 ; 
 			
-			heart1.x = 961; 
-			heart1.y = 40; 
+			heart1.x = 940; 
+			heart1.y = 500; 
 		}
 		
 		private function updateHearts():void {
@@ -262,6 +284,7 @@ package
 				if(GameMain.countGlows < 9) {
 					removeChild(heart1); 
 					heart1.dispose(); 
+					
 	
 				}
 				if(GameMain.countGlows < 6) { 
@@ -297,6 +320,28 @@ package
 				}
 			}
 		}
+		
+		private function playSound():void { 
+			sc = tone.play();
+			//	for continual looping 
+			sc.addEventListener(flash.events.Event.SOUND_COMPLETE, onComplete);
+			var transform:SoundTransform = new SoundTransform(1); 
+			sc.soundTransform = transform; 
+		}
+		
+		public function stopSound():void{ 
+			var transform:SoundTransform = new SoundTransform(0); 
+			sc.soundTransform = transform; 
+		}
+		
+		//		endless loop
+		public function onComplete(event:flash.events.Event):void
+		{
+			sc.removeEventListener(flash.events.Event.SOUND_COMPLETE, onComplete);
+			playSound();
+			
+		}
+		
 		public function endLevel(e:TimerEvent):void { 
 			removeLevel(); 
 			restartGame.dispatch(); 
@@ -309,7 +354,8 @@ package
 			gb.remove();
 			gb.destroy();
 			}
-
+			sc.removeEventListener(flash.events.Event.SOUND_COMPLETE, onComplete);
+			stopSound(); 
 			fireGoomba.removeEventListener(TimerEvent.TIMER,goGoomba); 
 			this.removeChildren(); 
 			this.dispose();
