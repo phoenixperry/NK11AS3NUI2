@@ -28,7 +28,6 @@
 	import flash.printing.PrintJob;
 	import flash.text.Font;
 	import flash.ui.Keyboard;
-	import flash.ui.Mouse;
 	import flash.utils.Timer;
 	
 	import org.osflash.signals.Signal;
@@ -46,10 +45,11 @@
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.Stats;
+	import flash.ui.Mouse;
 	
 	public class GameMain extends Sprite
 	{
-		private static const _useKinect:Boolean = false ; 
+		private static const _useKinect:Boolean = true ; 
 
 		[Embed(source="assets/gameOver/fonts/Gotham-Light.otf", embedAsCFF="false",fontName="Gotham")]
 		public static var Gotham:Class; 
@@ -160,27 +160,27 @@
 		}		
 		//this function sets the game up to auto loop once it's been started via keypress 
 		private function restart():void {  
-		//uncomment this section to add looping functionaly back
-//			gameOverStart = new GameOverStart(); 
-//			gameOverStart.alpha = 0; 
-//			addChild(gameOverStart); 
-//			TweenLite.to(gameOverStart, 3, {x:0, y:0, alpha:1});
-//			
-//			if(useKinect) {
-//				KinectOn.gbArray = []; 
-//				
-//					for (var i:int = 0; i < 14; i++) 
-//					{
-//						var gb:GlowBody = new GlowBody();  
-//						KinectOn.gbArray.push(gb); 
-//						addChild(KinectOn.gbArray[i]); 
-//					
-//				}
-//				countGlows = 13;
-//			}
-//			else{
-//				countGlows = 1; 
-//			}
+		; 
+			gameOverStart = new GameOverStart(); 
+			gameOverStart.alpha = 0; 
+			addChild(gameOverStart); 
+			TweenLite.to(gameOverStart, 3, {x:0, y:0, alpha:1});
+			
+			if(useKinect) {
+				KinectOn.gbArray = []; 
+				
+					for (var i:int = 0; i < 14; i++) 
+					{
+						var gb:GlowBody = new GlowBody();  
+						KinectOn.gbArray.push(gb); 
+						addChild(KinectOn.gbArray[i]); 
+					
+				}
+				countGlows = 13;
+			}
+			else{
+				countGlows = 1; 
+			}
 			
 		}
 		private function autoStart():void { 
@@ -237,10 +237,7 @@
 				stage.addEventListener(TouchEvent.TOUCH, onTouch);
 				countGlows = 1; 
 			}
-			 var s:Stats = new Stats(); 
-			 setChildIndex(s, 999); 	
-			 addChild(new Stats());
-			
+			//this.addChild(new Stats());
 		}
 		private function deleteLevel(e:KeyboardEvent):void { 
 			if(e.keyCode == Keyboard.RIGHT){

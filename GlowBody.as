@@ -217,7 +217,7 @@ package
 				//trace(_BallBody.GetPosition().x, _BallBody.GetPosition().y); 
 				var diff:b2Vec2 = new b2Vec2((ballTarget.x-ballCurrent.x), (ballTarget.y-ballCurrent.y)); 
 				//diff.Normalize(); 
-				diff.Multiply(37);
+				diff.Multiply(14);
 				_BallBody.SetLinearVelocity(diff); 
 				_BallBody.SetAngularVelocity(0); 
 				_BallBody.IsFixedRotation(); 
